@@ -132,7 +132,7 @@ export function createDaemonwoodServer({
     catch { response.writeHead(400).end(); return; }
     response.setHeader("X-Content-Type-Options", "nosniff");
     response.setHeader("Cache-Control", "no-store");
-    response.setHeader("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'");
+    response.setHeader("Content-Security-Policy", `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri ${devFiles && url.pathname === "/docs/art-review.html" ? "'self'" : "'none'"}`);
     if (request.method === "POST" && token && request.headers.authorization !== `Bearer ${token}`) { json(response, 401, { ok: false, error: "Local adapter credential required" }); return; }
 
     if (request.method === "POST" && url.pathname === "/api/shutdown" && onShutdown) {

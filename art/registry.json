@@ -39,6 +39,18 @@
       "prompt": "art/prompts/fern.txt"
     },
     {
+      "id": "fern-stations",
+      "kind": "familiar-stations",
+      "source": "art/source/familiars/fern-stations.png",
+      "export": "assets/sprites/fern-stations-v1.png",
+      "authoring": "OpenAI built-in image generation, derived from the project's supplied character design",
+      "date": "2026-09-26",
+      "provenance": "New source sheet generated for this project. Original character authorship and license were not supplied.",
+      "license": "Project owner to confirm rights to original references before redistribution",
+      "status": "pending-visual-qa",
+      "prompt": "art/prompts/stations/fern.txt"
+    },
+    {
       "id": "lumen",
       "kind": "familiar",
       "source": "art/source/familiars/lumen.png",
@@ -49,6 +61,18 @@
       "license": "Project owner to confirm rights to original references before redistribution",
       "status": "pending-visual-qa",
       "prompt": "art/prompts/lumen.txt"
+    },
+    {
+      "id": "lumen-stations",
+      "kind": "familiar-stations",
+      "source": "art/source/familiars/lumen-stations.png",
+      "export": "assets/sprites/lumen-stations-v1.png",
+      "authoring": "OpenAI built-in image generation, derived from the project's supplied character design",
+      "date": "2026-09-26",
+      "provenance": "New source sheet generated for this project. Original character authorship and license were not supplied.",
+      "license": "Project owner to confirm rights to original references before redistribution",
+      "status": "pending-visual-qa",
+      "prompt": "art/prompts/stations/lumen.txt"
     },
     {
       "id": "cedar",
@@ -63,6 +87,18 @@
       "prompt": "art/prompts/cedar.txt"
     },
     {
+      "id": "cedar-stations",
+      "kind": "familiar-stations",
+      "source": "art/source/familiars/cedar-stations.png",
+      "export": "assets/sprites/cedar-stations-v1.png",
+      "authoring": "OpenAI built-in image generation, derived from the project's supplied character design",
+      "date": "2026-09-26",
+      "provenance": "New source sheet generated for this project. Original character authorship and license were not supplied.",
+      "license": "Project owner to confirm rights to original references before redistribution",
+      "status": "pending-visual-qa",
+      "prompt": "art/prompts/stations/cedar.txt"
+    },
+    {
       "id": "alder",
       "kind": "familiar",
       "source": "art/source/familiars/alder.png",
@@ -73,6 +109,18 @@
       "license": "Project owner to confirm rights to original references before redistribution",
       "status": "pending-visual-qa",
       "prompt": "art/prompts/alder.txt"
+    },
+    {
+      "id": "alder-stations",
+      "kind": "familiar-stations",
+      "source": "art/source/familiars/alder-stations.png",
+      "export": "assets/sprites/alder-stations-v1.png",
+      "authoring": "OpenAI built-in image generation, derived from the project's supplied character design",
+      "date": "2026-09-26",
+      "provenance": "New source sheet generated for this project. Original character authorship and license were not supplied.",
+      "license": "Project owner to confirm rights to original references before redistribution",
+      "status": "pending-visual-qa",
+      "prompt": "art/prompts/stations/alder.txt"
     },
     {
       "id": "mica",
@@ -87,6 +135,18 @@
       "prompt": "art/prompts/mica.txt"
     },
     {
+      "id": "mica-stations",
+      "kind": "familiar-stations",
+      "source": "art/source/familiars/mica-stations.png",
+      "export": "assets/sprites/mica-stations-v1.png",
+      "authoring": "OpenAI built-in image generation, derived from the project's supplied character design",
+      "date": "2026-09-26",
+      "provenance": "New source sheet generated for this project. Original character authorship and license were not supplied.",
+      "license": "Project owner to confirm rights to original references before redistribution",
+      "status": "pending-visual-qa",
+      "prompt": "art/prompts/stations/mica.txt"
+    },
+    {
       "id": "ripple",
       "kind": "familiar",
       "source": "art/source/familiars/ripple.png",
@@ -97,6 +157,18 @@
       "license": "Project owner to confirm rights to original references before redistribution",
       "status": "pending-visual-qa",
       "prompt": "art/prompts/ripple.txt"
+    },
+    {
+      "id": "ripple-stations",
+      "kind": "familiar-stations",
+      "source": "art/source/familiars/ripple-stations.png",
+      "export": "assets/sprites/ripple-stations-v1.png",
+      "authoring": "OpenAI built-in image generation, derived from the project's supplied character design",
+      "date": "2026-09-26",
+      "provenance": "New source sheet generated for this project. Original character authorship and license were not supplied.",
+      "license": "Project owner to confirm rights to original references before redistribution",
+      "status": "pending-visual-qa",
+      "prompt": "art/prompts/stations/ripple.txt"
     },
     {
       "id": "thimble",
@@ -111,6 +183,18 @@
       "prompt": "art/prompts/thimble.txt"
     },
     {
+      "id": "thimble-stations",
+      "kind": "familiar-stations",
+      "source": "art/source/familiars/thimble-stations.png",
+      "export": "assets/sprites/thimble-stations-v1.png",
+      "authoring": "OpenAI built-in image generation, derived from the project's supplied character design",
+      "date": "2026-09-26",
+      "provenance": "New source sheet generated for this project. Original character authorship and license were not supplied.",
+      "license": "Project owner to confirm rights to original references before redistribution",
+      "status": "pending-visual-qa",
+      "prompt": "art/prompts/stations/thimble.txt"
+    },
+    {
       "id": "spruce",
       "kind": "familiar",
       "source": "art/source/familiars/spruce.png",
@@ -123,6 +207,18 @@
       "prompt": "art/prompts/spruce.txt"
     },
     {
+      "id": "spruce-stations",
+      "kind": "familiar-stations",
+      "source": "art/source/familiars/spruce-stations.png",
+      "export": "assets/sprites/spruce-stations-v1.png",
+      "authoring": "OpenAI built-in image generation, derived from the project's supplied character design",
+      "date": "2026-09-26",
+      "provenance": "New source sheet generated for this project. Original character authorship and license were not supplied.",
+      "license": "Project owner to confirm rights to original references before redistribution",
+      "status": "pending-visual-qa",
+      "prompt": "art/prompts/stations/spruce.txt"
+    },
+    {
       "id": "nettle",
       "kind": "familiar",
       "source": "art/source/familiars/nettle.png",
@@ -133,6 +229,18 @@
       "license": "Project owner to confirm rights to original references before redistribution",
       "status": "pending-visual-qa",
       "prompt": "art/prompts/nettle.txt"
+    },
+    {
+      "id": "nettle-stations",
+      "kind": "familiar-stations",
+      "source": "art/source/familiars/nettle-stations.png",
+      "export": "assets/sprites/nettle-stations-v1.png",
+      "authoring": "OpenAI built-in image generation, derived from the project's supplied character design",
+      "date": "2026-09-26",
+      "provenance": "New source sheet generated for this project. Original character authorship and license were not supplied.",
+      "license": "Project owner to confirm rights to original references before redistribution",
+      "status": "pending-visual-qa",
+      "prompt": "art/prompts/stations/nettle.txt"
     },
     {
       "id": "workshop",

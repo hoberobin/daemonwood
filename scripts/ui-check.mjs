@@ -6,6 +6,7 @@ import { tmpdir } from 'node:os';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createDaemonwoodServer } from '../src/event-server.js';
+import { MAP_FAMILIAR_LIMIT } from '../src/world-model.js';
 
 // Isolated browser integration checks. No real process/session discovery,
 // settings writes, adapter installation, or production event POSTs.
@@ -73,11 +74,12 @@ try {
     fixtureStream.emit('ready',{setup:setupFixture,delivery:{hookEvents:0,lastHookReceivedAt:null}});
   })()`);
   await check('installation alone never claims event delivery', `document.querySelector('#connect-label').textContent === 'Ready for Claude Code' && document.querySelector('#connect-dot').hidden`);
-  await evaluate(`for(let i=0;i<5;i++) app.applySafeEvent(fixture('Session '+i));`);
-  await check('five waiting sessions are counted, with an actionable overflow', `app.registry.records.size===5 && app.registry.visible.length===4 && document.querySelector('#hidden-notice').tagName==='BUTTON' && !document.querySelector('#hidden-notice').hidden`);
+  const overflowCount = MAP_FAMILIAR_LIMIT + 1;
+  await evaluate(`for(let i=0;i<${overflowCount};i++) app.applySafeEvent(fixture('Session '+i));`);
+  await check('waiting sessions are counted, with an actionable overflow', `app.registry.records.size===${overflowCount} && app.registry.visible.length===${MAP_FAMILIAR_LIMIT} && document.querySelector('#hidden-notice').tagName==='BUTTON' && !document.querySelector('#hidden-notice').hidden`);
   await check('attention is announced without selecting a familiar', `!app.registry.selected && document.querySelector('#live-status').textContent.includes('needs you')`);
   await evaluate(`document.querySelector('#attention-banner').click()`);
-  await check('attention opens a complete five-session queue', `document.querySelector('#session-picker').open && document.querySelectorAll('#session-list button').length===5`);
+  await check('attention opens the complete session queue', `document.querySelector('#session-picker').open && document.querySelectorAll('#session-list button').length===${overflowCount}`);
   await evaluate(`window.focusedChoice=document.querySelector('#session-list button');focusedChoice.focus();app.applySafeEvent(fixture('Session 0'));`);
   await check('an event update preserves the focused session button', `focusedChoice.isConnected && document.activeElement===focusedChoice`);
   // Exercise the real 15-second refresh, not only event-driven renders.
@@ -87,7 +89,7 @@ try {
   await check('hidden sessions open the inspector without displacing another session', `app.registry.selectedId===hiddenKey && !app.registry.visibleKeys.includes(hiddenKey) && !document.querySelector('#inspector').hidden`);
   await evaluate(`fixtureStream.emit('daemonwood-snapshot',[...app.registry.records.values()].map(r=>fixture(r.key)));`);
   await check('reconnect snapshots preserve a still-existing selected session', `app.registry.selectedId===hiddenKey`);
-  await check('accessible map has no invisible tab stops', `document.querySelectorAll('#sr-roster button, #sr-roster [tabindex]').length===0 && document.querySelectorAll('#sr-roster li').length===5`);
+  await check('accessible map has no invisible tab stops', `document.querySelectorAll('#sr-roster button, #sr-roster [tabindex]').length===0 && document.querySelectorAll('#sr-roster li').length===${overflowCount}`);
   await evaluate(`fixtureStream.emit('daemonwood-delivery',{hookEvents:1,lastHookReceivedAt:new Date().toISOString()});`);
   await check('actual delivery updates the status immediately', `document.querySelector('#connect-label').textContent==='Receiving Claude events' && !document.querySelector('#connect-dot').hidden`);
   await evaluate(`fixtureStream.emit('error',{});`);
