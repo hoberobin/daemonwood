@@ -1,0 +1,147 @@
+{
+  "version": 1,
+  "notes": "Sources are raster masters, not recovered layered paintings. Layer manifests, masks and runtime effects are editable separately. Exports are generated; never hand edit them.",
+  "assets": [
+    {
+      "id": "moss",
+      "kind": "familiar",
+      "source": "art/source/familiars/moss.png",
+      "export": "assets/sprites/moss-actions-v1.png",
+      "authoring": "OpenAI built-in image generation, derived from the project's supplied character design",
+      "date": "2026-09-25",
+      "provenance": "New source sheet generated for this project. Original character authorship and license were not supplied.",
+      "license": "Project owner to confirm rights to original references before redistribution",
+      "status": "pending-visual-qa",
+      "prompt": "art/prompts/moss.txt"
+    },
+    {
+      "id": "fern",
+      "kind": "familiar",
+      "source": "art/source/familiars/fern.png",
+      "export": "assets/sprites/fern-actions-v1.png",
+      "authoring": "OpenAI built-in image generation, derived from the project's supplied character design",
+      "date": "2026-09-25",
+      "provenance": "New source sheet generated for this project. Original character authorship and license were not supplied.",
+      "license": "Project owner to confirm rights to original references before redistribution",
+      "status": "pending-visual-qa",
+      "prompt": "art/prompts/fern.txt"
+    },
+    {
+      "id": "lumen",
+      "kind": "familiar",
+      "source": "art/source/familiars/lumen.png",
+      "export": "assets/sprites/lumen-actions-v1.png",
+      "authoring": "OpenAI built-in image generation, derived from the project's supplied character design",
+      "date": "2026-09-25",
+      "provenance": "New source sheet generated for this project. Original character authorship and license were not supplied.",
+      "license": "Project owner to confirm rights to original references before redistribution",
+      "status": "pending-visual-qa",
+      "prompt": "art/prompts/lumen.txt"
+    },
+    {
+      "id": "cedar",
+      "kind": "familiar",
+      "source": "art/source/familiars/cedar.png",
+      "export": "assets/sprites/cedar-actions-v1.png",
+      "authoring": "OpenAI built-in image generation, derived from the project's supplied character design",
+      "date": "2026-09-25",
+      "provenance": "New source sheet generated for this project. Original character authorship and license were not supplied.",
+      "license": "Project owner to confirm rights to original references before redistribution",
+      "status": "pending-visual-qa",
+      "prompt": "art/prompts/cedar.txt"
+    },
+    {
+      "id": "alder",
+      "kind": "familiar",
+      "source": "art/source/familiars/alder.png",
+      "export": "assets/sprites/alder-actions-v1.png",
+      "authoring": "OpenAI built-in image generation, derived from the project's supplied character design",
+      "date": "2026-09-25",
+      "provenance": "New source sheet generated for this project. Original character authorship and license were not supplied.",
+      "license": "Project owner to confirm rights to original references before redistribution",
+      "status": "pending-visual-qa",
+      "prompt": "art/prompts/alder.txt"
+    },
+    {
+      "id": "mica",
+      "kind": "familiar",
+      "source": "art/source/familiars/mica.png",
+      "export": "assets/sprites/mica-actions-v1.png",
+      "authoring": "OpenAI built-in image generation, derived from the project's supplied character design",
+      "date": "2026-09-25",
+      "provenance": "New source sheet generated for this project. Original character authorship and license were not supplied.",
+      "license": "Project owner to confirm rights to original references before redistribution",
+      "status": "pending-visual-qa",
+      "prompt": "art/prompts/mica.txt"
+    },
+    {
+      "id": "ripple",
+      "kind": "familiar",
+      "source": "art/source/familiars/ripple.png",
+      "export": "assets/sprites/ripple-actions-v1.png",
+      "authoring": "OpenAI built-in image generation, derived from the project's supplied character design",
+      "date": "2026-09-25",
+      "provenance": "New source sheet generated for this project. Original character authorship and license were not supplied.",
+      "license": "Project owner to confirm rights to original references before redistribution",
+      "status": "pending-visual-qa",
+      "prompt": "art/prompts/ripple.txt"
+    },
+    {
+      "id": "thimble",
+      "kind": "familiar",
+      "source": "art/source/familiars/thimble.png",
+      "export": "assets/sprites/thimble-actions-v1.png",
+      "authoring": "OpenAI built-in image generation, derived from the project's supplied character design",
+      "date": "2026-09-25",
+      "provenance": "New source sheet generated for this project. Original character authorship and license were not supplied.",
+      "license": "Project owner to confirm rights to original references before redistribution",
+      "status": "pending-visual-qa",
+      "prompt": "art/prompts/thimble.txt"
+    },
+    {
+      "id": "spruce",
+      "kind": "familiar",
+      "source": "art/source/familiars/spruce.png",
+      "export": "assets/sprites/spruce-actions-v1.png",
+      "authoring": "OpenAI built-in image generation, derived from the project's supplied character design",
+      "date": "2026-09-25",
+      "provenance": "New source sheet generated for this project. Original character authorship and license were not supplied.",
+      "license": "Project owner to confirm rights to original references before redistribution",
+      "status": "pending-visual-qa",
+      "prompt": "art/prompts/spruce.txt"
+    },
+    {
+      "id": "nettle",
+      "kind": "familiar",
+      "source": "art/source/familiars/nettle.png",
+      "export": "assets/sprites/nettle-actions-v1.png",
+      "authoring": "OpenAI built-in image generation, derived from the project's supplied character design",
+      "date": "2026-09-25",
+      "provenance": "New source sheet generated for this project. Original character authorship and license were not supplied.",
+      "license": "Project owner to confirm rights to original references before redistribution",
+      "status": "pending-visual-qa",
+      "prompt": "art/prompts/nettle.txt"
+    },
+    {
+      "id": "workshop",
+      "kind": "map",
+      "source": "art/source/map/workshop-master.png",
+      "export": "assets/map/workshop-plate-v3.png",
+      "authoring": "Existing project raster master; original layered painting unavailable",
+      "provenance": "Copied byte-for-byte from approved runtime plate v3",
+      "license": "Unrecorded in supplied project",
+      "status": "approved-existing"
+    },
+    {
+      "id": "toolbox-helper",
+      "kind": "helper",
+      "source": "art/source/props/toolbox-helper.png",
+      "export": "assets/sprites/toolbox-helper-v1.png",
+      "authoring": "OpenAI built-in image generation",
+      "date": "2026-09-25",
+      "license": "Generated for this project; no third-party reference used beyond supplied project art",
+      "status": "pending-visual-qa",
+      "prompt": "art/prompts/toolbox-helper.txt"
+    }
+  ]
+}

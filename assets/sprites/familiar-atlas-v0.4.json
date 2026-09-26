@@ -1,0 +1,38 @@
+{
+  "frameWidth": 128,
+  "frameHeight": 128,
+  "logicalDrawSize": 42,
+  "catalog": "../src/familiars.js",
+  "familiars": {
+    "moss": {"name": "Moss", "species": "raccoon mechanic", "image": "moss-walk-v0.3.png"},
+    "fern": {"name": "Fern", "species": "opossum archivist", "image": "fern-walk-v0.2.png"},
+    "lumen": {"name": "Lumen", "species": "luna-moth tester", "image": "lumen-walk-v0.2.png"},
+    "cedar": {"name": "Cedar", "species": "pigeon courier", "image": "cedar-walk-v0.2.png"},
+    "alder": {"name": "Alder", "species": "beaver builder", "image": "alder-walk-v0.1.png"},
+    "mica": {"name": "Mica", "species": "spotted-owl analyst", "image": "mica-walk-v0.1.png"},
+    "ripple": {"name": "Ripple", "species": "river-otter debugger", "image": "ripple-walk-v0.1.png"},
+    "thimble": {"name": "Thimble", "species": "deer-mouse scout", "image": "thimble-walk-v0.1.png"},
+    "spruce": {"name": "Spruce", "species": "Douglas-squirrel cartographer", "image": "spruce-walk-v0.1.png"},
+    "nettle": {"name": "Nettle", "species": "banana-slug forager", "image": "nettle-walk-v0.1.png"}
+  },
+  "frames": {
+    "walk_down_0": {"x": 0, "y": 0},
+    "walk_down_1": {"x": 128, "y": 0},
+    "walk_left_0": {"x": 256, "y": 0},
+    "walk_left_1": {"x": 384, "y": 0},
+    "walk_right_0": {"x": 512, "y": 0},
+    "walk_right_1": {"x": 640, "y": 0},
+    "walk_up_0": {"x": 768, "y": 0},
+    "walk_up_1": {"x": 896, "y": 0}
+  },
+  "animations": {
+    "walk:down": ["walk_down_0", "walk_down_1"],
+    "walk:left": ["walk_left_0", "walk_left_1"],
+    "walk:right": ["walk_right_0", "walk_right_1"],
+    "walk:up": ["walk_up_0", "walk_up_1"]
+  },
+  "frameRate": 6,
+  "repeat": -1,
+  "status": "production-high-density",
+  "notes": "Ten familiars share eight 128px source frames and one 42-unit world footprint. src/familiars.js is the runtime catalog; this manifest mirrors it for art tooling and is contract-tested against it."
+}

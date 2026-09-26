@@ -1,0 +1,30 @@
+{
+  "frameWidth": 32,
+  "frameHeight": 32,
+  "familiars": {
+    "moss": {"name": "Moss", "species": "raccoon mechanic", "image": "moss-walk-v0.2.png"},
+    "fern": {"name": "Fern", "species": "opossum archivist", "image": "fern-walk-v0.1.png"},
+    "lumen": {"name": "Lumen", "species": "luna-moth tester", "image": "lumen-walk-v0.1.png"},
+    "cedar": {"name": "Cedar", "species": "pigeon courier", "image": "cedar-walk-v0.1.png"}
+  },
+  "frames": {
+    "walk_down_0": {"x": 0, "y": 0},
+    "walk_down_1": {"x": 32, "y": 0},
+    "walk_left_0": {"x": 64, "y": 0},
+    "walk_left_1": {"x": 96, "y": 0},
+    "walk_right_0": {"x": 128, "y": 0},
+    "walk_right_1": {"x": 160, "y": 0},
+    "walk_up_0": {"x": 192, "y": 0},
+    "walk_up_1": {"x": 224, "y": 0}
+  },
+  "animations": {
+    "walk:down": ["walk_down_0", "walk_down_1"],
+    "walk:left": ["walk_left_0", "walk_left_1"],
+    "walk:right": ["walk_right_0", "walk_right_1"],
+    "walk:up": ["walk_up_0", "walk_up_1"]
+  },
+  "frameRate": 6,
+  "repeat": -1,
+  "status": "production-pass",
+  "notes": "Four coordinated familiars share one walk contract and are assigned per session without duplicate species while capacity permits."
+}

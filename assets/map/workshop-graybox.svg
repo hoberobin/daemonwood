@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 288" width="1536" height="864" shape-rendering="crispEdges">
+  <title>The Patch lifecycle workshop graybox</title>
+  <desc>Exact 32 by 18 tile planning map with one shared place for each visible lifecycle stage and no ended-session holding area.</desc>
+  <defs>
+    <pattern id="grid" width="16" height="16" patternUnits="userSpaceOnUse">
+      <path d="M16 0H0V16" fill="none" stroke="#d8dfd1" stroke-opacity=".12"/>
+    </pattern>
+  </defs>
+  <rect width="512" height="288" fill="#30453a"/>
+  <path d="M384 224h128v64H368v-16h16z" fill="#28626a"/>
+  <path d="M0 0h512v12H0zM0 0h14v288H0zM498 0h14v224h-14zM0 272h384v16H0z" fill="#172a24"/>
+
+  <g fill="#765f45" opacity=".85">
+    <path d="M96 88h320v18H96z"/>
+    <path d="M248 88h18v136h-18z"/>
+    <path d="M96 150h320v18H96z"/>
+  </g>
+
+  <g stroke="#d9c89e" stroke-width="2">
+    <rect x="40" y="20" width="124" height="76" fill="#78523c"/>
+    <rect x="184" y="20" width="84" height="76" fill="#4e3e2f"/>
+    <rect x="280" y="20" width="84" height="76" fill="#31535a"/>
+    <rect x="408" y="16" width="88" height="96" fill="#30383b"/>
+    <circle cx="257" cy="151" r="35" fill="#263b31"/>
+    <rect x="40" y="176" width="128" height="72" fill="#433e35" stroke="#e0b43d"/>
+    <rect x="344" y="176" width="128" height="80" fill="#493a2c" stroke="#78b783"/>
+  </g>
+
+  <g fill="#f0e2b6" font-family="monospace" font-size="8" font-weight="700" text-anchor="middle">
+    <text x="102" y="34">WORKBENCH</text>
+    <text x="226" y="34">RESEARCH</text>
+    <text x="322" y="34">COMMAND</text>
+    <text x="452" y="34">TEST</text>
+    <text x="257" y="153">IDLE</text>
+    <text x="104" y="194">NEEDS INPUT</text>
+    <text x="408" y="194">DONE</text>
+  </g>
+
+  <g fill="#b7d4c2" stroke="#15241f">
+    <circle cx="102" cy="82" r="3"/><circle cx="226" cy="82" r="3"/>
+    <circle cx="322" cy="82" r="3"/><circle cx="450" cy="90" r="3"/>
+    <circle cx="257" cy="151" r="3"/><circle cx="103" cy="216" r="3"/>
+    <circle cx="408" cy="219" r="3"/>
+    <circle cx="165" cy="111" r="3"/><circle cx="257" cy="105" r="3"/>
+    <circle cx="356" cy="111" r="3"/><circle cx="166" cy="158" r="3"/>
+    <circle cx="348" cy="158" r="3"/><circle cx="257" cy="205" r="3"/>
+  </g>
+
+  <rect width="512" height="288" fill="url(#grid)" pointer-events="none"/>
+  <text x="8" y="282" fill="#d8dfd1" font-family="monospace" font-size="7">32×18 TILES · 16PX · 512×288</text>
+</svg>

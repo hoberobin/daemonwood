@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "about": "Optional station-work extension sheet, one per familiar, beside the 24-frame base sheet. Source: art/source/familiars/<id>-stations.png, 1024x512, 4 columns x 2 rows of 256px cells. Exported at the base sheet's own scale so the body matches frame for frame.",
+  "frameSize": 128,
+  "columns": 4,
+  "rows": 2,
+  "baseline": 119,
+  "pivot": [
+    64,
+    119
+  ],
+  "drawSize": 42,
+  "sourceSuffix": "-stations",
+  "animations": {
+    "editing": [
+      0,
+      1
+    ],
+    "investigating": [
+      2,
+      3
+    ],
+    "running": [
+      4,
+      5
+    ],
+    "testing": [
+      6,
+      7
+    ]
+  },
+  "items": {
+    "editing": "wooden mallet: raised, then tapped down",
+    "investigating": "cedar-bound book: reading, then a page mid-turn",
+    "running": "short brass lever: held upright, then pulled back",
+    "testing": "small glass flask: held up to the eye, then swirled"
+  },
+  "familiars": {}
+}

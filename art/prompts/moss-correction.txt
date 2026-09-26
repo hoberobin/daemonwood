@@ -1,0 +1,1 @@
+Use case: precise-object-edit. Preserve the approved 1024x1536 transparent Moss sheet and all 24 positions. Correct only the continuity of the monocle: row 2 left-facing views must show no monocle because it is on the far side. Preserve species, costume, lamp, poses, scale, alpha, gutters and texture; do not add or remove frames.

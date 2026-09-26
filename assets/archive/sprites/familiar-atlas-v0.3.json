@@ -1,0 +1,31 @@
+{
+  "frameWidth": 128,
+  "frameHeight": 128,
+  "logicalDrawSize": 42,
+  "familiars": {
+    "moss": {"name": "Moss", "species": "raccoon mechanic", "image": "moss-walk-v0.3.png"},
+    "fern": {"name": "Fern", "species": "opossum archivist", "image": "fern-walk-v0.2.png"},
+    "lumen": {"name": "Lumen", "species": "luna-moth tester", "image": "lumen-walk-v0.2.png"},
+    "cedar": {"name": "Cedar", "species": "pigeon courier", "image": "cedar-walk-v0.2.png"}
+  },
+  "frames": {
+    "walk_down_0": {"x": 0, "y": 0},
+    "walk_down_1": {"x": 128, "y": 0},
+    "walk_left_0": {"x": 256, "y": 0},
+    "walk_left_1": {"x": 384, "y": 0},
+    "walk_right_0": {"x": 512, "y": 0},
+    "walk_right_1": {"x": 640, "y": 0},
+    "walk_up_0": {"x": 768, "y": 0},
+    "walk_up_1": {"x": 896, "y": 0}
+  },
+  "animations": {
+    "walk:down": ["walk_down_0", "walk_down_1"],
+    "walk:left": ["walk_left_0", "walk_left_1"],
+    "walk:right": ["walk_right_0", "walk_right_1"],
+    "walk:up": ["walk_up_0", "walk_up_1"]
+  },
+  "frameRate": 6,
+  "repeat": -1,
+  "status": "production-high-density",
+  "notes": "128px source frames match the illustrated plate's source-pixel density while retaining the same 42-unit world footprint."
+}

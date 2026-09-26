@@ -1,0 +1,516 @@
+/* The Patch — local workshop UI.
+   The world is the interface. At rest the page is the map, a name, and a way
+   in. Detail arrives as a drawer sliding over the right edge of the map — the
+   board does not move for the chrome, the way it does not in any game with a
+   fixed board and a unit panel. What the drawer covers, the renderer redraws
+   as a column of badges at its edge, so the panel costs the map pixels and
+   never costs it a session. */
+
+/* These literals are a mirror, not a source. `src/design/tokens.js` decides the
+   palette; they are declared here so the first paint is right before any script
+   runs, and `applyTokens()` writes them again at boot. `tests/design-tokens.test.js`
+   fails the moment the two copies disagree, so the duplication cannot rot. */
+:root {
+  --soot: #13120e;
+  --surface: #1c1913;
+  --surface-raised: #262117;
+  --border: #3a3020;
+  --ink: #f1ece0;
+  --muted: #a2977f;
+  --paper: #f7f1e3;
+  --frame: #0f0e0a;
+  --scrim: rgba(17, 15, 11, 0.84);
+  --veil: rgba(10, 9, 6, 0.74);
+  --chip: rgba(24, 21, 15, 0.9);
+  --hairline: rgba(58, 48, 32, 0.55);
+  --cedar: #675e57;
+  --brass: #b89167;
+  --lamp: #e8be88;
+  --state-needs-input: #ffcf3d;
+  --state-trouble: #ef5a35;
+  --state-finished: #a9d143;
+  --state-arriving: #a4bcc6;
+  --state-preparing: #6ea5bb;
+  --state-investigating: #3b9fbd;
+  --state-editing: #6ba2dc;
+  --state-running: #4668c4;
+  --state-testing: #8b8ed8;
+  --state-idle: #8a8c7c;
+  --state-disconnected: #5f635e;
+  --gold-wash: rgba(255, 207, 61, 0.13);
+  --gold-edge: #7a6222;
+  --ember-wash: rgba(239, 90, 53, 0.12);
+  --ember-edge: #7d3524;
+  --hud-font: ui-monospace, "SF Mono", Menlo, monospace;
+  --hud-tracking: 0.09em;
+  --sign-plank-top: #2a2117;
+  --sign-plank-bottom: #191209;
+  --sign-batten: #473e39;
+  --sign-edge: #212026;
+  --shadow: 0 10px 30px rgba(0, 0, 0, .45);
+  --hud-label: 10.5px;
+
+  /* The one material. Every control and panel in the interface is the same
+     object the station placards on the map are: a dark plank face set in a
+     cedar batten, over a soot outline. White and black only, so it adds no
+     colour to the palette. */
+  --plank: linear-gradient(180deg, var(--sign-plank-top), var(--sign-plank-bottom));
+  --lip: 0 2px 0 rgba(0, 0, 0, .45);
+  --pressed: inset 0 2px 3px rgba(0, 0, 0, .45);
+  /* Three radii, and every corner in this file is one of them. */
+  --radius-sm: 3px;
+  --radius: 5px;
+  --radius-lg: 8px;
+}
+
+/* One treatment for every micro-label in the interface, so the panel and the
+   canvas placards read as one instrument rather than a web card parked next to
+   a game. Anything that names a field rather than carrying its value wears it. */
+.hud-label {
+  font-family: var(--hud-font); font-size: var(--hud-label);
+  letter-spacing: var(--hud-tracking); text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* For anyone reading the page rather than looking at it. The map is a canvas;
+   the text the canvas used to draw lives here now. */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow-x: hidden;
+  background: var(--soot);
+  color: var(--ink);
+  font: 14px/1.45 ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2 { margin: 0; font-weight: 700; letter-spacing: -.01em; }
+
+/* The map is the page. No max width and a thin margin, so the 16:9 frame
+   grows until it meets the window on one axis. */
+.app-shell {
+  height: 100%;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- top-right HUD ----
+   Not a bar any more: the controls float over the map's top-right corner and
+   take no height of their own. Each one is hidden unless it is needed, so at
+   rest the corner is empty map. It sits under the drawer (z-index 3), which
+   covers it while a familiar is open. */
+
+.topbar {
+  position: absolute; top: 10px; right: 10px; left: 10px; z-index: 2;
+  display: flex; justify-content: flex-end;
+  pointer-events: none;
+}
+.topbar-tools { display: flex; align-items: center; gap: 8px; min-width: 0; pointer-events: auto; }
+.connect-button[hidden] { display: none; }
+
+/* A dot is a light, and a light is a state: green for "live" beside a status,
+   ember for a bridge in trouble. Never decoration. */
+.dot { width: 7px; height: 7px; border-radius: 50%; flex: none; display: inline-block; }
+.dot.needs-input { background: var(--state-needs-input); }
+.dot.trouble { background: var(--state-trouble); }
+.dot.finished { background: var(--state-finished); }
+.dot.arriving { background: var(--state-arriving); }
+.dot.preparing { background: var(--state-preparing); }
+.dot.investigating { background: var(--state-investigating); }
+.dot.editing { background: var(--state-editing); }
+.dot.running { background: var(--state-running); }
+.dot.testing { background: var(--state-testing); }
+.dot.idle { background: var(--state-idle); }
+.dot.disconnected { background: var(--state-disconnected); }
+
+/* ---- buttons ----
+   One button, the way a game has one: a plank in a batten that sits on a dark
+   lip and drops onto it when pressed. Variants change the edge, never the
+   shape. */
+
+.connect-button, .attention-banner {
+  min-height: 44px; border-radius: var(--radius);
+  border: 2px solid var(--sign-batten);
+  background: var(--plank);
+  box-shadow: 0 0 0 1px var(--sign-edge), var(--lip);
+  color: var(--ink); font: inherit; cursor: pointer;
+}
+.connect-button:hover { border-color: var(--brass); }
+.connect-button:active, .attention-banner:active {
+  transform: translateY(2px);
+  box-shadow: 0 0 0 1px var(--sign-edge), var(--pressed);
+}
+
+.connect-button {
+  padding: 0 16px;
+  color: var(--muted); font-size: 12.5px; font-weight: 600;
+  font-family: var(--hud-font); letter-spacing: .04em;
+}
+.connect-button .dot { margin-right: 8px; vertical-align: 1px; }
+.connect-button .dot[hidden] { display: none; }
+/* Once it says "connected" it is a fact, not a call to action, and it reads in
+   the same ink as the rest of the bar. Until then its edge is the lamp. */
+.connect-button.connected { color: var(--ink); }
+.connect-button:not(.connected) { border-color: var(--brass); color: var(--lamp); }
+.connect-button .connect-short { display: none; }
+.connect-button:hover { color: var(--ink); }
+
+/* ---- the one alert ----
+   Silence means nothing needs you, so this appears only when it does. It is
+   the one button allowed to be a signal colour all over, because the whole
+   object is the signal. */
+.attention-banner {
+  display: inline-flex; align-items: center; gap: 9px;
+  padding: 0 14px 0 8px;
+  border-color: var(--gold-edge);
+  background: linear-gradient(var(--gold-wash), var(--gold-wash)), var(--plank);
+  font-size: 13px;
+  animation: alert-in .22s ease-out;
+}
+.attention-banner:hover { border-color: var(--state-needs-input); }
+.attention-banner[hidden] { display: none; }
+.attention-banner strong { font-weight: 600; white-space: nowrap; }
+/* The same lit badge a familiar wears over its head when it needs you, so the
+   alert and the creature it is about are visibly one thing. */
+.alert-glyph {
+  display: inline-grid; place-items: center; flex: none;
+  width: 22px; height: 22px; border-radius: var(--radius-sm);
+  background: var(--state-needs-input); color: var(--soot);
+  box-shadow: 0 0 0 1px var(--sign-edge);
+  font-family: var(--hud-font); font-style: normal; font-weight: 800; font-size: 13px; line-height: 1;
+  animation: pulse 1.8s ease-in-out infinite;
+}
+/* The address, after the name: quieter than the name, still on the button, so
+   "Moss needs you · VS Code ttys003" is one read. */
+.attention-banner .where { font-family: var(--hud-font); font-size: 11.5px; letter-spacing: .02em; white-space: nowrap; opacity: .82; }
+.attention-banner .where::before { content: "·"; margin-right: 8px; opacity: .6; }
+.attention-banner .where[hidden] { display: none; }
+@keyframes alert-in { from { opacity: 0; transform: translateY(-3px); } }
+@keyframes pulse { 50% { opacity: .55; } }
+
+/* Quieter than the alert on purpose: nothing is wrong, the clearing is just
+   smaller than the number of sessions. It states a fact and asks for nothing. */
+.hidden-chip {
+  display: inline-flex; align-items: center;
+  min-height: 44px; padding: 0 12px;
+  font-family: var(--hud-font); font-size: 11.5px; letter-spacing: .02em;
+  color: var(--muted);
+  white-space: nowrap; cursor: pointer;
+  border: 1px solid var(--sign-batten); border-radius: var(--radius); background: var(--plank);
+}
+.hidden-chip[hidden] { display: none; }
+
+.connect-button:focus-visible, .icon-button:focus-visible,
+.attention-banner:focus-visible,
+.hidden-chip:focus-visible, .session-choice:focus-visible {
+  outline: 2px solid var(--lamp); outline-offset: 2px;
+}
+
+/* ---- the world ---- */
+
+.world-wrap { flex: 1; min-height: 0; display: flex; justify-content: center; align-items: center; container-type: size; }
+
+/* The frame carries the world's aspect ratio itself, so the art meets the border
+   on every edge instead of sitting inside dead letterbox bars. It is 16:9 and it
+   stays 16:9: the drawer goes over the top and the map holds still. The border
+   is the same cedar batten the placards on the map are set in. */
+.world-frame {
+  position: relative; width: min(100%, calc(100cqh * 16 / 9)); aspect-ratio: 16 / 9; max-height: 100%;
+  border: 2px solid var(--sign-batten);
+  border-radius: var(--radius-lg);
+  overflow: hidden; background: var(--frame);
+  box-shadow: 0 0 0 1px var(--sign-edge), var(--shadow);
+}
+.world-stage { position: absolute; inset: 0; }
+
+/* The canvas fills the frame exactly. The renderer matches its backing store to
+   this displayed size and letterboxes the 16:9 world inside it, so there is no
+   CSS upscaling and pointer coordinates stay mappable. */
+#world { display: block; width: 100%; height: 100%; }
+#world:focus-visible { outline: 2px solid var(--lamp); outline-offset: -3px; }
+
+/* ---- the inspector ----
+   A drawer docked to the right edge of the map. It slides in over the world and
+   the world does not move for it. Its width is clamped in pixels: it holds one
+   column of text, so on a wide monitor a percentage was buying a 590px panel to
+   carry 300px of content and paying for it in map.
+
+   It is the same plank as every other control, with the batten down the edge
+   it slides in from — a unit panel, not a sign bolted to a post. */
+.inspector {
+  position: absolute; top: 0; right: 0; bottom: 0;
+  width: clamp(268px, 24%, 344px);
+  z-index: 3;
+  display: flex; flex-direction: column; gap: 12px;
+  padding: 14px; overflow: auto;
+  border: 0; border-left: 2px solid var(--sign-batten); border-radius: 0;
+  background: var(--plank);
+  box-shadow: -1px 0 0 var(--sign-edge), -18px 0 44px rgba(0, 0, 0, .45);
+  animation: drawer-in .18s cubic-bezier(.2, .7, .3, 1);
+}
+/* It slides out as well as in. A drawer that arrives and then blinks out of
+   existence is the one piece of motion a game would never leave half-built. */
+.inspector.closing { animation: drawer-out .18s cubic-bezier(.4, 0, 1, 1) forwards; }
+
+.inspector[hidden] { display: none; }
+@keyframes drawer-in { from { transform: translateX(100%); } }
+@keyframes drawer-out { to { transform: translateX(100%); } }
+
+.ins-head { display: flex; align-items: center; gap: 11px; }
+  /* Idle frame 16 of the shared four-column, six-row sheet. The portrait
+   uses the same art as the world. This is the panel's tie to the map
+   now that the names are off it: you recognise the silhouette you clicked.
+   Its frame is the state colour, the way a unit portrait is in any tactics
+   game — set inline by the app. */
+.ins-portrait {
+  width: 52px; height: 52px; flex: none; border-radius: var(--radius);
+  border: 2px solid var(--sign-batten);
+  background-color: rgba(0, 0, 0, .3);
+  background-repeat: no-repeat;
+  background-size: 400% 600%;
+  background-position: 0 80%;
+  box-shadow: 0 0 0 1px var(--sign-edge);
+}
+
+.ins-who { min-width: 0; flex: 1; }
+.ins-who strong { display: block; font-size: 15px; }
+.ins-who small { display: block; color: var(--muted); font-size: 11.5px; }
+
+/* The tab title: the one line in the drawer written in the session's own
+   words, so it gets body type and room to wrap rather than a clipped cell. */
+.ins-title {
+  margin: 0; font-size: 13px; line-height: 1.35; color: var(--ink);
+  overflow-wrap: anywhere;
+}
+.ins-title[hidden] { display: none; }
+
+.icon-button {
+  width: 34px; height: 34px; flex: none; border-radius: var(--radius);
+  border: 1px solid transparent; background: transparent; color: var(--muted);
+  font-size: 18px; line-height: 1; cursor: pointer;
+}
+.icon-button:active { transform: translateY(1px); }
+.icon-button:hover { border-color: var(--sign-batten); background: rgba(255, 255, 255, .04); color: var(--ink); }
+
+.ins-stats { margin: 0; display: grid; gap: 6px; }
+.ins-stats div {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px; min-width: 0;
+  padding-bottom: 6px; border-bottom: 1px solid var(--hairline);
+}
+.ins-stats div:last-child { padding-bottom: 0; border-bottom: 0; }
+.ins-stats div[hidden] { display: none; }
+.ins-stats dt {
+  flex: none; color: var(--muted); font-size: var(--hud-label);
+  font-family: var(--hud-font); letter-spacing: var(--hud-tracking); text-transform: uppercase;
+}
+.ins-stats dd {
+  margin: 0; font-size: 12px; text-align: right;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* The trail answers "what has this one been doing?" — the question the old
+   global debug log was being asked to answer and was bad at. */
+.ins-trail h2 {
+  margin: 0 0 6px; color: var(--muted); font-size: var(--hud-label);
+  font-family: var(--hud-font); font-weight: 600;
+  letter-spacing: var(--hud-tracking); text-transform: uppercase;
+}
+.ins-trail ol { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; }
+.ins-trail ol:empty::after { content: "No moves yet."; color: var(--muted); font-size: 11.5px; }
+.ins-trail li { display: flex; align-items: baseline; gap: 9px; font-size: 11.5px; }
+.ins-trail time {
+  flex: none; color: var(--muted);
+  font-family: var(--hud-font); font-size: 10.5px;
+}
+.ins-trail li.now span { font-weight: 700; }
+
+.ins-keys {
+  margin-top: auto; padding-top: 10px; border-top: 1px solid var(--hairline);
+  color: var(--muted); font-size: var(--hud-label);
+  font-family: var(--hud-font); letter-spacing: .02em;
+}
+/* Keys look like keys: a cap on a lip, which is what makes a hint read as
+   something you press. */
+kbd {
+  display: inline-block; min-width: 16px; padding: 1px 4px; margin-right: 2px;
+  border: 1px solid var(--sign-batten); border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, .04);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, .5);
+  font-family: var(--hud-font); font-size: 9.5px; text-align: center;
+}
+
+/* ---- corner HUD ----
+   A healthy bridge says nothing; the familiars walking are the proof. */
+
+.link-chip {
+  position: absolute; left: 10px; bottom: 10px;
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 6px 11px; border-radius: var(--radius);
+  border: 1px solid var(--sign-batten);
+  background: var(--chip);
+  font-size: 11.5px; color: var(--muted);
+}
+.link-chip[hidden] { display: none; }
+
+.empty-world {
+  position: absolute; inset: 0; display: grid; place-content: center; justify-items: center;
+  gap: 4px; padding: 24px; text-align: center;
+  background: var(--scrim); backdrop-filter: blur(3px);
+}
+.empty-world[hidden] { display: none; }
+.empty-world h2 { font-size: 19px; }
+.empty-world p { margin: 0 0 14px; color: var(--muted); }
+.empty-note { margin-top: 10px; font-size: 12px; color: var(--state-disconnected); }
+
+/* ---- developer console ----
+   Behind the backtick, the way a game hides its console. Raw stream, for
+   debugging the bridge — never part of the everyday interface. */
+
+.dev-console {
+  flex: none; max-height: 32vh; overflow: auto; padding: 10px 12px;
+  border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--surface);
+  animation: console-in .16s ease-out;
+}
+.dev-console[hidden] { display: none; }
+@keyframes console-in { from { opacity: 0; transform: translateY(8px); } }
+.dev-console h2 {
+  display: flex; justify-content: space-between; gap: 10px; margin: 0 0 8px;
+  color: var(--muted); font-size: var(--hud-label); font-weight: 600;
+  letter-spacing: .09em; text-transform: uppercase;
+}
+.dev-console h2 span { font-weight: 400; letter-spacing: .04em; text-transform: none; }
+.event-log {
+  margin: 0; padding: 10px 12px; list-style: none;
+  border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--soot);
+  font-family: var(--hud-font); font-size: 11px; color: var(--muted);
+}
+.event-log:empty::after { content: "Nothing on the wire yet."; }
+.event-log li { padding: 2px 0; border-bottom: 1px solid var(--hairline); }
+.event-log li:last-child { border-bottom: 0; }
+
+/* ---- connect dialog ----
+   The same plank as everything else, at dialog size. */
+
+.connect-dialog {
+  width: min(560px, calc(100% - 32px)); padding: 20px;
+  border: 2px solid var(--sign-batten); border-radius: var(--radius);
+  background: var(--plank);
+  color: var(--ink);
+  box-shadow: 0 0 0 1px var(--sign-edge), var(--shadow);
+}
+.connect-dialog::backdrop { background: var(--veil); }
+.dialog-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.eyebrow {
+  margin: 0 0 3px; font-size: 10px; letter-spacing: .13em; color: var(--muted);
+  font-family: var(--hud-font); text-transform: uppercase;
+}
+.setup-status {
+  display: flex; align-items: flex-start; gap: 9px;
+  margin: 0 0 14px; padding: 9px 11px; border-radius: var(--radius);
+  font-size: 12.5px; line-height: 1.45; color: var(--ink);
+  background: rgba(0, 0, 0, .25); box-shadow: inset 0 0 0 1px var(--hairline);
+}
+.setup-status .dot { margin-top: 5px; }
+.setup-status[hidden] { display: none; }
+.dialog-lede { margin: 0 0 2px; font-size: 13px; }
+.dialog-note { margin: 12px 0 2px; font-size: 12.5px; color: var(--muted); }
+.dialog-note strong { color: var(--ink); font-weight: 600; }
+.connect-steps { margin: 18px 0 0; padding-left: 19px; display: grid; gap: 12px; font-size: 13px; }
+.connect-steps span { display: block; color: var(--muted); margin-top: 2px; }
+.setup-command, .connect-dialog code {
+  display: block; margin-top: 5px; padding: 7px 9px; border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, .3); border: 1px solid var(--sign-batten);
+  font-family: var(--hud-font); font-size: 11.5px;
+  color: var(--lamp); overflow-x: auto; white-space: pre;
+}
+.connect-steps span code { display: inline; padding: 1px 5px; margin: 0; white-space: normal; overflow-wrap: anywhere; }
+
+/* ---- narrow ----
+   The drawer becomes a sheet stacked under the map. Same contract: the panel
+   takes room, it never takes cover. */
+
+@media (max-width: 860px) {
+  .app-shell { height: auto; min-height: 100%; padding: 6px; }
+  .topbar { top: 6px; right: 6px; left: 6px; }
+  .attention-banner { padding: 0 11px 0 8px; min-width: 0; }
+  .hidden-chip { padding: 0 2px; font-size: 11.5px; }
+  .connect-button { padding: 0 13px; }
+  /* Centre the frame in whatever height is left rather than pinning it under the
+     top bar. The plate is locked to 16:9, so on a tall phone there is always
+     spare height; balanced above and below it reads as a deliberate layout. */
+  .world-wrap { flex: none; align-items: flex-start; container-type: normal; }
+  /* A phone has no width to give a rail and no height to give a sheet inside a
+     16:9 box — half the frame leaves a useless strip of map. So the frame grows
+     downward instead: the stage keeps every pixel of its 16:9, the panel sits
+     under it, and the page scrolls the way a phone expects to. */
+  .world-frame {
+    width: 100%; max-height: none; aspect-ratio: auto;
+    display: flex; flex-direction: column; flex: none;
+  }
+  .world-stage { position: relative; inset: auto; width: 100%; aspect-ratio: 16 / 9; }
+  /* A phone gets the sheet under the map, not the drawer over it — and that
+     means every trace of the drawer has to be undone, `transform` included.
+     The slide-in leaves the panel translated 100% to the right; a static sheet
+     that inherits it renders off the side of the screen entirely. */
+  .inspector {
+    position: static; width: auto; max-height: none;
+    inset: auto; transform: none;
+    border: 0; border-top: 2px solid var(--sign-batten); border-radius: 0;
+    box-shadow: none; animation-name: hud-in-up;
+    padding: 13px;
+  }
+  .inspector.closing { animation: none; }
+  .ins-portrait { width: 44px; height: 44px; }
+  .icon-button { width: 44px; height: 44px; }
+  .ins-keys { display: none; }
+  .dev-console { max-height: none; }
+}
+@keyframes hud-in-up { from { opacity: 0; transform: translateY(12px); } }
+
+/* Below this width the corner controls tighten so the alert, the count and
+   the way in still fit on one line over the map. */
+@media (max-width: 560px) {
+  .attention-banner strong { font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* No room for the address beside the name on a phone; the inspector still
+     carries it one tap away. */
+  .attention-banner .where { display: none; }
+  .connect-button { padding: 0 12px; }
+  .connect-button .connect-long { display: none; }
+  .connect-button .connect-short { display: inline; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inspector, .inspector.closing, .dev-console, .attention-banner, .alert-glyph { animation: none; }
+}
+
+/* Session access is disclosed on demand; the resting world stays quiet. */
+.hidden-chip:hover { color: var(--ink); border-color: var(--brass); }
+.session-picker { max-height: calc(100dvh - 32px); overflow: auto; }
+.session-list { list-style: none; padding: 0; margin: 16px 0 0; display: grid; gap: 8px; }
+.session-choice {
+  display: flex; align-items: center; gap: 12px; width: 100%; min-height: 72px;
+  padding: 10px; text-align: left; font: inherit; color: var(--ink);
+  border: 1px solid var(--sign-batten); border-radius: var(--radius);
+  background: var(--plank); cursor: pointer;
+}
+.session-choice:hover, .session-choice[aria-pressed="true"] { border-color: var(--brass); }
+.session-choice .ins-portrait { width: 44px; height: 44px; }
+.session-choice-copy { display: grid; gap: 4px; min-width: 0; overflow-wrap: anywhere; }
+.session-choice-copy strong { font-size: 14px; }
+.session-choice-copy > span { font-size: 12px; }
+.session-choice-copy small { color: var(--muted); font-size: 12px; }
+.setup-status .dot[hidden] { display: none; }
+@media (max-width: 560px) {
+  .topbar-tools { flex-wrap: wrap; gap: 6px; }
+  .hidden-chip { padding: 0 8px; }
+}

@@ -1,0 +1,43 @@
+{
+  "name": "The Patch — Western Oregon v0.2",
+  "note": "Sampled from assets/map/workshop-plate-v3.png, not chosen. The environment holds the warm half of the wheel; the pure-yellow and bright-green bands are deliberately empty so signals can own them. Mirrored by src/design/tokens.js — tests/design-tokens.test.js fails if the two drift.",
+  "environment": {
+    "sand": "#78685d",
+    "sand_light": "#91887e",
+    "sand_deep": "#605651",
+    "cedar": "#675e57",
+    "cedar_dark": "#473e39",
+    "cedar_deep": "#2c2b2a",
+    "lamp": "#e8be88",
+    "brass": "#b89167",
+    "meadow": "#49664f",
+    "meadow_light": "#557159",
+    "meadow_deep": "#3e5748",
+    "canopy": "#41504e",
+    "canopy_deep": "#2e3f39",
+    "thicket": "#51574f",
+    "stone": "#67615f",
+    "basalt": "#474040",
+    "soot": "#212026",
+    "fog": "#626d77",
+    "bloom": "#f4f2e6",
+    "creek": "#21414e",
+    "creek_deep": "#1e2f39",
+    "creek_light": "#305866",
+    "flame": "#e08a3a",
+    "rust": "#6e514e"
+  },
+  "signals": {
+    "needs_input": "#ffcf3d",
+    "trouble": "#ef5a35",
+    "finished": "#a9d143",
+    "arriving": "#a4bcc6",
+    "preparing": "#6ea5bb",
+    "investigating": "#3b9fbd",
+    "editing": "#6ba2dc",
+    "running": "#4668c4",
+    "testing": "#8b8ed8",
+    "idle": "#8a8c7c",
+    "disconnected": "#5f635e"
+  }
+}

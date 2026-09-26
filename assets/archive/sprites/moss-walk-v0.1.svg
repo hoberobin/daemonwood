@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 32" width="1024" height="128" shape-rendering="crispEdges">
+  <title>Moss raccoon familiar graybox walk sheet</title>
+  <desc>Eight 32 by 32 frames: down, left, right, and up with two walk frames per direction.</desc>
+  <rect width="256" height="32" fill="none"/>
+
+  <!-- DOWN 1 -->
+  <g transform="translate(0 0)">
+    <path fill="#17201d" d="M8 8h4V4h4v2h4V4h4v4h4v14h-4v6h-6v-4h-4v4H8v-6H4V12h4z"/>
+    <path fill="#8e8c82" d="M10 8h4V6h2v4h4V6h2v2h4v12h-4v4H10v-4H6v-8h4z"/>
+    <path fill="#30383b" d="M8 10h8v6H8zm12 0h6v6h-6z"/>
+    <rect x="12" y="12" width="3" height="3" fill="#d9c89e"/><rect x="21" y="12" width="2" height="3" fill="#d9c89e"/>
+    <rect x="18" y="14" width="2" height="2" fill="#17201d"/>
+    <path fill="#506442" d="M10 18h14v7H10z"/><path fill="#d9c89e" d="M14 18h6v7h-6z"/>
+    <path fill="#b98b3d" d="M23 9h3v3h-3zm1-2h2v2h-2z"/>
+    <path fill="#30383b" d="M25 18h5v3h-3v3h-3v-2h2v-2h-1z"/><rect x="28" y="18" width="2" height="2" fill="#65a8a1"/>
+  </g>
+
+  <!-- DOWN 2 -->
+  <g transform="translate(32 0)">
+    <path fill="#17201d" d="M8 8h4V4h4v2h4V4h4v4h4v14h-3v5h-7v-3h-4v5H7v-7H4V12h4z"/>
+    <path fill="#8e8c82" d="M10 8h4V6h2v4h4V6h2v2h4v12h-4v4H10v-4H6v-8h4z"/>
+    <path fill="#30383b" d="M8 10h8v6H8zm12 0h6v6h-6z"/>
+    <rect x="12" y="12" width="3" height="3" fill="#d9c89e"/><rect x="21" y="12" width="2" height="3" fill="#d9c89e"/>
+    <rect x="18" y="14" width="2" height="2" fill="#17201d"/>
+    <path fill="#506442" d="M10 18h14v7H10z"/><path fill="#d9c89e" d="M14 18h6v7h-6z"/>
+    <path fill="#b98b3d" d="M23 9h3v3h-3zm1-2h2v2h-2z"/>
+    <path fill="#30383b" d="M25 18h5v3h-3v3h-3v-2h2v-2h-1z"/><rect x="28" y="18" width="2" height="2" fill="#65a8a1"/>
+  </g>
+
+  <!-- LEFT 1 -->
+  <g transform="translate(64 0)">
+    <path fill="#17201d" d="M8 8h3V5h4v3h8v3h4v11h-5v5h-6v-3h-4v4H7v-6H3v-5h5z"/>
+    <path fill="#8e8c82" d="M10 8h3V7h2v3h8v9h-4v4h-8v-3H6v-2h4z"/>
+    <path fill="#30383b" d="M8 10h10v6H8z"/><rect x="9" y="12" width="3" height="3" fill="#d9c89e"/>
+    <path fill="#506442" d="M12 17h11v8H12z"/><path fill="#d9c89e" d="M12 18h4v6h-4z"/>
+    <path fill="#30383b" d="M22 18h7v3h-3v3h-4v-2h2v-2h-2z"/><rect x="27" y="18" width="2" height="2" fill="#65a8a1"/>
+    <path fill="#b98b3d" d="M8 9h3v3H8z"/>
+  </g>
+
+  <!-- LEFT 2 -->
+  <g transform="translate(96 0)">
+    <path fill="#17201d" d="M8 8h3V5h4v3h8v3h4v11h-4v6h-7v-4h-4v3H6v-5H3v-5h5z"/>
+    <path fill="#8e8c82" d="M10 8h3V7h2v3h8v9h-4v4h-8v-3H6v-2h4z"/>
+    <path fill="#30383b" d="M8 10h10v6H8z"/><rect x="9" y="12" width="3" height="3" fill="#d9c89e"/>
+    <path fill="#506442" d="M12 17h11v8H12z"/><path fill="#d9c89e" d="M12 18h4v6h-4z"/>
+    <path fill="#30383b" d="M22 18h7v3h-3v3h-4v-2h2v-2h-2z"/><rect x="27" y="18" width="2" height="2" fill="#65a8a1"/>
+    <path fill="#b98b3d" d="M8 9h3v3H8z"/>
+  </g>
+
+  <!-- RIGHT 1 -->
+  <g transform="translate(128 0)">
+    <path fill="#17201d" d="M9 8h8V5h4v3h3v9h5v5h-4v6h-5v-4h-4v3h-6v-5H5V11h4z"/>
+    <path fill="#8e8c82" d="M9 10h8V7h2v1h3v10h4v2h-5v3h-8v-4H9z"/>
+    <path fill="#30383b" d="M14 10h10v6H14z"/><rect x="20" y="12" width="3" height="3" fill="#d9c89e"/>
+    <path fill="#506442" d="M9 17h11v8H9z"/><path fill="#d9c89e" d="M16 18h4v6h-4z"/>
+    <path fill="#30383b" d="M3 18h7v2H8v2h2v2H6v-3H3z"/><rect x="3" y="18" width="2" height="2" fill="#65a8a1"/>
+    <path fill="#b98b3d" d="M21 9h3v3h-3z"/>
+  </g>
+
+  <!-- RIGHT 2 -->
+  <g transform="translate(160 0)">
+    <path fill="#17201d" d="M9 8h8V5h4v3h3v9h5v5h-3v5h-6v-3h-4v4H9v-6H5V11h4z"/>
+    <path fill="#8e8c82" d="M9 10h8V7h2v1h3v10h4v2h-5v3h-8v-4H9z"/>
+    <path fill="#30383b" d="M14 10h10v6H14z"/><rect x="20" y="12" width="3" height="3" fill="#d9c89e"/>
+    <path fill="#506442" d="M9 17h11v8H9z"/><path fill="#d9c89e" d="M16 18h4v6h-4z"/>
+    <path fill="#30383b" d="M3 18h7v2H8v2h2v2H6v-3H3z"/><rect x="3" y="18" width="2" height="2" fill="#65a8a1"/>
+    <path fill="#b98b3d" d="M21 9h3v3h-3z"/>
+  </g>
+
+  <!-- UP 1 -->
+  <g transform="translate(192 0)">
+    <path fill="#17201d" d="M8 8h4V4h4v2h4V4h4v4h4v14h-4v6h-6v-4h-4v4H8v-6H4V12h4z"/>
+    <path fill="#777a72" d="M10 8h4V6h2v3h4V6h2v2h4v12h-4v4H10v-4H6v-8h4z"/>
+    <path fill="#30383b" d="M8 9h18v7H8z"/>
+    <path fill="#506442" d="M10 17h14v8H10z"/><path fill="#3c4f32" d="M14 17h6v8h-6z"/>
+    <path fill="#30383b" d="M24 18h6v3h-3v3h-3v-2h2v-2h-2z"/><rect x="28" y="18" width="2" height="2" fill="#65a8a1"/>
+    <rect x="22" y="8" width="3" height="3" fill="#b98b3d"/>
+  </g>
+
+  <!-- UP 2 -->
+  <g transform="translate(224 0)">
+    <path fill="#17201d" d="M8 8h4V4h4v2h4V4h4v4h4v14h-3v5h-7v-3h-4v5H7v-7H4V12h4z"/>
+    <path fill="#777a72" d="M10 8h4V6h2v3h4V6h2v2h4v12h-4v4H10v-4H6v-8h4z"/>
+    <path fill="#30383b" d="M8 9h18v7H8z"/>
+    <path fill="#506442" d="M10 17h14v8H10z"/><path fill="#3c4f32" d="M14 17h6v8h-6z"/>
+    <path fill="#30383b" d="M24 18h6v3h-3v3h-3v-2h2v-2h-2z"/><rect x="28" y="18" width="2" height="2" fill="#65a8a1"/>
+    <rect x="22" y="8" width="3" height="3" fill="#b98b3d"/>
+  </g>
+</svg>

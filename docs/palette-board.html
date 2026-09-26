@@ -1,0 +1,85 @@
+<!doctype html><meta charset="utf-8"><title>The Patch — palette board</title>
+<!-- Every state, drawn as the sign the renderer would draw, over the real plate.
+     Open it at http://127.0.0.1:4173/docs/palette-board.html while `npm start`
+     is running. This exists because a palette cannot be judged from hex values:
+     the first work arc looked correct in the token file and had three states
+     that were indistinguishable once they were 19px of type on a map. -->
+<style>
+  body{margin:0;background:#13120e;color:#f1ece0;font:13px/1.45 ui-sans-serif,-apple-system,sans-serif}
+  .wrap{padding:18px;display:grid;gap:18px}
+  h2{font:600 10.5px/1 ui-monospace,Menlo,monospace;letter-spacing:.09em;text-transform:uppercase;color:#a2977f;margin:0 0 8px}
+  canvas{display:block;width:100%;image-rendering:auto;border:1px solid #3a3020;border-radius:10px}
+  .rows{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .sw{padding:9px 11px;border:2px solid #5f3c26;border-radius:5px;
+      background:linear-gradient(180deg,#2a2117,#191209);box-shadow:0 0 0 1px #1b1c1a;position:relative}
+  .sw b{display:block;font:700 11px/1.3 ui-monospace,Menlo,monospace;letter-spacing:.06em}
+  .sw i{display:block;font-style:normal;color:#a2977f;font-size:10.5px;margin-top:2px}
+  .sw::before{content:"";position:absolute;left:2px;top:2px;bottom:2px;width:4px;border-radius:2px;background:var(--c)}
+  .sw{padding-left:16px}
+</style>
+<div class="wrap">
+  <div><h2>Every state, on the plate it has to survive</h2><canvas id="c" width="2048" height="1152"></canvas></div>
+  <div><h2>The eleven signals</h2><div class="rows" id="sw"></div></div>
+</div>
+<script type="module">
+import { signals, sign, ui, environment } from "/src/design/tokens.js";
+
+const LABEL = {
+  needs_input:"NEEDS YOU", trouble:"TROUBLE", finished:"DONE",
+  arriving:"STARTING", preparing:"GETTING STARTED", investigating:"RESEARCHING",
+  editing:"EDITING", running:"RUNNING COMMAND", testing:"TESTING",
+  idle:"IDLE", disconnected:"DISCONNECTED"
+};
+const NAME = {
+  needs_input:"KETTLE", trouble:"ANVIL", finished:"BRAMBLE", arriving:"SCOUT",
+  preparing:"QUILL", investigating:"MICA", editing:"FERN", running:"CEDAR",
+  testing:"SPRUCE", idle:"MOSS", disconnected:"ALDER"
+};
+
+const sw = document.querySelector("#sw");
+for (const [state, colour] of Object.entries(signals)) {
+  const el = document.createElement("div");
+  el.className = "sw"; el.style.setProperty("--c", colour);
+  el.innerHTML = `<b style="color:${colour}">${LABEL[state]}</b><i>${state} · ${colour}</i>`;
+  sw.append(el);
+}
+
+const c = document.querySelector("#c"), x = c.getContext("2d");
+const plate = new Image();
+plate.src = "/assets/map/workshop-plate-v3.png";
+await plate.decode();
+x.imageSmoothingEnabled = true; x.imageSmoothingQuality = "high";
+x.drawImage(plate, 0, 0, c.width, c.height);
+
+/* The same made object the renderer builds: plank in a batten, painted state
+   trim on the left. Drawn here at one size so the
+   eleven can be compared honestly. */
+function roundRect(ctx,x0,y0,w,h,r){ctx.beginPath();ctx.moveTo(x0+r,y0);
+  ctx.arcTo(x0+w,y0,x0+w,y0+h,r);ctx.arcTo(x0+w,y0+h,x0,y0+h,r);
+  ctx.arcTo(x0,y0+h,x0,y0,r);ctx.arcTo(x0,y0,x0+w,y0,r);ctx.closePath();}
+
+const entries = Object.entries(signals);
+const cols = 3, padX = 26, padY = 22, cellW = (c.width - padX*2) / cols;
+entries.forEach(([state, tone], i) => {
+  const col = i % cols, row = (i / cols) | 0;
+  const bx = padX + col * cellW, by = padY + row * 96 + 40;
+  const w = cellW - 40, h = 74, r = 8;
+
+  x.save(); x.shadowColor = "rgba(0,0,0,.55)"; x.shadowBlur = 16; x.shadowOffsetY = 5;
+  x.fillStyle = sign.edge; roundRect(x,bx,by,w,h,r); x.fill(); x.restore();
+  x.fillStyle = sign.batten; roundRect(x,bx,by,w,h,r); x.fill();
+  const g = x.createLinearGradient(0,by,0,by+h);
+  g.addColorStop(0, sign.plankTop); g.addColorStop(1, sign.plankBottom);
+  x.fillStyle = g; roundRect(x,bx+4,by+4,w-8,h-8,r*.7); x.fill();
+  x.fillStyle = tone; roundRect(x,bx+4,by+4,8,h-8,r*.7); x.fill();
+
+  x.textBaseline = "top";
+  x.fillStyle = ui.hudPaper;
+  x.font = '700 21px ui-monospace, Menlo, monospace';
+  x.fillText(NAME[state], bx+22, by+11);
+  x.fillStyle = tone;
+  x.font = '600 19px ui-monospace, Menlo, monospace';
+  x.fillText(LABEL[state], bx+22, by+42);
+});
+document.title = "ready";
+</script>

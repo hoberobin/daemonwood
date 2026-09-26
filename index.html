@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>The Patch — Local Workshop</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <div class="world-wrap">
+        <div class="world-frame" id="world-frame">
+          <!-- The stage holds the map and nothing but the map. On a phone it
+               keeps its 16:9 while the frame grows downward for the sheet. -->
+          <div class="world-stage" id="world-stage">
+            <canvas id="world" tabindex="0" aria-label="The Patch agent workshop. Use the left and right arrow keys to inspect sessions, S to open the session list, C for the connection guide, and Escape to close details."></canvas>
+
+            <!-- The map's real accessible content. The canvas was never more
+                 than a picture with a label on it, and now that the names and
+                 the state words have come off the picture, this is where they
+                 live: one button per session, carrying the same sentence the
+                 panel would, and selecting the same familiar a click would. -->
+            <ul class="sr-only" id="sr-roster" aria-label="Connected sessions"></ul>
+            <p class="sr-only" id="live-status" role="status" aria-live="polite"></p>
+
+            <!-- The map is the whole window, so the few controls that are not
+                 the world ride on it, top right, and only when they are
+                 needed: the alert when someone needs you, the count when the
+                 clearing is full, and the connection button only while there is
+                 something to do. Once hooks are in, C still opens the details. -->
+            <header class="topbar">
+              <div class="topbar-tools">
+                <!-- Who, and where: the alert names the terminal so the answer is
+                     "go to VS Code ttys003", not "click, read, then go find it". -->
+                <button class="attention-banner" id="attention-banner" type="button" hidden>
+                  <i class="alert-glyph" aria-hidden="true">!</i><strong id="attention-summary">An agent needs you</strong><span class="where" id="attention-where" hidden></span>
+                </button>
+                <!-- The clearing holds a fixed number of places (MAP_FAMILIAR_LIMIT). When more sessions than that are
+                     connected, saying so is the difference between a map and a lie. -->
+                <button class="hidden-chip" id="hidden-notice" type="button" aria-haspopup="dialog" aria-controls="session-picker" hidden></button>
+                <!-- Says whether Claude Code is connected, not merely that it could
+                     be. The bridge runs the installer's own check and reports it on
+                     every beat, so a "Connect" that never changes cannot stand next
+                     to a familiar that is plainly connected. -->
+                <button class="connect-button" id="connect-agent" type="button"><i class="dot" id="connect-dot" hidden></i><span class="connect-long" id="connect-label">Connect</span><span class="connect-short" id="connect-short" aria-hidden="true">Connect</span></button>
+              </div>
+            </header>
+
+            <!-- Corner HUD. Present only while the bridge is not listening; a
+                 healthy bridge says nothing, because the familiars are the proof. -->
+            <div class="link-chip" id="bridge-state" hidden><i class="dot disconnected"></i><span>Connecting</span></div>
+
+            <!-- Says only what is certainly true: nothing is running here now.
+                 This page is served by an installed Patch, so there is nothing to
+                 set up; the next move is simply to use Claude Code. -->
+            <div class="empty-world" id="empty-world">
+              <h2>The clearing is quiet</h2>
+              <p>Ready for Claude Code. Start a session in any project.</p>
+              <small class="empty-note">Sessions already running appear on their own. Press C for connection details.</small>
+            </div>
+          </div>
+
+          <!-- The inspector is a drawer over the right edge of the map. The map
+               does not move for it; anyone it covers is redrawn as a badge at
+               its edge, so it costs the map pixels and never a session. -->
+          <aside class="inspector" id="inspector" aria-label="Selected familiar" hidden>
+            <header class="ins-head">
+              <!-- The familiar's own down-facing frame, lifted straight out of
+                   its walk sheet and framed in its state colour. With names off
+                   the map, the silhouette is what ties this panel to the thing
+                   you clicked. -->
+              <span class="ins-portrait" id="agent-portrait" aria-hidden="true"></span>
+              <div class="ins-who">
+                <strong id="agent-name">No session</strong>
+                <small id="agent-species">—</small>
+              </div>
+              <button class="icon-button" id="card-close" type="button" aria-label="Close familiar details">×</button>
+            </header>
+
+            <!-- What this session is about: the title on its terminal tab,
+                 which Claude Code writes after the first prompt. Hidden until
+                 there is one. -->
+            <p class="ins-title" id="task-value" hidden></p>
+
+            <!-- The project first, because it is the part a person recognises.
+                 The session row is the name a person gave with /rename; Claude
+                 Code's fallback slug is not shown, because it is the project row
+                 again with noise on the end. -->
+            <dl class="ins-stats">
+              <div><dt>Project</dt><dd id="repo-value">—</dd></div>
+              <div><dt title="Set with /rename in Claude Code.">Session</dt><dd id="session-value">—</dd></div>
+              <div><dt>Helpers</dt><dd id="subagent-value">0</dd></div>
+              <div><dt>Updated</dt><dd id="freshness-value">No events yet</dd></div>
+            </dl>
+
+            <div class="ins-trail">
+              <h2>History</h2>
+              <ol id="agent-trail"></ol>
+            </div>
+
+            <footer class="ins-keys" aria-hidden="true"><kbd>←</kbd><kbd>→</kbd> cycle · <kbd>S</kbd> sessions · <kbd>C</kbd> connect · <kbd>Esc</kbd> close</footer>
+          </aside>
+        </div>
+      </div>
+
+      <!-- Developer console. Hidden until you press ` — it is for debugging the
+           bridge, so it never takes space in the everyday interface. -->
+      <section class="dev-console" id="dev-console" hidden aria-label="Event history">
+        <h2>Event stream <span>press ` to close</span></h2>
+        <ol class="event-log" id="event-log"></ol>
+      </section>
+
+      <dialog class="connect-dialog session-picker" id="session-picker" aria-labelledby="sessions-title">
+        <form method="dialog" class="dialog-heading">
+          <div><p class="eyebrow">THE WORKSHOP</p><h2 id="sessions-title">Sessions</h2></div>
+          <button class="icon-button" id="sessions-close" value="close" aria-label="Close session list">×</button>
+        </form>
+        <p class="dialog-note" id="sessions-summary"></p>
+        <ul class="session-list" id="session-list"></ul>
+      </dialog>
+
+      <dialog class="connect-dialog" id="connect-dialog" aria-labelledby="connect-title">
+        <form method="dialog">
+          <div class="dialog-heading">
+            <div><p class="eyebrow">CONNECTION</p><h2 id="connect-title">Claude Code</h2></div>
+            <button class="icon-button" value="close" aria-label="Close connection guide">×</button>
+          </div>
+
+          <!-- The same answer the button gives, with the numbers: which file,
+               how many hooks, whether the terminals show their familiar. -->
+          <p class="setup-status" id="setup-status" hidden><i class="dot" id="setup-dot"></i><span id="setup-text"></span></p>
+
+          <p class="dialog-lede">Setup covers <strong>every project</strong> in this Claude Code profile. If something looks wrong, repair it from any terminal:</p>
+          <code class="setup-command" id="repair-command">the-patch repair</code>
+
+          <ol class="connect-steps">
+            <li><strong>Check a real session</strong><span>Existing sessions can appear from local notes. Run a normal task in Claude Code and look for “Receiving Claude events” to verify hook delivery to this bridge.</span></li>
+            <li><strong>Check anytime</strong><span>Run <code id="status-command">the-patch status</code> to see what is installed and whether this bridge is listening.</span></li>
+          </ol>
+        </form>
+      </dialog>
+    </main>
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>

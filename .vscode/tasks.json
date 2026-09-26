@@ -1,0 +1,50 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "The Patch: Start",
+      "type": "process",
+      "command": "npm",
+      "args": ["start"],
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "The Patch: Test",
+      "type": "process",
+      "command": "npm",
+      "args": ["test"],
+      "problemMatcher": [],
+      "group": { "kind": "test", "isDefault": true }
+    },
+    {
+      "label": "The Patch: Connect every project",
+      "type": "process",
+      "command": "npm",
+      "args": ["run", "connect"],
+      "problemMatcher": []
+    },
+    {
+      "label": "The Patch: Connect one project",
+      "type": "process",
+      "command": "npm",
+      "args": ["run", "connect", "--", "${input:project}"],
+      "problemMatcher": []
+    },
+    {
+      "label": "The Patch: Status",
+      "type": "process",
+      "command": "npm",
+      "args": ["run", "status"],
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "project",
+      "type": "promptString",
+      "description": "Absolute path to the project you want on the map"
+    }
+  ]
+}

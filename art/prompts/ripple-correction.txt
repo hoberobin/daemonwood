@@ -1,0 +1,1 @@
+Use case: precise-object-edit. Preserve the approved 1024x1536 transparent Ripple sheet and all 24 positions. In row 4 back views, keep the satchel and scarf knot on consistent anatomical sides across all four columns. Preserve everything else, including distinct leg poses, scale, alpha, gutters and texture.

@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "source": "art/source/map/workshop-master.png",
+  "size": [
+    1672,
+    941
+  ],
+  "world": [
+    512,
+    288
+  ],
+  "base": "assets/map/workshop-plate-v3.png",
+  "notes": "Non-destructive decomposition. Bases are exact crops at original coordinates over the retained painting; masked foreground and dynamic effects are separately authored. Moving a station requires repainting the exposed ground, which is not reconstructed here.",
+  "stations": [
+    {
+      "id": "workbench",
+      "sourceRect": [
+        128,
+        50,
+        411,
+        250
+      ],
+      "image": "assets/map/layers/workbench.png"
+    },
+    {
+      "id": "research",
+      "sourceRect": [
+        596,
+        45,
+        287,
+        245
+      ],
+      "image": "assets/map/layers/research.png"
+    },
+    {
+      "id": "command",
+      "sourceRect": [
+        918,
+        45,
+        302,
+        239
+      ],
+      "image": "assets/map/layers/command.png"
+    },
+    {
+      "id": "test_dungeon",
+      "sourceRect": [
+        1325,
+        20,
+        323,
+        298
+      ],
+      "image": "assets/map/layers/test_dungeon.png"
+    },
+    {
+      "id": "permission_gate",
+      "sourceRect": [
+        131,
+        540,
+        501,
+        201
+      ],
+      "image": "assets/map/layers/permission_gate.png"
+    },
+    {
+      "id": "shipping_dock",
+      "sourceRect": [
+        1054,
+        542,
+        615,
+        275
+      ],
+      "image": "assets/map/layers/shipping_dock.png"
+    },
+    {
+      "id": "campfire",
+      "sourceRect": [
+        710,
+        365,
+        277,
+        209
+      ],
+      "image": "assets/map/layers/campfire.png"
+    }
+  ]
+}

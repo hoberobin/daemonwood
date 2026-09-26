@@ -1,0 +1,261 @@
+{
+  "capturedAt": "2026-09-26T23:01:49.882Z",
+  "atlasHash": "1780143c2625846acdf853c4534ab67243fef204b191cf2296e3d40884ff0a30",
+  "errors": [],
+  "reducedMotionPixelIdentical": true,
+  "benchmark": {
+    "frames": 120,
+    "medianMs": 0.10000002384185791,
+    "p95Ms": 0.20000004768371582,
+    "note": "Synchronous canvas submission only; not end-to-end GPU frame time"
+  },
+  "captures": [
+    {
+      "name": "overview-desktop",
+      "width": 1440,
+      "height": 1050,
+      "options": {},
+      "sha256": "80dae1cebce3ee6500f8d3db06b45a29cd2a4cb5320e18a98ef996a5df7d7f53"
+    },
+    {
+      "name": "overview-laptop",
+      "width": 1024,
+      "height": 768,
+      "options": {},
+      "sha256": "686dcf4178f03236f2419c8e5910490f6bbd19b653c68dc1b4fcc464d6da0dd4"
+    },
+    {
+      "name": "overview-phone",
+      "width": 430,
+      "height": 932,
+      "options": {},
+      "sha256": "43223d04ec78170a3a1d2f5dc6c932e7a5853951bf6e7253fcad163848189812"
+    },
+    {
+      "name": "overview-grayscale",
+      "width": 1440,
+      "height": 1050,
+      "options": {
+        "vision": "grayscale"
+      },
+      "sha256": "e59f778b594c35b59b0d3feec04aa1993f9930cd288a22708836dd97a4b2fc3b"
+    },
+    {
+      "name": "overview-deutan",
+      "width": 1440,
+      "height": 1050,
+      "options": {
+        "vision": "deutan"
+      },
+      "sha256": "779c50391f6edd1cf9204328f04085fa6760205ab78c2f2885901f38cb983540"
+    },
+    {
+      "name": "workbench-1",
+      "width": 1440,
+      "height": 1050,
+      "options": {
+        "scene": "crowd",
+        "station": "workbench",
+        "count": 1
+      },
+      "sha256": "41f4d6c01e63c697a00897c8e67749480124d0014d64df24097cae251765a148"
+    },
+    {
+      "name": "workbench-4",
+      "width": 1440,
+      "height": 1050,
+      "options": {
+        "scene": "crowd",
+        "station": "workbench",
+        "count": 4
+      },
+      "sha256": "224e9e98205dcf1cdf7c3fe4bd093d5d778f52b2566f8f018c67344d7cc24eed"
+    },
+    {
+      "name": "research-1",
+      "width": 1440,
+      "height": 1050,
+      "options": {
+        "scene": "crowd",
+        "station": "research",
+        "count": 1
+      },
+      "sha256": "83a784b2a1d5d717489f8826f86e6c4891a3dd075a967c1640d4283342febaff"
+    },
+    {
+      "name": "research-4",
+      "width": 1440,
+      "height": 1050,
+      "options": {
+        "scene": "crowd",
+        "station": "research",
+        "count": 4
+      },
+      "sha256": "95662f162b6ed69573f99b1b6b745bf2455376b780222b54e43113c532fb7142"
+    },
+    {
+      "name": "command-1",
+      "width": 1440,
+      "height": 1050,
+      "options": {
+        "scene": "crowd",
+        "station": "command",
+        "count": 1
+      },
+      "sha256": "92b0e35db86efcde28bcccdf577343266a17606dd0504fcf4fcc51c32cc6a407"
+    },
+    {
+      "name": "command-4",
+      "width": 1440,
+      "height": 1050,
+      "options": {
+        "scene": "crowd",
+        "station": "command",
+        "count": 4
+      },
+      "sha256": "5d52832d79e5076ebacef52f15ca736548c90abcded8480fd7389ed2fbd7ed8b"
+    },
+    {
+      "name": "test_dungeon-1",
+      "width": 1440,
+      "height": 1050,
+      "options": {
+        "scene": "crowd",
+        "station": "test_dungeon",
+        "count": 1
+      },
+      "sha256": "cf47e1675d5b154892ef53340d343128d652ff228cdcf269548c8a6c4ac1ed57"
+    },
+    {
+      "name": "test_dungeon-4",
+      "width": 1440,
+      "height": 1050,
+      "options": {
+        "scene": "crowd",
+        "station": "test_dungeon",
+        "count": 4
+      },
+      "sha256": "d49ccc39deff17d1968f814198b221c612f5f3c58184e258f6c6d8eda48e8503"
+    },
+    {
+      "name": "campfire-1",
+      "width": 1440,
+      "height": 1050,
+      "options": {
+        "scene": "crowd",
+        "station": "campfire",
+        "count": 1
+      },
+      "sha256": "ee654e6b71f51f6f7d037b96d572b4350d7ab955b10f08e103019f6d5395f013"
+    },
+    {
+      "name": "campfire-4",
+      "width": 1440,
+      "height": 1050,
+      "options": {
+        "scene": "crowd",
+        "station": "campfire",
+        "count": 4
+      },
+      "sha256": "de7865136ada2fdc7ded2d3865735e70638f580df98b2f530380d47a0e6b88ef"
+    },
+    {
+      "name": "permission_gate-1",
+      "width": 1440,
+      "height": 1050,
+      "options": {
+        "scene": "crowd",
+        "station": "permission_gate",
+        "count": 1
+      },
+      "sha256": "084335d54aa3064df322d3a762c3023c4bd927434ee163b90e17cb6d26707c70"
+    },
+    {
+      "name": "permission_gate-4",
+      "width": 1440,
+      "height": 1050,
+      "options": {
+        "scene": "crowd",
+        "station": "permission_gate",
+        "count": 4
+      },
+      "sha256": "ebef9e4222f8890b95b601cf14e92df843d790cb9bde220a91327e20f3bf9095"
+    },
+    {
+      "name": "shipping_dock-1",
+      "width": 1440,
+      "height": 1050,
+      "options": {
+        "scene": "crowd",
+        "station": "shipping_dock",
+        "count": 1
+      },
+      "sha256": "43297c1a9e6df7883f5cc38153d69293b5af5f4bf50ede679fd691a78ede13ff"
+    },
+    {
+      "name": "shipping_dock-4",
+      "width": 1440,
+      "height": 1050,
+      "options": {
+        "scene": "crowd",
+        "station": "shipping_dock",
+        "count": 4
+      },
+      "sha256": "f1e47957e3dcc3b2dbd2142c9d3c517d16a8c16d07075be095f80d70f1feff64"
+    },
+    {
+      "name": "walk-down",
+      "width": 1440,
+      "height": 1050,
+      "options": {
+        "scene": "walk",
+        "direction": "down",
+        "time": 145
+      },
+      "sha256": "b20961a35708e9c212578b1ffe22abcc419ce8dad21e2685490ec818c0f6c13f"
+    },
+    {
+      "name": "walk-left",
+      "width": 1440,
+      "height": 1050,
+      "options": {
+        "scene": "walk",
+        "direction": "left",
+        "time": 145
+      },
+      "sha256": "b1f658ad1a06bf933bff197f9df91ec2a7518099bf6a7fd7abec459b2e5fcdb8"
+    },
+    {
+      "name": "walk-right",
+      "width": 1440,
+      "height": 1050,
+      "options": {
+        "scene": "walk",
+        "direction": "right",
+        "time": 145
+      },
+      "sha256": "235ea0f88d77f72750d9ba7294ac4a7667c8f8ac2585920d69ca91a263a08315"
+    },
+    {
+      "name": "walk-up",
+      "width": 1440,
+      "height": 1050,
+      "options": {
+        "scene": "walk",
+        "direction": "up",
+        "time": 145
+      },
+      "sha256": "9468bfa8a4f0bf151bffc72c8267311b7f36c3a7e1417e5b9860f812e64f6ff8"
+    },
+    {
+      "name": "reduced-motion",
+      "width": 1440,
+      "height": 1050,
+      "options": {
+        "reduced": true
+      },
+      "sha256": "fe849c760039c578e2b79f47147f41ffeb621017b6dbc4253f55deeda96a9005"
+    }
+  ],
+  "reviewStatus": "Technical checks passed. Screenshots require visual review; not a user-comprehension test."
+}

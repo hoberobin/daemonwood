@@ -1,0 +1,13 @@
+Use case: identity-preserve. Station-work EXTENSION sheet for The Patch, to sit beside this character's approved production sheet. Image 1 is that approved 24-frame sheet (assets/sprites/spruce-actions-v1.png or art/source/familiars/spruce.png): match it exactly — same species, face, clothes, equipment, proportions, body scale, soot outline, warm upper-left light and muted painted pixel-inspired texture. Do NOT redesign the character.
+
+Deliver a genuine alpha TRANSPARENT PNG, 1024x512, EXACT FOUR equal columns by TWO equal rows: 8 separate full-body figures in 256x256 cells. No background colour, no glow halos, no shadows, no scenery, no grid lines, no captions. Every figure is FRONT-facing like the idle poses in row 5 of Image 1, drawn at the SAME body scale and on the SAME foot baseline as Image 1, so a frame can swap with an idle frame without the character changing size or jumping. Each figure, including its prop, fits inside 200x200 pixels, centred, with transparent gutters and nothing crossing a cell edge.
+
+The prop is held in front of the chest the same way Image 1 holds its parchment question card, wooden cog and cedar parcel, and at about the same size as those props. Props are hand-held only: no tables, anvils, shelves, consoles or machines.
+Row 1, cell 1: holding a small wooden mallet raised, focused expression. Cell 2: the same mallet brought down in a light tap, small concentrating squint.
+Row 1, cell 3: holding an open cedar-bound book, reading, calm. Cell 4: the same book with one page mid-turn.
+Row 2, cell 5: both hands on a short brass lever with a round brass knob, held upright. Cell 6: the same lever pulled back toward the body, determined.
+Row 2, cell 7: holding a small round glass flask of cloudy, muted grey-green liquid up at eye level, curious. Cell 8: the same flask tilted in a gentle swirl.
+
+Muted world palette only: cedar, brass, soot, moss, cream. No bright yellow, bright green, red, or glowing blue on any prop — bright colours are reserved for the interface. No floating symbols, sparks, bubbles, motion lines or text. Exactly 8 separate characters. Production sprite sheet, not poster.
+
+Character: Spruce, a Douglas squirrel cartographer with tufted ears, huge bushy cinnamon tail, olive vest, round brass compass and rolled field map. His bushy tail remains tall and clearly squirrel-like.
