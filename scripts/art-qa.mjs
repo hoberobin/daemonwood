@@ -4,8 +4,8 @@ import assert from "node:assert/strict";
 
 // Uses an already-running local Chrome debugging endpoint. Never navigates or
 // closes an existing user tab; only the isolated synthetic review page.
-const origin = process.env.PATCH_ART_ORIGIN || "http://127.0.0.1:4173";
-const cdp = process.env.PATCH_ART_CDP || "http://127.0.0.1:9222";
+const origin = process.env.DAEMONWOOD_ART_ORIGIN || "http://127.0.0.1:4173";
+const cdp = process.env.DAEMONWOOD_ART_CDP || "http://127.0.0.1:9222";
 const output = new URL("../art/qa/", import.meta.url);
 await mkdir(output, { recursive: true });
 let response;

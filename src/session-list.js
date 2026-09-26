@@ -70,7 +70,7 @@ export function createSessionAnnouncer() {
     const messages = [];
     if (arrivals.length) messages.push(`${arrivals.map((r) => `${r.agentName}${whereLabel(r) ? ` in ${whereLabel(r)}` : ""}`).join("; ")} ${arrivals.length === 1 ? "needs" : "need"} you.`);
     else if (changed) messages.push(waiting.length ? `${waiting.length} sessions still need you.` : "No sessions need your input.");
-    if (selectionChanged && selected) messages.push(`${selected.agentName}. ${selected.leaving ? "Left the Patch" : stateCopy(selected.controller.state).label}. ${whereLabel(selected)}.`);
+    if (selectionChanged && selected) messages.push(`${selected.agentName}. ${selected.leaving ? "Left the wood" : stateCopy(selected.controller.state).label}. ${whereLabel(selected)}.`);
     return messages.join(" ");
   };
 }

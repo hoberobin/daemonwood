@@ -1,4 +1,4 @@
-/* The Patch — design tokens.
+/* Daemonwood — design tokens.
  *
  * One source of record for every value the world and the interface share. The
  * palette used to live in three places — `assets/palette/pnw-palette.json`, the
@@ -17,7 +17,7 @@
 /* ---------------------------------------------------------------------------
  * The one idea this palette is built on
  * ---------------------------------------------------------------------------
- * The Patch is a wet, illustrated place. The preserved plate carries
+ * Daemonwood is a wet, illustrated place. The preserved plate carries
  * saturated foliage, creek blue, lamps, and warm wood, while signals remain
  * deliberately brighter and more legible than the surrounding world. Fir and fern and
  * wet basalt, almost no chroma anywhere — except the creek, and the lamps.

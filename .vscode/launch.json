@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Run The Patch",
+      "name": "Run Daemonwood",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/server.mjs",

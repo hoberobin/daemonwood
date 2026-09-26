@@ -1,4 +1,4 @@
-/* What a Patch hook entry looks like, and how it is written, read and removed.
+/* What a Daemonwood hook entry looks like, and how it is written, read and removed.
    The one source of truth for that; scripts/runtime.mjs installs through it,
    and scripts/connect.mjs remains as the source checkout's per-project tool. */
 import { access, mkdir, readFile, rename, writeFile } from "node:fs/promises";
@@ -7,9 +7,9 @@ import { homedir } from "node:os";
 import { resolve, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const patchRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
-const hookPath = join(patchRoot, "hooks", "patch-hook.mjs");
-const statusLinePath = join(patchRoot, "hooks", "patch-statusline.mjs");
+const daemonwoodRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
+const hookPath = join(daemonwoodRoot, "hooks", "daemonwood-hook.mjs");
+const statusLinePath = join(daemonwoodRoot, "hooks", "daemonwood-statusline.mjs");
 
 /* The twelve hooks the map listens to. TaskCreated and TaskCompleted were
    subscribed once and are not any more: they report the session's own task
@@ -30,7 +30,7 @@ export const CLAUDE_EVENTS = Object.freeze([
   "SessionEnd"
 ]);
 
-export function patchHandler({ nodePath = process.execPath, adapterPath = hookPath } = {}) {
+export function daemonwoodHandler({ nodePath = process.execPath, adapterPath = hookPath } = {}) {
   return {
     type: "command",
     command: nodePath,
@@ -39,7 +39,7 @@ export function patchHandler({ nodePath = process.execPath, adapterPath = hookPa
   };
 }
 
-export function addPatchHooks(settings, options = {}) {
+export function addDaemonwoodHooks(settings, options = {}) {
   /* Every one of our handlers is replaced with the current one rather than kept.
      The hook stores an absolute path to the node binary, and that path moves —
      an nvm switch, a Homebrew upgrade. Keeping a handler because it points at
@@ -50,9 +50,9 @@ export function addPatchHooks(settings, options = {}) {
      The strip runs over every event, not only the ones being installed, so a
      hook this version no longer listens to does not keep firing from an older
      install. */
-  const next = removePatchHooks(settings, options);
+  const next = removeDaemonwoodHooks(settings, options);
   next.hooks ||= {};
-  const handler = patchHandler(options);
+  const handler = daemonwoodHandler(options);
   for (const eventName of CLAUDE_EVENTS) {
     const groups = Array.isArray(next.hooks[eventName]) ? next.hooks[eventName] : [];
     next.hooks[eventName] = [...groups, { hooks: [handler] }];
@@ -60,7 +60,7 @@ export function addPatchHooks(settings, options = {}) {
   return next;
 }
 
-export function removePatchHooks(settings, options = {}) {
+export function removeDaemonwoodHooks(settings, options = {}) {
   const next = structuredClone(settings || {});
   if (!next.hooks || typeof next.hooks !== "object") return next;
 
@@ -68,7 +68,7 @@ export function removePatchHooks(settings, options = {}) {
     if (!Array.isArray(groups)) continue;
     const remaining = groups.flatMap((group) => {
       if (!Array.isArray(group?.hooks)) return [group];
-      const hooks = group.hooks.filter((candidate) => !isPatchHandler(candidate, options));
+      const hooks = group.hooks.filter((candidate) => !isDaemonwoodHandler(candidate, options));
       return hooks.length ? [{ ...group, hooks }] : [];
     });
     if (remaining.length) next.hooks[eventName] = remaining;
@@ -78,10 +78,10 @@ export function removePatchHooks(settings, options = {}) {
   return next;
 }
 
-export function inspectPatchHooks(settings, options = {}) {
+export function inspectDaemonwoodHooks(settings, options = {}) {
   const configured = CLAUDE_EVENTS.filter((eventName) =>
     Array.isArray(settings?.hooks?.[eventName]) && settings.hooks[eventName].some((group) =>
-      Array.isArray(group?.hooks) && group.hooks.some((candidate) => isPatchHandler(candidate, options))
+      Array.isArray(group?.hooks) && group.hooks.some((candidate) => isDaemonwoodHandler(candidate, options))
     )
   );
   return { configured, missing: CLAUDE_EVENTS.filter((name) => !configured.includes(name)) };
@@ -99,7 +99,7 @@ export function inspectPatchHooks(settings, options = {}) {
    nests. */
 const STATUS_LINE_FLAG = "--then-b64";
 
-export function patchStatusLine(previous, { nodePath = process.execPath, statusLinePath: path = statusLinePath } = {}) {
+export function daemonwoodStatusLine(previous, { nodePath = process.execPath, statusLinePath: path = statusLinePath } = {}) {
   const original = unwrapStatusLine(previous, { statusLinePath: path });
   let command = `${shellQuote(nodePath)} ${shellQuote(path)}`;
   if (original) command += ` ${STATUS_LINE_FLAG} ${Buffer.from(JSON.stringify(original), "utf8").toString("base64")}`;
@@ -110,16 +110,16 @@ export function patchStatusLine(previous, { nodePath = process.execPath, statusL
   };
 }
 
-export function isPatchStatusLine(value, { statusLinePath: path = statusLinePath } = {}) {
+export function isDaemonwoodStatusLine(value, { statusLinePath: path = statusLinePath } = {}) {
   if (value?.type !== "command" || typeof value.command !== "string") return false;
-  return value.command.includes(shellQuote(path)) || /hooks[\\/]patch-statusline\.mjs/.test(value.command);
+  return value.command.includes(shellQuote(path)) || /hooks[\\/](?:daemonwood|patch)-statusline\.mjs/.test(value.command);
 }
 
-/* The status line that was configured before The Patch wrapped it, or the
+/* The status line that was configured before Daemonwood wrapped it, or the
    value itself when it is not ours. `null` when there was none. */
 export function unwrapStatusLine(value, options = {}) {
   if (!value || typeof value !== "object") return null;
-  if (!isPatchStatusLine(value, options)) return value;
+  if (!isDaemonwoodStatusLine(value, options)) return value;
   const match = new RegExp(`${STATUS_LINE_FLAG} ([A-Za-z0-9+/=]+)`).exec(value.command);
   if (!match) return null;
   try {
@@ -130,23 +130,23 @@ export function unwrapStatusLine(value, options = {}) {
   }
 }
 
-export function addPatchStatusLine(settings, options = {}) {
+export function addDaemonwoodStatusLine(settings, options = {}) {
   const next = structuredClone(settings || {});
-  next.statusLine = patchStatusLine(next.statusLine, options);
+  next.statusLine = daemonwoodStatusLine(next.statusLine, options);
   return next;
 }
 
-export function removePatchStatusLine(settings, options = {}) {
+export function removeDaemonwoodStatusLine(settings, options = {}) {
   const next = structuredClone(settings || {});
-  if (!isPatchStatusLine(next.statusLine, options)) return next;
+  if (!isDaemonwoodStatusLine(next.statusLine, options)) return next;
   const original = unwrapStatusLine(next.statusLine, options);
   if (original) next.statusLine = original;
   else delete next.statusLine;
   return next;
 }
 
-export function inspectPatchStatusLine(settings, options = {}) {
-  const active = isPatchStatusLine(settings?.statusLine, options);
+export function inspectDaemonwoodStatusLine(settings, options = {}) {
+  const active = isDaemonwoodStatusLine(settings?.statusLine, options);
   const original = unwrapStatusLine(settings?.statusLine, options);
   return { active, wraps: active && original?.command ? original.command : null };
 }
@@ -159,25 +159,25 @@ export async function installStatusLine({ home = homedir(), ...options } = {}) {
   const settingsFile = userSettingsFile(home);
   await mkdir(join(home, ".claude"), { recursive: true });
   const settings = await readSettings(settingsFile);
-  const next = addPatchStatusLine(settings, options);
+  const next = addDaemonwoodStatusLine(settings, options);
   const changed = serialize(next) !== serialize(settings);
   if (changed) await atomicJsonWrite(settingsFile, next);
-  return { settingsFile, changed, ...inspectPatchStatusLine(next, options) };
+  return { settingsFile, changed, ...inspectDaemonwoodStatusLine(next, options) };
 }
 
 export async function uninstallStatusLine({ home = homedir(), ...options } = {}) {
   const settingsFile = userSettingsFile(home);
   const settings = await readSettings(settingsFile);
-  const next = removePatchStatusLine(settings, options);
+  const next = removeDaemonwoodStatusLine(settings, options);
   const changed = serialize(next) !== serialize(settings);
   if (changed) await atomicJsonWrite(settingsFile, next);
-  return { settingsFile, changed, ...inspectPatchStatusLine(next, options) };
+  return { settingsFile, changed, ...inspectDaemonwoodStatusLine(next, options) };
 }
 
 export async function checkStatusLine({ home = homedir(), ...options } = {}) {
   const settingsFile = userSettingsFile(home);
   const settings = await readSettings(settingsFile);
-  return { settingsFile, changed: false, ...inspectPatchStatusLine(settings, options) };
+  return { settingsFile, changed: false, ...inspectDaemonwoodStatusLine(settings, options) };
 }
 
 function shellQuote(value) {
@@ -199,24 +199,24 @@ function shellQuote(value) {
 export async function install(targetDirectory, options = {}) {
   const paths = await settingsPaths(targetDirectory, options);
   const settings = await readSettings(paths.settingsFile);
-  const next = addPatchHooks(settings, options);
+  const next = addDaemonwoodHooks(settings, options);
   const changed = serialize(next) !== serialize(settings);
   if (changed) await atomicJsonWrite(paths.settingsFile, next);
-  return { ...paths, ...inspectPatchHooks(next, options), changed };
+  return { ...paths, ...inspectDaemonwoodHooks(next, options), changed };
 }
 
 export async function uninstall(targetDirectory, options = {}) {
   const paths = await settingsPaths(targetDirectory, options);
   const settings = await readSettings(paths.settingsFile);
-  const next = removePatchHooks(settings, options);
+  const next = removeDaemonwoodHooks(settings, options);
   await atomicJsonWrite(paths.settingsFile, next);
-  return { ...paths, ...inspectPatchHooks(next, options) };
+  return { ...paths, ...inspectDaemonwoodHooks(next, options) };
 }
 
 export async function check(targetDirectory, options = {}) {
   const paths = await settingsPaths(targetDirectory, options);
   const settings = await readSettings(paths.settingsFile);
-  return { ...paths, ...inspectPatchHooks(settings, options) };
+  return { ...paths, ...inspectDaemonwoodHooks(settings, options) };
 }
 
 /* The file the earlier installer wrote to, which Claude Code never read.
@@ -232,17 +232,17 @@ export async function cleanLegacyUserLocal({ home = homedir(), ...options } = {}
   } catch {
     return { legacyFile, removed: 0 };
   }
-  const before = inspectPatchHooks(settings, options).configured.length;
+  const before = inspectDaemonwoodHooks(settings, options).configured.length;
   if (!before) return { legacyFile, removed: 0 };
-  await atomicJsonWrite(legacyFile, removePatchHooks(settings, options));
+  await atomicJsonWrite(legacyFile, removeDaemonwoodHooks(settings, options));
   return { legacyFile, removed: before };
 }
 
-function isPatchHandler(candidate, { adapterPath = hookPath } = {}) {
+function isDaemonwoodHandler(candidate, { adapterPath = hookPath } = {}) {
   return candidate?.type === "command" && Array.isArray(candidate.args) &&
     candidate.args.some((value) => {
       const path = String(value);
-      return resolve(path) === resolve(adapterPath) || /(?:^|[\\/])hooks[\\/]patch-hook\.mjs$/.test(path);
+      return resolve(path) === resolve(adapterPath) || /(?:^|[\\/])hooks[\\/](?:daemonwood|patch)-hook\.mjs$/.test(path);
     });
 }
 
@@ -278,7 +278,7 @@ function serialize(value) {
 }
 
 async function atomicJsonWrite(settingsFile, value) {
-  const temporary = `${settingsFile}.patch-tmp`;
+  const temporary = `${settingsFile}.daemonwood-tmp`;
   await writeFile(temporary, serialize(value), "utf8");
   await rename(temporary, settingsFile);
 }

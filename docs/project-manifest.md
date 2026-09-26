@@ -1,4 +1,4 @@
-# The Patch — Project Manifest
+# Daemonwood — Project Manifest
 
 Last updated: 2026-09-26  
 Current package: v0.15.0-beta.1  
@@ -6,7 +6,7 @@ Current gate: real-session comprehension and engagement test
 
 ## Product thesis
 
-The Patch turns local coding-agent sessions into visible pixel familiars inside a persistent Pacific Northwest workshop. Each familiar truthfully reflects a session's observable lifecycle so one person can supervise different providers without repeatedly opening every tool.
+Daemonwood turns local coding-agent sessions into visible pixel familiars inside a persistent Pacific Northwest workshop. Each familiar truthfully reflects a session's observable lifecycle so one person can supervise different providers without repeatedly opening every tool.
 
 ## Primary value
 
@@ -29,14 +29,14 @@ Within three seconds, the user should know:
 - No player-controlled avatar in v0.1.
 - Western Oregon/Cascadia is the permanent environmental identity.
 - The production walk family has ten identities: Moss, Fern, Lumen, Cedar, Alder, Mica, Ripple, Thimble, Spruce, and Nettle. `src/familiars.js` is the runtime catalog for their names, species/roles, and sprite paths.
-- Every session prefers one familiar, fixed by its id, and takes the next along the family only while its own is worn by a live session. The bridge remembers each session's face and terminal app in `~/.the-patch/familiars.json`, so a bridge restart never changes a familiar the terminal has been naming all day. Two live sessions never share a face.
+- Every session prefers one familiar, fixed by its id, and takes the next along the family only while its own is worn by a live session. The bridge remembers each session's face and terminal app in `~/.daemonwood/familiars.json`, so a bridge restart never changes a familiar the terminal has been naming all day. Two live sessions never share a face.
 - Physical stations communicate state: Research Desk, Workbench, Command Console, Test Dungeon, Permission Gate, Shipping Dock, and Campfire.
 - A familiar alone at a station stands on it. Only familiars genuinely sharing a station are staggered, and they re-centre when the others leave. The campfire is the exception and declares its own seats, because its anchor is a bonfire rather than standing room.
 - Shipping Dock means the agent stopped working; Campfire means it has been quiet there for five minutes. An ended or disconnected session's familiar walks out through the south gate with a wave and fades (`AgentController.leave`, `src/familiar-ledger.js` untouched); it is drawn while it walks but is no longer a session. Superseded, unproven and reset removals are instant.
 - No XP, currency, streaks, productivity scoring, or surveillance mechanics.
-- Onboarding is one command. `npm start` (later `npx --yes <package>`) stages a durable runtime in `~/.the-patch/`, writes Claude Code's hooks into the user settings (`~/.claude/settings.json` or `$CLAUDE_CONFIG_DIR`) — there is no user-level `settings.local.json` — which covers every project at once and needs no approval step, then starts a background service and opens the map. `scripts/connect.mjs <project>` remains a checkout-only per-project install.
+- Onboarding is one command. `npm start` (later `npx --yes <package>`) stages a durable runtime in `~/.daemonwood/`, writes Claude Code's hooks into the user settings (`~/.claude/settings.json` or `$CLAUDE_CONFIG_DIR`) — there is no user-level `settings.local.json` — which covers every project at once and needs no approval step, then starts a background service and opens the map. `scripts/connect.mjs <project>` remains a checkout-only per-project install.
 - Claude Code's per-process session note (`~/.claude/sessions/<pid>.json`) is the bridge's word on which session a process hosts and whether it is waiting, busy or idle. It admits sessions before their transcript exists, refuses a borrowed pid, retires the old session on `/clear`, corrects the map when hooks cannot, and puts already-running sessions on the map at startup.
-- Agent trust boundaries are never forged. Where an agent requires the user's approval for hooks, that approval is the user's to give; The Patch may read whether it was given and must never write it.
+- Agent trust boundaries are never forged. Where an agent requires the user's approval for hooks, that approval is the user's to give; Daemonwood may read whether it was given and must never write it.
 - At rest the interface is the world, the product name, and one sign saying whether Claude Code is connected: the bridge runs the installer's own check and reports it on every heartbeat. An alert appears only when a session needs you, and everywhere the page points at a session — the alert, the next step, the hover nameplate, the inspector — it names the terminal and project in one wording from `src/session-address.js`. Claude Code's fallback session slug is never shown; a Session row exists only for a name somebody chose. Clicking a familiar opens an inspector rail inside the map frame; the frame widens by the rail's share and the renderer insets the world to match, so the panel takes room without taking cover. On narrow screens the rail stacks under the map instead.
 
 ## Canonical files

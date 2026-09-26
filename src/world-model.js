@@ -61,18 +61,19 @@ export const stationOffsets = stationSpread.at(-1);
    station is somewhere you can stand, so centring a lone familiar on the anchor
    is right. The campfire has a bonfire painted at its centre: centred, a
    familiar stood in the flames, and its name tag covered the fire entirely.
-   These seats put familiars around the ring the way the art already arranges
-   the logs — near side first, so one familiar reads as sitting at the fire. */
+   These seats flank the painted ring, with later arrivals filling its upper
+   and lower sides. Their feet stay outside the stones while their bodies read
+   as gathered around the flames instead of lining up on the south path. */
 const stationSeats = Object.freeze({
   campfire: Object.freeze([
-    Object.freeze({ x: -38, y: 20 }),
-    Object.freeze({ x: 38, y: 20 }),
-    Object.freeze({ x: -54, y: 38 }),
-    Object.freeze({ x: 54, y: 38 }),
-    Object.freeze({ x: -64, y: 6 }),
-    Object.freeze({ x: 64, y: 6 }),
-    Object.freeze({ x: -22, y: 50 }),
-    Object.freeze({ x: 22, y: 50 })
+    Object.freeze({ x: -36, y: 4 }),
+    Object.freeze({ x: 36, y: 4 }),
+    Object.freeze({ x: -54, y: -15 }),
+    Object.freeze({ x: 54, y: -15 }),
+    Object.freeze({ x: -56, y: 21 }),
+    Object.freeze({ x: 56, y: 21 }),
+    Object.freeze({ x: -29, y: 38 }),
+    Object.freeze({ x: 29, y: 38 })
   ])
 });
 

@@ -35,5 +35,62 @@
     "running": "short brass lever: held upright, then pulled back",
     "testing": "small glass flask: held up to the eye, then swirled"
   },
-  "familiars": {}
+  "familiars": {
+    "moss": {
+      "image": "./assets/sprites/moss-stations-v1.png",
+      "source": "art/source/familiars/moss-stations.png",
+      "sourceHash": "3288a770aab770e1611d1439a29c5bf107220419a19ac6294587e4084ab0d6fd",
+      "exportHash": "f759c5c18bf2953344e495b66983634dc22bedb371ff17f6aeb2fb74d80198d2",
+      "sourceBounds": [
+        [
+          24,
+          55,
+          212,
+          182
+        ],
+        [
+          314,
+          51,
+          179,
+          186
+        ],
+        [
+          569,
+          55,
+          179,
+          182
+        ],
+        [
+          825,
+          54,
+          178,
+          183
+        ],
+        [
+          57,
+          311,
+          181,
+          182
+        ],
+        [
+          314,
+          311,
+          179,
+          181
+        ],
+        [
+          557,
+          311,
+          191,
+          181
+        ],
+        [
+          823,
+          311,
+          182,
+          181
+        ]
+      ]
+    }
+  }
 }

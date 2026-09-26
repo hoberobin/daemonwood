@@ -149,7 +149,7 @@ test("the inspector states no fact that is the same for every familiar", async (
 test("the interface speaks about one agent, not a menagerie", async () => {
   const html = await read("index.html");
   assert.ok(!/codex/i.test(html), "Codex is no longer connected, so it must not be promised");
-  // The page is served by an installed Patch: it points at repair, never at
+  // The page is served by an installed Daemonwood: it points at repair, never at
   // checkout-only npm scripts or docs the server does not serve.
   assert.ok(!/npm run/.test(html), "npm scripts exist only in the source checkout");
   assert.ok(!html.includes("./docs/"), "docs are not part of the served payload");
@@ -215,8 +215,8 @@ test("the top bar distinguishes installation from receipt on the live bridge", a
   assert.match(button, /id="connect-label"/);
   assert.match(app, /function applySetup\(/);
   assert.match(app, /connectionStatus\(/, "status is derived from separate evidence");
-  assert.match(app, /eventSource\.addEventListener\("patch-delivery"/, "delivery updates immediately after an accepted hook");
-  assert.match(app, /eventSource\.addEventListener\("patch-beat", withSetup\)/, "the check arrives with the beat, not on a poll");
+  assert.match(app, /eventSource\.addEventListener\("daemonwood-delivery"/, "delivery updates immediately after an accepted hook");
+  assert.match(app, /eventSource\.addEventListener\("daemonwood-beat", withSetup\)/, "the check arrives with the beat, not on a poll");
   // The dialog repeats it with the numbers, so the fix is one command away.
   assert.match(html, /id="setup-status"/);
 });

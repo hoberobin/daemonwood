@@ -36,20 +36,20 @@ test("a named project scopes the install to that repo", () => {
 });
 
 test("Claude Code is detected from its home directory or from PATH", async () => {
-  const home = await mkdtemp(join(tmpdir(), "patch-detect-"));
-  const bin = await mkdtemp(join(tmpdir(), "patch-bin-"));
+  const home = await mkdtemp(join(tmpdir(), "daemonwood-detect-"));
+  const bin = await mkdtemp(join(tmpdir(), "daemonwood-bin-"));
   assert.equal(claudeInstalled({ home, pathEntries: [] }), false);
 
   await mkdir(join(home, ".claude"));
   assert.equal(claudeInstalled({ home, pathEntries: [] }), true);
 
-  const bare = await mkdtemp(join(tmpdir(), "patch-bare-"));
+  const bare = await mkdtemp(join(tmpdir(), "daemonwood-bare-"));
   await writeFile(join(bin, "claude"), "#!/bin/sh\n");
   assert.equal(claudeInstalled({ home: bare, pathEntries: [bin] }), true);
 });
 
 test("connect, status and disconnect round-trip a real settings file", async () => {
-  const project = await mkdtemp(join(tmpdir(), "patch-connect-"));
+  const project = await mkdtemp(join(tmpdir(), "daemonwood-connect-"));
   const target = { directory: project, scope: "project" };
 
   const connected = await run("connect", target);
@@ -71,11 +71,11 @@ test("connect, status and disconnect round-trip a real settings file", async () 
 });
 
 test("connecting every project writes the user's settings.json and clears the old file", async () => {
-  const home = await mkdtemp(join(tmpdir(), "patch-connect-home-"));
+  const home = await mkdtemp(join(tmpdir(), "daemonwood-connect-home-"));
   await mkdir(join(home, ".claude"));
   const legacy = join(home, ".claude", "settings.local.json");
-  const { addPatchHooks } = await import("../scripts/claude-setup.mjs");
-  await writeFile(legacy, JSON.stringify(addPatchHooks({ other: 1 })));
+  const { addDaemonwoodHooks } = await import("../scripts/claude-setup.mjs");
+  await writeFile(legacy, JSON.stringify(addDaemonwoodHooks({ other: 1 })));
 
   const connected = await run("connect", { directory: home, scope: "everywhere" }, { home });
   assert.equal(connected.ok, true);

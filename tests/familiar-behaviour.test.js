@@ -166,6 +166,23 @@ test("impatience and company draw exactly what they did before the table", () =>
   for (const key of ["a", "b"]) assert.equal(poses.get(key).frame, companyFrame(company.get(key).facing));
 });
 
+test("idle familiars briefly watch the fire without interrupting company", () => {
+  const solo = familiarAt("solo", "idle");
+  const pair = [familiarAt("left", "idle", { slot: 0, crowd: 2 }), familiarAt("right", "idle", { slot: 1, crowd: 2 })];
+  const soloFrames = new Set();
+  let breathingTogether = false;
+  for (let elapsed = 0; elapsed < 30_000; elapsed += 50) {
+    soloFrames.add(resolvePoses([solo], { now: NOW, elapsed }).get("solo").frame);
+    const poses = resolvePoses(pair, { now: NOW, elapsed });
+    if (poses.get("left").lift > 0 || poses.get("right").lift > 0) breathingTogether = true;
+    assert.equal(poses.get("left").frame, POSES.face_right);
+    assert.equal(poses.get("right").frame, POSES.face_left);
+  }
+  assert.deepEqual(soloFrames, new Set([null, POSES.face_right]));
+  assert.ok(breathingTogether, "company has a small visible breath");
+  assert.equal(resolvePoses([solo], { now: NOW, elapsed: 0, reducedMotion: true }).get("solo").frame, null);
+});
+
 test("a newcomer looks round once, and only when it has just arrived", () => {
   const seen = (age) => new Set(TIMES.map((elapsed) =>
     resolvePoses([familiarAt("n", "arriving", { since: NOW - age })], { now: NOW + elapsed, elapsed }).get("n").frame));

@@ -12,7 +12,7 @@ const testPattern = /(?:^|\s|\/)(?:npm\s+(?:run\s+)?test|pnpm\s+(?:run\s+)?test|
    parent waiting on three Explore helpers is not "Researching" three times a
    second — so only the helper lifecycle itself and anything that needs the
    user come out of a helper. The helper's name never reaches the map either:
-   the familiar is the session, and it keeps the name the Patch gave it. */
+   the familiar is the session, and it keeps the name Daemonwood gave it. */
 function insideHelper(input) {
   return Boolean(input.agent_id);
 }

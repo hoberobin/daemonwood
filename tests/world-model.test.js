@@ -48,11 +48,13 @@ test("the campfire seats familiars around the fire instead of inside it", () => 
     const seats = [...Array(crowd).keys()].map((slot) => stationPosition("campfire", slot, crowd));
     assert.equal(new Set(seats.map(({ x, y }) => `${x},${y}`)).size, crowd, "campfire seats must be distinct");
     for (const seat of seats) {
-      // Clear of the painted flame, and still recognisably at the fire.
-      assert.ok(seat.y > nodes.campfire.y, "a familiar must sit on the near side of the fire, never in it");
+      // Both sides of the fire fill before the south path; feet clear the stones.
+      assert.ok(Math.abs(seat.x - nodes.campfire.x) >= 29, "feet must clear the painted fire ring");
       assert.ok(Math.hypot(seat.x - nodes.campfire.x, seat.y - nodes.campfire.y) < 70, "seats stay at the campfire");
     }
   }
+  assert.ok(stationPosition("campfire", 2).y < nodes.campfire.y, "the circle reaches north of the fire");
+  assert.ok(stationPosition("campfire", 0).y < nodes.campfire.y + 10, "the first familiar sits beside the fire");
 });
 
 test("shared stations fan sessions into stable nearby positions", () => {

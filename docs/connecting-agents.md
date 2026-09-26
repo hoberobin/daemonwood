@@ -6,25 +6,25 @@
 npm start            # from a clone; `npx --yes <package-name>` once published
 ```
 
-The launcher (`bin/the-patch.mjs` → `scripts/cli.mjs` → `scripts/runtime.mjs`)
-stages a durable runtime in `~/.the-patch/versions/<build>/`, writes stable hook
-launchers to `~/.the-patch/hooks/`, points Claude Code's user settings at them,
+The launcher (`bin/daemonwood.mjs` → `scripts/cli.mjs` → `scripts/runtime.mjs`)
+stages a durable runtime in `~/.daemonwood/versions/<build>/`, writes stable hook
+launchers to `~/.daemonwood/hooks/`, points Claude Code's user settings at them,
 and starts a background service on `127.0.0.1:4173` (or another free port,
-recorded in `~/.the-patch/runtime.json`, which every sender reads). Run it
+recorded in `~/.daemonwood/runtime.json`, which every sender reads). Run it
 again any time; it is idempotent, reuses a healthy service, and rewrites
 handlers whose Node path has moved.
 
 ```bash
-node bin/the-patch.mjs status      # service, Claude Code, hooks, delivery
-node bin/the-patch.mjs repair      # rewrite our handlers and restart
-node bin/the-patch.mjs stop        # pause until the next explicit launch
-node bin/the-patch.mjs uninstall   # remove only The Patch's handlers and runtime
+node bin/daemonwood.mjs status      # service, Claude Code, hooks, delivery
+node bin/daemonwood.mjs repair      # rewrite our handlers and restart
+node bin/daemonwood.mjs stop        # pause until the next explicit launch
+node bin/daemonwood.mjs uninstall   # remove only Daemonwood's handlers and runtime
 ```
 
 `connect` and `disconnect` remain as aliases for launch and uninstall. If the
 service is not running when a hook fires, the hook hands its already-sanitized
 event to a short-lived helper that starts the service and delivers it, so a
-reboot never needs a manual restart. `stop` is respected: a paused Patch stays
+reboot never needs a manual restart. `stop` is respected: a paused Daemonwood stays
 down.
 
 From the source checkout, `node scripts/connect.mjs /absolute/path/to/project`
@@ -76,7 +76,7 @@ the name on the map and the name in the terminal are one decision. Nothing a
 sender posts can pick one. Every session has one familiar it prefers, fixed
 by its id, and takes the next one along the family only while its own is
 worn by a live session — and the bridge remembers each session's face in
-`~/.the-patch/familiars.json`, so restarting the bridge never renames anyone.
+`~/.daemonwood/familiars.json`, so restarting the bridge never renames anyone.
 (It did once: the author's session was Moss in the terminal all morning and
 Nettle on the map after a restart. That file is why it cannot happen again.)
 
@@ -84,7 +84,7 @@ Nettle on the map after a restart. That file is why it cannot happen again.)
 check as `status` — the hooks in the Claude Code user settings and the status
 line — and reports it on every heartbeat. The button reads **Ready for Claude
 Code** once hooks are installed, **Receiving Claude events** with a green dot
-once a hook event has actually arrived, and **The Patch needs a quick repair**
+once a hook event has actually arrived, and **Daemonwood needs a quick repair**
 or **Claude Code hooks are disabled** when something must change. It steps out
 of the corner once nothing needs doing; `C` still opens the dialog, which gives
 the numbers and the exact repair command for this install.
@@ -113,7 +113,7 @@ Two consequences worth knowing:
 
 ## What each hook means on the map
 
-The Patch subscribes to twelve Claude Code events. `hooks/normalize-claude-event.js`
+Daemonwood subscribes to twelve Claude Code events. `hooks/normalize-claude-event.js`
 translates them; nothing else in the system knows Claude exists.
 
 | Claude Code event | Becomes | Where the familiar goes |
@@ -132,7 +132,7 @@ translates them; nothing else in the system knows Claude exists.
 | `SubagentStart` / `SubagentStop` | helper count changes | helpers never move or rename the parent |
 | `Stop` | `stopped` | Done, at the Shipping Dock |
 | `StopFailure`, `PostToolUseFailure` | `failure` | Trouble, where it stands |
-| `SessionEnd` | `session_ended` | leaves the Patch |
+| `SessionEnd` | `session_ended` | leaves the wood |
 
 Two traps worth naming. Every hook fired inside a subagent carries `agent_id`
 and `agent_type`, and the session's own hooks carry neither: the adapter drops
@@ -211,7 +211,7 @@ session sent. A hook that arrives later still wins.
 Every sweep also looks for notes whose process is running and whose session
 is not on the map — opened before the bridge, before the hooks, or while the
 bridge was restarting — and admits them with the state the note records. So
-restarting The Patch never shows an empty clearing over a machine with three
+restarting Daemonwood never shows an empty clearing over a machine with three
 sessions on it. A session that has just left is not brought back by the note
 its exiting process leaves behind for a moment.
 
@@ -220,7 +220,7 @@ its exiting process leaves behind for a moment.
 A session is removed only on proof: its own `SessionEnd`, its owning process
 being gone, its process's note naming a different session (`/clear`), or —
 for a session with no note — the ledger disowning it. Claude Code processes that are killed
-abruptly never get to run `SessionEnd`, so The Patch records each session's PID
+abruptly never get to run `SessionEnd`, so Daemonwood records each session's PID
 plus its process start time and reaps it within about two seconds. Silence
 removes nobody — a session quiet for a week but demonstrably running is still
 running, and the freshness line already says how long it has been.
@@ -240,10 +240,10 @@ The title is the one line Claude Code itself puts on the terminal tab: a short
 `/rename`. The hook reads the last 64 KB of the session's own transcript, keeps
 only that entry (80 characters at most), and sends it to the local bridge with
 the event; nothing else in the transcript is parsed or leaves the hook. The
-bridge itself still never opens a transcript. Set `PATCH_SESSION_TITLES=0` in
+bridge itself still never opens a transcript. Set `DAEMONWOOD_SESSION_TITLES=0` in
 Claude Code's environment to leave titles out.
 
-Hooks use a short timeout and fail open. If The Patch is closed, Claude Code
+Hooks use a short timeout and fail open. If Daemonwood is closed, Claude Code
 continues normally. Hooks are observational; they never approve, deny, rewrite,
 continue, or stop agent work.
 

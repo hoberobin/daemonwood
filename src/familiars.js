@@ -71,7 +71,7 @@ export function chooseFamiliar(key, takenTypes = []) {
 
 /* Claude labels a subagent with its agent type, which is a real name worth
    showing. A plain "Claude" is the product, not a name, so the familiar keeps
-   the one the Patch gave it. */
+   the one Daemonwood gave it. */
 export function isGenericAgentName(value) {
   return /^(?:agent|claude(?:[-\s]?code)?)$/i.test(String(value || "").trim());
 }
