@@ -11,7 +11,7 @@ export function connectionStatus({ setup = null, delivery = null, bridge = "conn
   const problem = live && (setup?.blocked ? "blocked" : setup?.error ? "unreadable" : hooks?.configured > 0 && !installed ? "incomplete" : null);
   const label = !live ? (bridge === "connecting" ? "Connecting to bridge" : "Reconnecting…")
     : problem === "blocked" ? "Claude Code hooks are disabled"
-    : problem ? "The Patch needs a quick repair"
+    : problem ? "Daemonwood needs a quick repair"
     : received ? "Receiving Claude events"
     : installed ? "Ready for Claude Code"
     : sessions ? "Claude sessions detected" : "Connect Claude Code";

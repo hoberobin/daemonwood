@@ -221,7 +221,7 @@ function applySafeEvent(safe) {
   history.splice(24);
   /* The goodbye, for anyone not looking at the map. Said once, here, because
      a departing familiar is no longer in the roster to be read from. */
-  if (record.removed && record.leaving) ui.live.textContent = `${record.agentName} left the Patch.`;
+  if (record.removed && record.leaving) ui.live.textContent = `${record.agentName} left the wood.`;
   renderUI();
 }
 
@@ -320,7 +320,7 @@ function renderUI() {
       item.textContent = `${clockTime(entry.timestamp)} · ${entry.agentName} · refused → ${entry.refusalReason}`;
       return item;
     }
-    const result = entry.removed ? "Left Patch" : stateCopy(entry.visualState).label;
+    const result = entry.removed ? "Left the wood" : stateCopy(entry.visualState).label;
     item.textContent = `${clockTime(entry.timestamp)} · ${entry.agentName} · ${entry.type.replaceAll("_", " ")} → ${result}`;
     return item;
   }));
@@ -511,18 +511,18 @@ function withSetup(event) {
   } catch { /* A beat without a body is still a beat. */ }
 }
 eventSource.addEventListener("ready", withSetup);
-eventSource.addEventListener("patch-beat", withSetup);
-eventSource.addEventListener("patch-delivery", (event) => {
+eventSource.addEventListener("daemonwood-beat", withSetup);
+eventSource.addEventListener("daemonwood-delivery", (event) => {
   markStreamAlive();
   try { deliveryState = JSON.parse(event.data); applySetup(setupState); } catch { /* Ignore malformed diagnostics. */ }
 });
-eventSource.addEventListener("patch-event", (event) => {
+eventSource.addEventListener("daemonwood-event", (event) => {
   markStreamAlive();
   try { applySafeEvent(JSON.parse(event.data)); } catch { /* The bridge ignores malformed stream entries. */ }
 });
 /* A session renamed itself, or the bridge learned which terminal it is in.
    Identity only: nothing moves, and nothing lands in the event log. */
-eventSource.addEventListener("patch-session", (event) => {
+eventSource.addEventListener("daemonwood-session", (event) => {
   markStreamAlive();
   try {
     const session = JSON.parse(event.data);
@@ -537,7 +537,7 @@ eventSource.addEventListener("patch-session", (event) => {
     renderUI();
   } catch { /* A malformed identity update must not break the live stream. */ }
 });
-eventSource.addEventListener("patch-snapshot", (event) => {
+eventSource.addEventListener("daemonwood-snapshot", (event) => {
   markStreamAlive();
   try {
     const snapshot = JSON.parse(event.data);
@@ -552,7 +552,7 @@ eventSource.addEventListener("patch-snapshot", (event) => {
 /* Refusals never reach the registry: nothing is drawn, moved, or removed for
    one. They land in the log so the reason survives, and in the chip so the
    operator can see that the silence has a cause. */
-eventSource.addEventListener("patch-refused", (event) => {
+eventSource.addEventListener("daemonwood-refused", (event) => {
   markStreamAlive();
   try {
     const entry = JSON.parse(event.data);

@@ -1,6 +1,6 @@
 # Concept references
 
-These images preserve the visual exploration that established The Patch's Pacific Northwest mood, composition, materials, and character direction.
+These images preserve the visual exploration that established Daemonwood's Pacific Northwest mood, composition, materials, and character direction.
 
 They are references—not runtime sprites, tilesets, or exact layout specifications. When a concept image conflicts with `../art-bible.md`, `assets/map/workshop.tmj`, or the palette files, the canonical production files win.
 

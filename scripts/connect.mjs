@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* The single front door: `npm run connect`.
 
-   The Patch watches Claude Code. Claude Code reads hooks from ~/.claude, so
+   Daemonwood watches Claude Code. Claude Code reads hooks from ~/.claude, so
    one install covers every project you will ever open — there is no per-agent
    matrix here and no trust step to explain. Naming a project narrows the
    install to that repo instead, for when you want one project on the map
@@ -16,8 +16,9 @@ import { basename, join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
 import { CLAUDE_EVENTS, check, checkStatusLine, cleanLegacyUserLocal, install, installStatusLine, uninstall, uninstallStatusLine } from "./claude-setup.mjs";
+import { setting } from "../src/local-paths.js";
 
-const BRIDGE_ORIGIN = process.env.PATCH_ORIGIN || "http://127.0.0.1:4173";
+const BRIDGE_ORIGIN = setting("ORIGIN") || "http://127.0.0.1:4173";
 
 /* `connect` with no arguments means every project. A path narrows it to one.
    `--no-statusline` leaves the terminal's status line alone. */
@@ -145,7 +146,7 @@ function printStatusLine(statusLine, action) {
 
 export function printReport(record, action, health, { installed = true } = {}) {
   console.log("");
-  console.log(`${PAD}The Patch · ${action}`);
+  console.log(`${PAD}Daemonwood · ${action}`);
   console.log("");
 
   if (record.error) {
@@ -223,7 +224,7 @@ async function main(argv = process.argv.slice(2)) {
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   main().catch((error) => {
-    console.error(`The Patch: ${error.message}`);
+    console.error(`Daemonwood: ${error.message}`);
     process.exitCode = 1;
   });
 }

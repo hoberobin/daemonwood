@@ -1,4 +1,4 @@
-import { patchHome } from "./local-paths.js";
+import { daemonwoodHome } from "./local-paths.js";
 import { mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join } from "node:path";
@@ -18,7 +18,7 @@ import { dirname, join } from "node:path";
    until its next hook. Nothing else: it is a memory of the bridge's own
    choices, never a source of sessions. A missing or unreadable file means
    nothing is remembered, and the bridge chooses as it always did. */
-export const FAMILIAR_LEDGER_FILE = join(patchHome(), "familiars.json");
+export const FAMILIAR_LEDGER_FILE = join(daemonwoodHome(), "familiars.json");
 const CAPACITY = 200;
 
 export function createFamiliarLedger({ file = FAMILIAR_LEDGER_FILE, capacity = CAPACITY } = {}) {

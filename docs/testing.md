@@ -54,7 +54,7 @@ appear only when the agent genuinely requests approval.
 
 ### Observe
 
-Keep The Patch visible but avoid opening the agent's terminal for 30 seconds at
+Keep Daemonwood visible but avoid opening the agent's terminal for 30 seconds at
 a time. Ask:
 
 1. Can I identify broad activity within three seconds?
@@ -83,9 +83,9 @@ within about two seconds. There is no sleeping or offline holding area.
    snapshot.
 2. Spawn a subagent if the task naturally benefits from one. The helper count
    may change, but child tool calls must not move or rename the parent.
-3. Stop The Patch, run another agent action, and confirm the agent continues
+3. Stop Daemonwood, run another agent action, and confirm the agent continues
    without hook errors blocking work.
-4. Restart The Patch. Every running session is back within two seconds,
+4. Restart Daemonwood. Every running session is back within two seconds,
    before any turn, with the state Claude Code records for it.
 4a. Approve a permission for a command that runs a while; confirm *Needs you*
    clears within two seconds of approving, not when the command ends.
@@ -107,7 +107,7 @@ The gate passes when the live session:
 - moves through at least three truthful places;
 - survives a browser refresh;
 - does not confuse helper activity with the parent;
-- never blocks the agent when The Patch is unavailable;
+- never blocks the agent when Daemonwood is unavailable;
 - exposes no private work content; and
 - earns **yes** or **partly** for "Would I leave this open?"
 
@@ -143,7 +143,7 @@ it.
 
 **First run.** With nothing connected, confirm the world says the clearing is
 quiet and says it is ready for Claude Code — it is served by an installed
-Patch, so it offers no setup command, and it must not claim a session exists.
+Daemonwood, so it offers no setup command, and it must not claim a session exists.
 
 ## Known limitations
 

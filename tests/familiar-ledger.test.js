@@ -6,9 +6,9 @@ import { join } from "node:path";
 import { once } from "node:events";
 import { createFamiliarLedger } from "../src/familiar-ledger.js";
 import { chooseFamiliar, FAMILIARS } from "../src/familiars.js";
-import { createPatchServer } from "../src/event-server.js";
+import { createDaemonwoodServer } from "../src/event-server.js";
 
-const dir = () => mkdtempSync(join(tmpdir(), "patch-faces-"));
+const dir = () => mkdtempSync(join(tmpdir(), "daemonwood-faces-"));
 
 /* The familiar is the one word the terminal and the map share, so a session
    must keep its face for as long as it lives — through a bridge restart, and
@@ -68,7 +68,7 @@ test("a bridge restart does not change a session's face, unless someone live is 
   ];
   const file = join(dir(), "familiars.json");
   const open = async (ledger) => {
-    const server = createPatchServer({ root: process.cwd(), processSnapshot: processes, ledgerSnapshot: () => null, registrySnapshot: () => null, reapIntervalMs: 10_000, familiarLedger: ledger });
+    const server = createDaemonwoodServer({ root: process.cwd(), processSnapshot: processes, ledgerSnapshot: () => null, registrySnapshot: () => null, reapIntervalMs: 10_000, familiarLedger: ledger });
     server.listen(0, "127.0.0.1");
     await once(server, "listening");
     t.after(() => server.close());

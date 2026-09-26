@@ -1,4 +1,4 @@
-# The Patch — Design System
+# Daemonwood — Design System
 
 Status: v0.13  
 Authority: `src/design/tokens.js` is the source of record. This document explains
@@ -164,6 +164,7 @@ day one familiar's sheet gains a pose of its own.
 | --- | --- |
 | `needs_input.impatience` | Calm, then glancing (a hop every 5 s after 1 min), then tapping (tap-tap-tap from 5 min), then sulking (back turned from 15 min, looking round every 6 s with its sign up). The hover nameplate, the alert and the screen-reader sentence carry the wait ("NEEDS YOU · 7M"). |
 | `idle.company` | Two or more familiars settled IDLE at the fire turn to face it and each other. A newcomer does not restart anyone's company. |
+| `idle.firewatch` | A familiar settled at the fire briefly looks toward the flames and takes a small breath. Company keeps facing inward between breaths. |
 | `arriving.look_around` | In its first three seconds a new arrival looks left, then right. A reload later does not replay it. |
 | `work.station_item` | At its own station a familiar works with the station's tool — mallet at the Workbench (editing), book at Research, brass lever at Command (running), flask at Test — in a short beat and a rest. Only for a familiar whose station sheet exists (see below); reduced motion holds the tool still. It outranks the stationmates' glance, because the side-on frames hold no tool. |
 | `work.stationmates` | Two working at the same station glance over at each other now and then. |

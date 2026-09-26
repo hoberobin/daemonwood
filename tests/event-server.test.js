@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { once } from "node:events";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { correctionFor, createPatchServer, discoverSessions, reapDeadSessions, verifyEventOwner } from "../src/event-server.js";
+import { correctionFor, createDaemonwoodServer, discoverSessions, reapDeadSessions, verifyEventOwner } from "../src/event-server.js";
 import { chooseFamiliar, FAMILIARS } from "../src/familiars.js";
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
@@ -20,11 +20,11 @@ const liveClaude = () => [
 /* These tests are about the process door, so the session ledger is stubbed as
    unreadable: "cannot tell" must never be a refusal. The ledger has its own
    tests below, which hand it a real answer. */
-const patchServer = (options = {}) =>
-  createPatchServer({ root, processSnapshot: liveClaude, ledgerSnapshot: () => null, ...options });
+const daemonwoodServer = (options = {}) =>
+  createDaemonwoodServer({ root, processSnapshot: liveClaude, ledgerSnapshot: () => null, ...options });
 
 test("bridge health and ingestion work without a live agent", async (t) => {
-  const server = patchServer();
+  const server = daemonwoodServer();
   server.listen(0, "127.0.0.1");
   await once(server, "listening");
   t.after(() => server.close());
@@ -64,7 +64,7 @@ test("bridge health and ingestion work without a live agent", async (t) => {
 });
 
 test("bridge rejects unsupported events", async (t) => {
-  const server = patchServer();
+  const server = daemonwoodServer();
   server.listen(0, "127.0.0.1");
   await once(server, "listening");
   t.after(() => server.close());
@@ -77,7 +77,7 @@ test("bridge rejects unsupported events", async (t) => {
 });
 
 test("a reconnecting browser receives the latest session snapshot", async (t) => {
-  const server = patchServer();
+  const server = daemonwoodServer();
   server.listen(0, "127.0.0.1");
   await once(server, "listening");
   t.after(() => server.close());
@@ -96,18 +96,18 @@ test("a reconnecting browser receives the latest session snapshot", async (t) =>
   const response = await fetch(`${base}/api/events/stream`, { signal: controller.signal });
   const reader = response.body.getReader();
   let output = "";
-  for (let count = 0; count < 4 && !output.includes("patch-snapshot"); count += 1) {
+  for (let count = 0; count < 4 && !output.includes("daemonwood-snapshot"); count += 1) {
     const chunk = await reader.read();
     output += new TextDecoder().decode(chunk.value || new Uint8Array());
   }
   controller.abort();
-  assert.match(output, /event: patch-snapshot/);
+  assert.match(output, /event: daemonwood-snapshot/);
   assert.match(output, /"sessionId":"snapshot-1"/);
   assert.match(output, /"visualState":"testing"/);
 });
 
 test("ended sessions are removed from health and reconnect snapshots", async (t) => {
-  const server = patchServer();
+  const server = daemonwoodServer();
   server.listen(0, "127.0.0.1");
   await once(server, "listening");
   t.after(() => server.close());
@@ -125,7 +125,7 @@ test("ended sessions are removed from health and reconnect snapshots", async (t)
 });
 
 test("an older end event cannot remove a newer snapshot", async (t) => {
-  const server = patchServer();
+  const server = daemonwoodServer();
   server.listen(0, "127.0.0.1");
   await once(server, "listening");
   t.after(() => server.close());
@@ -142,7 +142,7 @@ test("an older end event cannot remove a newer snapshot", async (t) => {
 
 test("the bridge removes a session when its owning CLI process dies", async (t) => {
   let processes = [{ pid: 4242, ppid: 1, startedAt: "Thu Sep 24 10:00:01 2026", command: "claude" }];
-  const server = createPatchServer({ root, processSnapshot: () => processes, ledgerSnapshot: () => null, reapIntervalMs: 5 });
+  const server = createDaemonwoodServer({ root, processSnapshot: () => processes, ledgerSnapshot: () => null, reapIntervalMs: 5 });
   server.listen(0, "127.0.0.1");
   await once(server, "listening");
   t.after(() => server.close());
@@ -170,7 +170,7 @@ test("the bridge removes a session when its owning CLI process dies", async (t) 
 });
 
 test("a later event without a project or task keeps the ones the session already gave", async () => {
-  const server = patchServer();
+  const server = daemonwoodServer();
   await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
   const base = `http://127.0.0.1:${server.address().port}`;
   const post = (body) => fetch(`${base}/api/events`, {
@@ -192,7 +192,8 @@ test("a later event without a project or task keeps the ones the session already
   const stream = await fetch(`${base}/api/events/stream`);
   const reader = stream.body.getReader();
   const chunk = new TextDecoder().decode((await reader.read()).value);
-  const snapshot = JSON.parse(chunk.slice(chunk.indexOf("patch-snapshot\ndata: ") + 21, chunk.lastIndexOf("\n\n")));
+  const marker = "daemonwood-snapshot\ndata: ";
+  const snapshot = JSON.parse(chunk.slice(chunk.indexOf(marker) + marker.length, chunk.lastIndexOf("\n\n")));
   assert.equal(snapshot[0].repository, "level-chinese");
   assert.equal(snapshot[0].taskLabel, "Audit the import pipeline");
   assert.equal(snapshot[0].visualState, "needs_input");
@@ -205,7 +206,7 @@ test("a later event without a project or task keeps the ones the session already
    a cast of demo familiars on a live map, one of them holding a permission
    prompt that no session was waiting on. */
 test("the bridge refuses an event that cannot name a live Claude Code process", async (t) => {
-  const server = patchServer();
+  const server = daemonwoodServer();
   server.listen(0, "127.0.0.1");
   await once(server, "listening");
   t.after(() => server.close());
@@ -233,7 +234,7 @@ test("the bridge refuses an event that cannot name a live Claude Code process", 
 });
 
 test("a refusal reaches the browser so silence can never pass for an empty workshop", async (t) => {
-  const server = patchServer();
+  const server = daemonwoodServer();
   server.listen(0, "127.0.0.1");
   await once(server, "listening");
   t.after(() => server.close());
@@ -250,12 +251,12 @@ test("a refusal reaches the browser so silence can never pass for an empty works
 
   const decoder = new TextDecoder();
   let seen = "";
-  while (!seen.includes("patch-refused")) {
+  while (!seen.includes("daemonwood-refused")) {
     const { value, done } = await reader.read();
     if (done) break;
     seen += decoder.decode(value, { stream: true });
   }
-  assert.match(seen, /event: patch-refused/);
+  assert.match(seen, /event: daemonwood-refused/);
   assert.match(seen, /"sessionId":"demo-kettle"/);
   await reader.cancel();
 });
@@ -312,7 +313,7 @@ test("a session is never evicted by silence, only by its process being gone", ()
 });
 
 test("the stream beats so a dead connection cannot pass for a quiet workshop", async (t) => {
-  const server = patchServer({ heartbeatIntervalMs: 20 });
+  const server = daemonwoodServer({ heartbeatIntervalMs: 20 });
   t.after(() => server.close());
   server.listen(0, "127.0.0.1");
   await once(server, "listening");
@@ -322,12 +323,12 @@ test("the stream beats so a dead connection cannot pass for a quiet workshop", a
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
   let seen = "";
-  while (!seen.includes("patch-beat")) {
+  while (!seen.includes("daemonwood-beat")) {
     const { value, done } = await reader.read();
     if (done) break;
     seen += decoder.decode(value, { stream: true });
   }
-  assert.match(seen, /event: patch-beat/);
+  assert.match(seen, /event: daemonwood-beat/);
   await reader.cancel();
 });
 
@@ -338,7 +339,7 @@ test("the stream beats so a dead connection cannot pass for a quiet workshop", a
    something nobody could grant. A pid proves a process, never a session. */
 test("a borrowed pid cannot conjure a session Claude Code never opened", async (t) => {
   const ledger = new Set(["real-session"]);
-  const server = patchServer({ ledgerSnapshot: () => ledger });
+  const server = daemonwoodServer({ ledgerSnapshot: () => ledger });
   server.listen(0, "127.0.0.1");
   await once(server, "listening");
   t.after(() => server.close());
@@ -421,7 +422,7 @@ test("a note left behind by an earlier life of the pid says nothing about this o
    one stood on the map, Done, for the rest of the day. */
 test("/clear hands the terminal to the new session and keeps its face", async (t) => {
   let registry = noteFor("first");
-  const server = createPatchServer({ root, processSnapshot: liveClaude, ledgerSnapshot: () => null, registrySnapshot: () => registry, reapIntervalMs: 10_000 });
+  const server = createDaemonwoodServer({ root, processSnapshot: liveClaude, ledgerSnapshot: () => null, registrySnapshot: () => registry, reapIntervalMs: 10_000 });
   server.listen(0, "127.0.0.1");
   await once(server, "listening");
   t.after(() => server.close());
@@ -445,7 +446,7 @@ test("/clear hands the terminal to the new session and keeps its face", async (t
 
 test("a session that ended is not resurrected by the note its exiting process leaves behind", async (t) => {
   const registry = noteFor("leaving");
-  const server = createPatchServer({ root, processSnapshot: liveClaude, ledgerSnapshot: () => null, registrySnapshot: () => registry, reapIntervalMs: 15 });
+  const server = createDaemonwoodServer({ root, processSnapshot: liveClaude, ledgerSnapshot: () => null, registrySnapshot: () => registry, reapIntervalMs: 15 });
   server.listen(0, "127.0.0.1");
   await once(server, "listening");
   t.after(() => server.close());
@@ -540,7 +541,7 @@ test("sessions Claude Code is running are discovered from its notes, verified ag
   assert.equal(found[0].repository, "web-app");
   assert.equal(found[0].ownerStartedAt, OWNER_STARTED);
 
-  const server = createPatchServer({ root, processSnapshot: processes, ledgerSnapshot: () => null, registrySnapshot: () => registry, reapIntervalMs: 10_000 });
+  const server = createDaemonwoodServer({ root, processSnapshot: processes, ledgerSnapshot: () => null, registrySnapshot: () => registry, reapIntervalMs: 10_000 });
   server.listen(0, "127.0.0.1");
   await once(server, "listening");
   t.after(() => server.close());
@@ -584,7 +585,7 @@ test("each session gets its own familiar, its terminal, and its name, and the te
   let names = new Map([[OWNER_PID, { pid: OWNER_PID, sessionId: "one", name: "growth-report", nameSource: "user" }]]);
   /* Notes here carry no status on purpose: this test is about names and
      terminals, and a note without a status neither corrects nor discovers. */
-  const server = createPatchServer({
+  const server = createDaemonwoodServer({
     root, processSnapshot: processes, ledgerSnapshot: () => null, registrySnapshot: () => names, reapIntervalMs: 25
   });
   server.listen(0, "127.0.0.1");
@@ -631,7 +632,7 @@ test("each session gets its own familiar, its terminal, and its name, and the te
     output += new TextDecoder().decode(chunk.value || new Uint8Array());
   }
   controller.abort();
-  assert.match(output, /event: patch-session\ndata: \{[^\n]*"sessionName":"growth-report-v2"/);
+  assert.match(output, /event: daemonwood-session\ndata: \{[^\n]*"sessionName":"growth-report-v2"/);
   const renamed = await fetch(`${base}/api/sessions/one`).then((r) => r.json());
   assert.equal(renamed.sessionName, "growth-report-v2");
   assert.equal(renamed.sessionNameSource, "derived", "a rename moves the source with the name");
@@ -644,7 +645,7 @@ test("each session gets its own familiar, its terminal, and its name, and the te
 test("the bridge reports whether Claude Code is set up, in health and on every beat", async (t) => {
   const setup = { scope: "everywhere", file: "~/.claude/settings.json", hooks: { configured: 12, total: 12, missing: [] }, statusLine: { active: true } };
   let checks = 0;
-  const server = patchServer({ heartbeatIntervalMs: 20, setupIntervalMs: 10_000, setupSnapshot: async () => { checks += 1; return setup; } });
+  const server = daemonwoodServer({ heartbeatIntervalMs: 20, setupIntervalMs: 10_000, setupSnapshot: async () => { checks += 1; return setup; } });
   t.after(() => server.close());
   server.listen(0, "127.0.0.1");
   await once(server, "listening");
@@ -657,17 +658,17 @@ test("the bridge reports whether Claude Code is set up, in health and on every b
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
   let seen = "";
-  while (!seen.includes("patch-beat")) {
+  while (!seen.includes("daemonwood-beat")) {
     const { value, done } = await reader.read();
     if (done) break;
     seen += decoder.decode(value, { stream: true });
   }
   await reader.cancel();
   assert.match(seen, /event: ready\ndata: \{"ok":true,"setup":\{"scope":"everywhere"/, "the first message carries the check");
-  assert.match(seen, /event: patch-beat\ndata: \{[^\n]*"setup":\{"scope":"everywhere"/, "so does every beat");
+  assert.match(seen, /event: daemonwood-beat\ndata: \{[^\n]*"setup":\{"scope":"everywhere"/, "so does every beat");
   assert.equal(checks, 1, "the check is a file read, cached between beats");
 
-  const silent = patchServer();
+  const silent = daemonwoodServer();
   t.after(() => silent.close());
   silent.listen(0, "127.0.0.1");
   await once(silent, "listening");
@@ -676,7 +677,7 @@ test("the bridge reports whether Claude Code is set up, in health and on every b
 });
 
 test("a failing install check is reported as unknown, never as an error on the stream", async (t) => {
-  const server = patchServer({ setupSnapshot: async () => { throw new Error("settings unreadable"); } });
+  const server = daemonwoodServer({ setupSnapshot: async () => { throw new Error("settings unreadable"); } });
   t.after(() => server.close());
   server.listen(0, "127.0.0.1");
   await once(server, "listening");
@@ -687,7 +688,7 @@ test("a failing install check is reported as unknown, never as an error on the s
 
 test("session discovery is not counted as hook delivery; accepted hooks update diagnostics", async (t) => {
   const registry = new Map([[OWNER_PID, { pid: OWNER_PID, sessionId: "discovered", status: "idle", repository: "fixture" }]]);
-  const server = patchServer({ registrySnapshot: () => registry, heartbeatIntervalMs: 20 });
+  const server = daemonwoodServer({ registrySnapshot: () => registry, heartbeatIntervalMs: 20 });
   t.after(() => server.close());
   server.listen(0, "127.0.0.1");
   await once(server, "listening");
@@ -705,19 +706,19 @@ test("session discovery is not counted as hook delivery; accepted hooks update d
   assert.equal(after.delivery.hookEvents, 1);
   assert.ok(Date.parse(after.delivery.lastHookReceivedAt));
   let seen = "";
-  while (!seen.includes("event: patch-delivery") || !seen.includes("event: patch-beat")) {
+  while (!seen.includes("event: daemonwood-delivery") || !seen.includes("event: daemonwood-beat")) {
     seen += new TextDecoder().decode((await reader.read()).value);
   }
   await reader.cancel();
-  assert.match(seen, /event: patch-delivery\ndata: \{"hookEvents":1/);
-  assert.match(seen, /event: patch-beat\ndata: [^\n]*"delivery":\{"hookEvents":1/);
+  assert.match(seen, /event: daemonwood-delivery\ndata: \{"hookEvents":1/);
+  assert.match(seen, /event: daemonwood-beat\ndata: [^\n]*"delivery":\{"hookEvents":1/);
   await fetch(`${origin}/api/events`, { method: "POST", body: JSON.stringify({ type: "needs_input", sessionId: "unproven" }) });
   assert.equal((await health()).delivery.hookEvents, 1, "refused events cannot prove hook delivery");
 });
 
 test("docs are served only by the source checkout's dev server", async (t) => {
   for (const [devFiles, expected] of [[false, 404], [true, 200]]) {
-    const server = patchServer({ devFiles });
+    const server = daemonwoodServer({ devFiles });
     server.listen(0, "127.0.0.1");
     await once(server, "listening");
     t.after(() => server.close());

@@ -1,5 +1,5 @@
 {
-  "name": "the-patch-local-prototype",
+  "name": "daemonwood",
   "version": "0.15.0-beta.1",
   "private": true,
   "description": "Watch local Claude Code sessions as pixel familiars in a Pacific Northwest workshop.",
@@ -8,22 +8,22 @@
     "node": ">=22"
   },
   "bin": {
-    "the-patch": "./bin/the-patch.mjs"
+    "daemonwood": "./bin/daemonwood.mjs"
   },
   "scripts": {
-    "start": "node bin/the-patch.mjs",
+    "start": "node bin/daemonwood.mjs",
     "test": "node --test tests/*.test.js",
     "art:export": "node scripts/export-art.mjs && node scripts/export-station-art.mjs",
     "art:check": "node scripts/check-art.mjs",
     "art:qa": "node scripts/art-qa.mjs",
-    "connect": "node bin/the-patch.mjs connect",
-    "status": "node bin/the-patch.mjs status",
-    "disconnect": "node bin/the-patch.mjs uninstall",
+    "connect": "node bin/daemonwood.mjs connect",
+    "status": "node bin/daemonwood.mjs status",
+    "disconnect": "node bin/daemonwood.mjs uninstall",
     "dev": "node server.mjs",
-    "doctor": "node bin/the-patch.mjs doctor",
-    "repair": "node bin/the-patch.mjs repair",
-    "stop": "node bin/the-patch.mjs stop",
-    "uninstall:patch": "node bin/the-patch.mjs uninstall"
+    "doctor": "node bin/daemonwood.mjs doctor",
+    "repair": "node bin/daemonwood.mjs repair",
+    "stop": "node bin/daemonwood.mjs stop",
+    "uninstall:daemonwood": "node bin/daemonwood.mjs uninstall"
   },
   "files": [
     "bin/",

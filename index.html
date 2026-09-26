@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>The Patch — Local Workshop</title>
+    <title>Daemonwood — Local Workshop</title>
     <link rel="stylesheet" href="./src/styles.css" />
   </head>
   <body>
@@ -13,7 +13,7 @@
           <!-- The stage holds the map and nothing but the map. On a phone it
                keeps its 16:9 while the frame grows downward for the sheet. -->
           <div class="world-stage" id="world-stage">
-            <canvas id="world" tabindex="0" aria-label="The Patch agent workshop. Use the left and right arrow keys to inspect sessions, S to open the session list, C for the connection guide, and Escape to close details."></canvas>
+            <canvas id="world" tabindex="0" aria-label="Daemonwood agent workshop. Use the left and right arrow keys to inspect sessions, S to open the session list, C for the connection guide, and Escape to close details."></canvas>
 
             <!-- The map's real accessible content. The canvas was never more
                  than a picture with a label on it, and now that the names and
@@ -51,7 +51,7 @@
             <div class="link-chip" id="bridge-state" hidden><i class="dot disconnected"></i><span>Connecting</span></div>
 
             <!-- Says only what is certainly true: nothing is running here now.
-                 This page is served by an installed Patch, so there is nothing to
+                 This page is served by an installed Daemonwood, so there is nothing to
                  set up; the next move is simply to use Claude Code. -->
             <div class="empty-world" id="empty-world">
               <h2>The clearing is quiet</h2>
@@ -131,11 +131,11 @@
           <p class="setup-status" id="setup-status" hidden><i class="dot" id="setup-dot"></i><span id="setup-text"></span></p>
 
           <p class="dialog-lede">Setup covers <strong>every project</strong> in this Claude Code profile. If something looks wrong, repair it from any terminal:</p>
-          <code class="setup-command" id="repair-command">the-patch repair</code>
+          <code class="setup-command" id="repair-command">daemonwood repair</code>
 
           <ol class="connect-steps">
             <li><strong>Check a real session</strong><span>Existing sessions can appear from local notes. Run a normal task in Claude Code and look for “Receiving Claude events” to verify hook delivery to this bridge.</span></li>
-            <li><strong>Check anytime</strong><span>Run <code id="status-command">the-patch status</code> to see what is installed and whether this bridge is listening.</span></li>
+            <li><strong>Check anytime</strong><span>Run <code id="status-command">daemonwood status</code> to see what is installed and whether this bridge is listening.</span></li>
           </ol>
         </form>
       </dialog>

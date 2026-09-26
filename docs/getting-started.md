@@ -5,10 +5,10 @@ One command to a moving familiar.
 ## 1. Requirements
 
 macOS (Linux/WSL in beta), Node.js 22 or newer (24 LTS recommended), and
-Claude Code on your `PATH`. Native Windows is not supported yet; run The Patch
+Claude Code on your `PATH`. Native Windows is not supported yet; run Daemonwood
 inside WSL next to Claude Code.
 
-## 2. Launch The Patch
+## 2. Launch Daemonwood
 
 From a clone of this repository:
 
@@ -17,7 +17,7 @@ npm start
 ```
 
 That one command checks Node and Claude Code, copies a durable runtime into
-`~/.the-patch/versions/`, writes The Patch's hooks into your Claude Code user
+`~/.daemonwood/versions/`, writes Daemonwood's hooks into your Claude Code user
 settings (`~/.claude/settings.json`, or `$CLAUDE_CONFIG_DIR/settings.json`),
 starts a background service and opens the map. It prints the address and
 returns to the shell, so you can close the terminal. Nothing refers back to
@@ -40,11 +40,11 @@ at the Shipping Dock, and after five quiet minutes it rests at the Campfire.
 ## 4. Everyday commands
 
 ```bash
-node bin/the-patch.mjs            # launch / resume / reopen the map (npm start)
-node bin/the-patch.mjs status     # service, Claude Code and hook check (npm run status)
-node bin/the-patch.mjs repair     # rewrite The Patch's hooks and restart (npm run repair)
-node bin/the-patch.mjs stop       # pause; Claude events will not restart it (npm run stop)
-node bin/the-patch.mjs uninstall  # remove hooks and runtime, keep familiar names
+node bin/daemonwood.mjs            # launch / resume / reopen the map (npm start)
+node bin/daemonwood.mjs status     # service, Claude Code and hook check (npm run status)
+node bin/daemonwood.mjs repair     # rewrite Daemonwood's hooks and restart (npm run repair)
+node bin/daemonwood.mjs stop       # pause; Claude events will not restart it (npm run stop)
+node bin/daemonwood.mjs uninstall  # remove hooks and runtime, keep familiar names
 ```
 
 Options: `--no-open` prints the address instead of opening a browser;
@@ -74,12 +74,12 @@ Still stuck:
    refusals included.
 4. Start a new session. A session already open is on the map from Claude
    Code's note, but reports each move only once its hooks are loaded.
-5. The service log is `~/.the-patch/service.log`.
+5. The service log is `~/.daemonwood/service.log`.
 
 More detail, including the full state mapping, is in
 [`connecting-agents.md`](connecting-agents.md).
 
-## Developing The Patch
+## Developing Daemonwood
 
 `npm run dev` serves the checkout directly in the foreground (it also serves
 the art review pages under `docs/`), and `npm test` runs the suite. The dev

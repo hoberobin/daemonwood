@@ -38,7 +38,7 @@ export async function withLock(path, action, timeout = 12000) {
         try { await rename(path, stale); await rm(stale, { recursive: true, force: true }); } catch {}
         continue;
       }
-      if (Date.now() >= deadline) throw new Error("Another Patch operation is still running. Try again in a moment.");
+      if (Date.now() >= deadline) throw new Error("Another Daemonwood operation is still running. Try again in a moment.");
       await delay(60);
     }
   }
@@ -54,7 +54,7 @@ export async function withLock(path, action, timeout = 12000) {
 // Refuse malformed settings and preserve concurrent edits by retrying the
 // merge against fresh bytes. No whole-file backup is restored over user edits.
 export async function editSettings(file, transform) {
-  return withLock(`${file}.patch-lock`, async () => {
+  return withLock(`${file}.daemonwood-lock`, async () => {
     const read = async () => { try { return await readFile(file, "utf8"); } catch (e) { if (e.code === "ENOENT") return "{}"; throw e; } };
     for (let attempt = 0; attempt < 4; attempt++) {
       const before = await read();
@@ -67,6 +67,6 @@ export async function editSettings(file, transform) {
       await atomicJson(file, next);
       return next;
     }
-    throw new Error("Claude settings changed during setup. Run The Patch again.");
+    throw new Error("Claude settings changed during setup. Run Daemonwood again.");
   });
 }

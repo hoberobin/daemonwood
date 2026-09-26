@@ -6,7 +6,7 @@ import { join } from "node:path";
 import { noteForProcess, readSessionRegistry, registryEntryFor, sessionNameFor, START_SLACK_MS } from "../src/session-registry.js";
 
 function registryFixture() {
-  const root = mkdtempSync(join(tmpdir(), "patch-registry-"));
+  const root = mkdtempSync(join(tmpdir(), "daemonwood-registry-"));
   writeFileSync(join(root, "30006.json"), JSON.stringify({
     pid: 30006, sessionId: "78cddc65-7041-4331-9d31-9a4a9f5f8dc4", cwd: "/Users/someone/work/app",
     messagingSocketPath: "/tmp/cc-socks/30006.sock", name: "work-app-6c", nameSource: "derived",
@@ -61,6 +61,6 @@ test("a name is only lent to the session whose pid and id both match", () => {
 });
 
 test("an unreadable registry says so, and names nobody", () => {
-  assert.equal(readSessionRegistry({ root: join(tmpdir(), "patch-registry-does-not-exist") }), null);
+  assert.equal(readSessionRegistry({ root: join(tmpdir(), "daemonwood-registry-does-not-exist") }), null);
   assert.equal(sessionNameFor({ ownerPid: 30006, sessionId: "x" }, null), null);
 });

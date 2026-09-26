@@ -1,6 +1,6 @@
-# The Patch terminology
+# Daemonwood terminology
 
-The Patch uses plain operational language in controls and inspector fields. World-flavored language adds character but never carries essential meaning by itself.
+Daemonwood uses plain operational language in controls and inspector fields. World-flavored language adds character but never carries essential meaning by itself.
 
 ## Product nouns
 
@@ -35,7 +35,7 @@ One top-level session equals one familiar. Helpers remain attached to their pare
 | idle | Idle | Campfire |
 
 There is no state for a session that has gone. An ended, disconnected or
-superseded session leaves the Patch rather than moving to an inactive area, so
+superseded session leaves the wood rather than moving to an inactive area, so
 the map never holds a character that is not backed by a running process whose
 own Claude Code note names that session — and the bridge refuses any event
 that cannot name one, so nothing can arrive without a process either.

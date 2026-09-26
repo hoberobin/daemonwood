@@ -45,7 +45,7 @@ test("titles are one clean line, capped, and absent rather than empty", () => {
 });
 
 test("only the tail of the file is read, and a missing file is no title", () => {
-  const dir = mkdtempSync(join(tmpdir(), "patch-title-"));
+  const dir = mkdtempSync(join(tmpdir(), "daemonwood-title-"));
   const file = join(dir, "s1.jsonl");
   writeFileSync(file, [
     line({ type: "ai-title", aiTitle: "Early title", sessionId: "s1" }),

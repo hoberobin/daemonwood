@@ -1,5 +1,5 @@
 {
-  "name": "The Patch — Western Oregon v0.2",
+  "name": "Daemonwood — Western Oregon v0.2",
   "note": "Sampled from assets/map/workshop-plate-v3.png, not chosen. The environment holds the warm half of the wheel; the pure-yellow and bright-green bands are deliberately empty so signals can own them. Mirrored by src/design/tokens.js — tests/design-tokens.test.js fails if the two drift.",
   "environment": {
     "sand": "#78685d",

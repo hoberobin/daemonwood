@@ -1,6 +1,6 @@
 # Documentation
 
-Start at the root [`README.md`](../README.md) for what The Patch is and how to
+Start at the root [`README.md`](../README.md) for what Daemonwood is and how to
 run it.
 
 ## Using it

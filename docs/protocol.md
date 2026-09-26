@@ -1,4 +1,4 @@
-# The Patch event protocol — v0.1
+# Daemonwood event protocol — v0.1
 
 The world knows about normalized lifecycle events, not Claude, Codex, Cursor, or any other provider. An adapter has one job: translate its provider's signals into this small payload and POST it to "http://127.0.0.1:4173/api/events".
 
@@ -33,7 +33,7 @@ session id). A sender that posts any of those three has them stripped.
 `GET /api/sessions` and `GET /api/sessions/<sessionId>` return the same public
 view the stream carries, so a terminal's status line can ask which familiar it
 is. Identity changes that are not lifecycle events — a rename — arrive on the
-stream as `patch-session` rather than `patch-event`.
+stream as `daemonwood-session` rather than `daemonwood-event`.
 
 ## Supported types
 
@@ -46,7 +46,7 @@ stream as `patch-session` rather than `patch-event`.
 | "failure" | A tool or turn failed |
 | "stopped" | Turn ended; the agent is no longer working (Done) |
 | "completed" | Provider explicitly reported the task complete (also Done) |
-| "session_ended" | Session closed; remove it from the Patch and reconnect snapshots |
+| "session_ended" | Session closed; remove it from the wood and reconnect snapshots |
 | "subagent_started" / "subagent_stopped" | Helper count changed |
 
 Tool categories are "read", "search", "edit", "write", "command", and "test". Unknown tool categories render as generic running work.
@@ -100,7 +100,7 @@ same way. Adapters never see these; they arrive on the stream like any other.
 An adapter that cannot supply local process identity cannot be trusted to keep
 the map one-to-one, and the bridge will not pretend otherwise. Refusals are
 counted in `/api/health` as `refusedEvents` and `lastRefusal`, streamed to the
-browser as `patch-refused`, and shown in `npm run status` — a refusal you cannot
+browser as `daemonwood-refused`, and shown in `npm run status` — a refusal you cannot
 see would be its own kind of lie.
 
 ## Privacy boundary

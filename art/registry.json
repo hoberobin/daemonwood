@@ -15,6 +15,18 @@
       "prompt": "art/prompts/moss.txt"
     },
     {
+      "id": "moss-stations",
+      "kind": "familiar-stations",
+      "source": "art/source/familiars/moss-stations.png",
+      "export": "assets/sprites/moss-stations-v1.png",
+      "authoring": "OpenAI built-in image generation, derived from the project's supplied character design",
+      "date": "2026-09-26",
+      "provenance": "New source sheet generated for this project. Original character authorship and license were not supplied.",
+      "license": "Project owner to confirm rights to original references before redistribution",
+      "status": "pending-visual-qa",
+      "prompt": "art/prompts/stations/moss.txt"
+    },
+    {
       "id": "fern",
       "kind": "familiar",
       "source": "art/source/familiars/fern.png",
@@ -127,10 +139,11 @@
       "kind": "map",
       "source": "art/source/map/workshop-master.png",
       "export": "assets/map/workshop-plate-v3.png",
-      "authoring": "Existing project raster master; original layered painting unavailable",
-      "provenance": "Copied byte-for-byte from approved runtime plate v3",
+      "authoring": "OpenAI built-in image generation, vegetation edit of existing project raster master",
+      "provenance": "User-approved workshop-pnw-v1 candidate promoted to master and runtime plate; original archived at assets/archive/map/workshop-plate-v3-pre-pnw.png",
+      "prompt": "art/prompts/workshop-pnw-v1.txt",
       "license": "Unrecorded in supplied project",
-      "status": "approved-existing"
+      "status": "approved-pnw"
     },
     {
       "id": "toolbox-helper",

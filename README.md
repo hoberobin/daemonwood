@@ -1,8 +1,8 @@
-# The Patch — v0.15 beta
+# Daemonwood — v0.15 beta
 
 Your coding agents, as pixel familiars in a Pacific Northwest workshop.
 
-The Patch renders live, sanitized lifecycle events from real Claude Code
+Daemonwood renders live, sanitized lifecycle events from real Claude Code
 sessions as characters moving between stations on a hand-drawn map. A familiar
 at the Test Dungeon is running tests. One at the Permission Gate is waiting for
 you. The map displays the eight sessions that matter most while tracking and
@@ -22,7 +22,7 @@ npm start     # set up, start in the background, open the map
 ```
 
 That is the whole setup, and it is safe to re-run. It stages a durable runtime
-in `~/.the-patch/`, writes The Patch's hooks into Claude Code's user settings
+in `~/.daemonwood/`, writes Daemonwood's hooks into Claude Code's user settings
 (`~/.claude/settings.json`, or `$CLAUDE_CONFIG_DIR`), which covers **every
 project in that profile at once**, starts a background service and opens the
 page. You can close the terminal; nothing refers back to this folder. Sessions
@@ -32,9 +32,9 @@ other hooks, permissions and status line are kept.
 
 ```bash
 npm run status      # service, Claude Code, hooks, delivery
-npm run repair      # rewrite The Patch's hooks and restart
+npm run repair      # rewrite Daemonwood's hooks and restart
 npm run stop        # pause until the next launch
-npm run disconnect  # uninstall: remove only The Patch's hooks and runtime
+npm run disconnect  # uninstall: remove only Daemonwood's hooks and runtime
 npm test            # the automated suite
 npm run dev         # serve this checkout in the foreground, for development
 ```
@@ -46,6 +46,14 @@ do the same from any directory.
 
 New here? [`docs/getting-started.md`](docs/getting-started.md) is the shortest
 path from download to a moving familiar.
+
+**Formerly The Patch.** If you ran it under the old name, `npm start` once
+upgrades it. The first launch carries your familiars' faces from `~/.the-patch/`
+to `~/.daemonwood/`, stops the old service, replaces the old hooks in
+`~/.claude/settings.json` and clears out the old runtime. The two old hook
+launchers stay behind as forwarders, because a Claude Code session that was
+already running can keep calling them until it restarts. `PATCH_*` environment
+overrides are still read as fallbacks for `DAEMONWOOD_*`.
 
 ## How to read the world
 
@@ -87,9 +95,9 @@ active agents.
 | `src/` | lifecycle state engine, world routing, renderer, design tokens, browser app |
 | `src/design/tokens.js` | the one source of record for every colour, type, motion and HUD value |
 | `hooks/` | the fail-open Claude Code adapter and status line |
-| `bin/the-patch.mjs`, `scripts/cli.mjs` | the CLI: launch, status, repair, stop, uninstall |
+| `bin/daemonwood.mjs`, `scripts/cli.mjs` | the CLI: launch, status, repair, stop, uninstall |
 | `scripts/runtime.mjs`, `daemon.mjs`, `deliver.mjs` | durable install, background service, cold-start delivery |
-| `scripts/claude-setup.mjs`, `local-files.mjs` | what a Patch hook entry is; safe settings edits and locks |
+| `scripts/claude-setup.mjs`, `local-files.mjs` | what a Daemonwood hook entry is; safe settings edits and locks |
 | `scripts/package-files.mjs` | the one payload list shared by npm and the installer |
 | `scripts/` (other) | `connect.mjs` (per-project dev install), art export/check/QA, `ui-check.mjs`, `screenshot.mjs` |
 | `tests/` | executable product invariants — logic, privacy, routing, map and sprite contracts |
@@ -132,11 +140,11 @@ active agents.
 - Test Dungeon, Permission Gate, and Shipping Dock are permanent visual state
   stations.
 - Done means the agent stopped working; Idle means it has been Done and quiet for
-  five minutes. Ended or disconnected sessions leave the Patch instead of
+  five minutes. Ended or disconnected sessions leave the wood instead of
   lingering in an inactive area.
 - A session keeps its familiar for life. Every session prefers one face, fixed
   by its id, yields it only while a live session wears it, and the bridge
-  remembers past choices in `~/.the-patch/familiars.json`, so a restart never
+  remembers past choices in `~/.daemonwood/familiars.json`, so a restart never
   renames a familiar the terminal's status line has been calling Moss all day.
 - A session that ends does not blink out. Its familiar turns, walks down to the
   chained gate at the foot of the clearing wearing a waving-hand badge, and
@@ -147,7 +155,7 @@ active agents.
   the next step, the hover nameplate, the inspector — in one wording. Claude
   Code's fallback session slug is not shown; only a name somebody chose is.
 - Abruptly killed Claude Code processes are detected from their PID plus process
-  start time and leave the Patch within about two seconds, even when no
+  start time and leave the wood within about two seconds, even when no
   `SessionEnd` hook can run.
 - A familiar stands on the map only for a session Claude Code says it is
   hosting: a live `claude` process, and Claude Code's own note for that process

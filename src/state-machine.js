@@ -11,7 +11,7 @@ export const VISUAL_STATES = Object.freeze({
   FINISHED: "finished"
 });
 
-/* Every way a session can leave the Patch. `disconnected` is the bridge's own
+/* Every way a session can leave the wood. `disconnected` is the bridge's own
    verdict on a session whose process is gone, `unproven` its verdict on one
    Claude Code turns out never to have opened, and `superseded` its verdict on
    one whose process now hosts a different session — `/clear` gives a terminal

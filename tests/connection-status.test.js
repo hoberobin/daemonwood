@@ -34,6 +34,6 @@ test("blocked, unreadable and partial setups ask for action instead of looking s
   assert.equal(unreadable.problem, "unreadable");
   assert.match(unreadable.details, /could not be read/);
   const partial = connectionStatus({ setup: { hooks: { configured: 9, total: 12 } }, bridge: "live" });
-  assert.equal(partial.label, "The Patch needs a quick repair");
+  assert.equal(partial.label, "Daemonwood needs a quick repair");
   assert.equal(partial.settled, false);
 });

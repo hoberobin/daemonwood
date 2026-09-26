@@ -6,7 +6,7 @@ import { join } from "node:path";
 import { isKnownSession, readSessionLedger } from "../src/session-proof.js";
 
 function ledgerFixture() {
-  const root = mkdtempSync(join(tmpdir(), "patch-ledger-"));
+  const root = mkdtempSync(join(tmpdir(), "daemonwood-ledger-"));
   const project = join(root, "-Users-someone-work-app");
   mkdirSync(project);
   writeFileSync(join(project, "6ab1a288-4289-494c-a426-3274cd4d5401.jsonl"), "");
@@ -29,7 +29,7 @@ test("the ledger is every session Claude Code has opened, across every project",
 });
 
 test("a ledger that cannot be read says so, rather than saying no", () => {
-  assert.equal(readSessionLedger({ root: join(tmpdir(), "patch-ledger-does-not-exist") }), null);
+  assert.equal(readSessionLedger({ root: join(tmpdir(), "daemonwood-ledger-does-not-exist") }), null);
   assert.equal(isKnownSession("anything", null), null);
   assert.equal(isKnownSession("anything", undefined), null);
   assert.equal(isKnownSession("real", new Set(["real"])), true);

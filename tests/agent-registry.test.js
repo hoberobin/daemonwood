@@ -122,7 +122,7 @@ test("a new session takes the place of the quietest resting one, never of active
   assertNoOverlap(registry);
 });
 
-test("an ended session leaves the Patch and frees its occupancy slot", () => {
+test("an ended session leaves the wood and frees its occupancy slot", () => {
   const registry = new AgentRegistry();
   registry.apply(event("a", "session-a", "editing"));
   registry.apply(event("b", "session-b", "testing"));

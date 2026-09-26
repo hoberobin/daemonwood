@@ -5,15 +5,15 @@ import { mkdtemp, readFile, rm, mkdir, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createPatchServer } from '../src/event-server.js';
+import { createDaemonwoodServer } from '../src/event-server.js';
 
 // Isolated browser integration checks. No real process/session discovery,
 // settings writes, adapter installation, or production event POSTs.
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
-const profile = await mkdtemp(join(tmpdir(), 'patch-ui-check-'));
-const chromePath = process.env.PATCH_CHROME || (process.platform === 'darwin'
+const profile = await mkdtemp(join(tmpdir(), 'daemonwood-ui-check-'));
+const chromePath = process.env.DAEMONWOOD_CHROME || (process.platform === 'darwin'
   ? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' : 'google-chrome');
-const server = createPatchServer({ root, processSnapshot: () => [], ledgerSnapshot: () => new Set(), registrySnapshot: () => new Map() });
+const server = createDaemonwoodServer({ root, processSnapshot: () => [], ledgerSnapshot: () => new Set(), registrySnapshot: () => new Map() });
 let chrome, ws;
 const delay = (ms) => new Promise((r) => setTimeout(r, ms));
 const errors = [];
@@ -29,7 +29,7 @@ try {
     if (launchError) throw launchError;
     try { port = Number((await readFile(join(profile, 'DevToolsActivePort'), 'utf8')).split('\n')[0]); } catch { await delay(100); }
   }
-  assert.ok(port, 'Chrome debugging endpoint started; set PATCH_CHROME to your Chrome binary');
+  assert.ok(port, 'Chrome debugging endpoint started; set DAEMONWOOD_CHROME to your Chrome binary');
   const target = await (await fetch(`http://127.0.0.1:${port}/json/new?about:blank`, { method: 'PUT' })).json();
   ws = new WebSocket(target.webSocketDebuggerUrl);
   ws.addEventListener('message', ({ data }) => {
@@ -85,10 +85,10 @@ try {
   await check('the periodic refresh preserves visible keyboard focus', `focusedChoice.isConnected && document.activeElement===focusedChoice && getComputedStyle(focusedChoice).visibility==='visible'`);
   await evaluate(`window.hiddenKey=app.registry.hidden[0].key;[...document.querySelectorAll('#session-list li')].find(n=>n.dataset.key===hiddenKey).querySelector('button').click();`);
   await check('hidden sessions open the inspector without displacing another session', `app.registry.selectedId===hiddenKey && !app.registry.visibleKeys.includes(hiddenKey) && !document.querySelector('#inspector').hidden`);
-  await evaluate(`fixtureStream.emit('patch-snapshot',[...app.registry.records.values()].map(r=>fixture(r.key)));`);
+  await evaluate(`fixtureStream.emit('daemonwood-snapshot',[...app.registry.records.values()].map(r=>fixture(r.key)));`);
   await check('reconnect snapshots preserve a still-existing selected session', `app.registry.selectedId===hiddenKey`);
   await check('accessible map has no invisible tab stops', `document.querySelectorAll('#sr-roster button, #sr-roster [tabindex]').length===0 && document.querySelectorAll('#sr-roster li').length===5`);
-  await evaluate(`fixtureStream.emit('patch-delivery',{hookEvents:1,lastHookReceivedAt:new Date().toISOString()});`);
+  await evaluate(`fixtureStream.emit('daemonwood-delivery',{hookEvents:1,lastHookReceivedAt:new Date().toISOString()});`);
   await check('actual delivery updates the status immediately', `document.querySelector('#connect-label').textContent==='Receiving Claude events' && !document.querySelector('#connect-dot').hidden`);
   await evaluate(`fixtureStream.emit('error',{});`);
   await check('an outage cannot retain a reassuring green delivery light', `document.querySelector('#connect-label').textContent==='Reconnecting…' && document.querySelector('#connect-dot').hidden`);
@@ -110,7 +110,7 @@ try {
   await send('Input.dispatchMouseEvent', { type: 'mousePressed', button: 'left', clickCount: 1, x: markerPoint.x, y: markerPoint.y });
   await send('Input.dispatchMouseEvent', { type: 'mouseReleased', button: 'left', clickCount: 1, x: markerPoint.x, y: markerPoint.y });
   await check('the drawn edge marker selects the session beneath the inspector', `app.registry.selectedId===${JSON.stringify(markerPoint.key)}`);
-  const output = process.env.PATCH_UI_OUTPUT ? resolve(process.env.PATCH_UI_OUTPUT) : null;
+  const output = process.env.DAEMONWOOD_UI_OUTPUT ? resolve(process.env.DAEMONWOOD_UI_OUTPUT) : null;
   const capture = async (name) => {
     if (!output) return;
     await mkdir(output, { recursive: true });

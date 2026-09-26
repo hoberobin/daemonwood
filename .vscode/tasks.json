@@ -2,7 +2,7 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "The Patch: Start",
+      "label": "Daemonwood: Start",
       "type": "process",
       "command": "npm",
       "args": ["start"],
@@ -11,7 +11,7 @@
       "presentation": { "reveal": "always", "panel": "dedicated" }
     },
     {
-      "label": "The Patch: Test",
+      "label": "Daemonwood: Test",
       "type": "process",
       "command": "npm",
       "args": ["test"],
@@ -19,21 +19,21 @@
       "group": { "kind": "test", "isDefault": true }
     },
     {
-      "label": "The Patch: Connect every project",
+      "label": "Daemonwood: Connect every project",
       "type": "process",
       "command": "npm",
       "args": ["run", "connect"],
       "problemMatcher": []
     },
     {
-      "label": "The Patch: Connect one project",
+      "label": "Daemonwood: Connect one project",
       "type": "process",
       "command": "npm",
       "args": ["run", "connect", "--", "${input:project}"],
       "problemMatcher": []
     },
     {
-      "label": "The Patch: Status",
+      "label": "Daemonwood: Status",
       "type": "process",
       "command": "npm",
       "args": ["run", "status"],

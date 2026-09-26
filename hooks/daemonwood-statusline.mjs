@@ -11,9 +11,9 @@
    exactly as it was. */
 import { execFile } from "node:child_process";
 
-import { localOrigin } from "../src/local-paths.js";
-const origin = process.env.PATCH_ORIGIN || localOrigin();
-const lookupTimeout = Number(process.env.PATCH_STATUSLINE_TIMEOUT_MS || 350);
+import { localOrigin, setting } from "../src/local-paths.js";
+const origin = setting("ORIGIN") || localOrigin();
+const lookupTimeout = Number(setting("STATUSLINE_TIMEOUT_MS") || 350);
 const wrapped = decodeWrapped(process.argv.slice(2));
 
 const input = await readStdin();

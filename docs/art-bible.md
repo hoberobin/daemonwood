@@ -1,4 +1,4 @@
-# The Patch — Art and World Bible v0.1
+# Daemonwood — Art and World Bible v0.1
 
 Status: locked foundation for the solo/local prototype  
 Product: a visual habitat for monitoring local Claude Code sessions  
@@ -6,7 +6,7 @@ Primary player action: observe, identify attention needs, inspect, and return to
 
 ## 1. Visual thesis
 
-The Patch is a warm, rain-soaked cooperative workshop in the forests of western Oregon/Cascadia, inhabited by strange, industrious pixel familiars. It is quietly useful, slightly broken, expressive, and never corporate.
+Daemonwood is a warm, rain-soaked cooperative workshop in the forests of western Oregon/Cascadia, inhabited by strange, industrious pixel familiars. It is quietly useful, slightly broken, expressive, and never corporate.
 
 The world must communicate four facts before it communicates decoration:
 
@@ -228,7 +228,7 @@ Subagents appear as small toolbox creatures.
 
 State changes that require a new destination first enter `traveling`. The displayed status remains the destination state while a small movement indicator shows transit.
 
-`session_ended`, `disconnected`, and `reset` remove the familiar from the Patch and from reconnect snapshots. They are terminal events, not world states. The Campfire is reserved for an open session between turns.
+`session_ended`, `disconnected`, and `reset` remove the familiar from the wood and from reconnect snapshots. They are terminal events, not world states. The Campfire is reserved for an open session between turns.
 
 ## 9. Readability rules
 
@@ -297,7 +297,7 @@ art/
 Runtime structure:
 
 ```text
-public/assets/patch/
+public/assets/daemonwood/
   tileset.png
   moss.png
   helper.png

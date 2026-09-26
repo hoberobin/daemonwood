@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 288" width="1536" height="864" shape-rendering="crispEdges">
-  <title>The Patch lifecycle workshop graybox</title>
+  <title>Daemonwood lifecycle workshop graybox</title>
   <desc>Exact 32 by 18 tile planning map with one shared place for each visible lifecycle stage and no ended-session holding area.</desc>
   <defs>
     <pattern id="grid" width="16" height="16" patternUnits="userSpaceOnUse">

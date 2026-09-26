@@ -13,7 +13,7 @@ const mime = {
   ".png": "image/png", ".svg": "image/svg+xml; charset=utf-8"
 };
 
-export function createPatchServer({
+export function createDaemonwoodServer({
   root,
   identity = {},
   token = null,
@@ -143,7 +143,7 @@ export function createPatchServer({
 
     if (request.method === "GET" && url.pathname === "/api/health") {
       json(response, 200, {
-        ok: true, product: "the-patch", protocol: 1, ...identity, clients: clients.size, sessions: sessions.size,
+        ok: true, product: "daemonwood", protocol: 1, ...identity, clients: clients.size, sessions: sessions.size,
         receivedEvents, refusedEvents, lastRefusal, lastEventAt, startedAt,
         setup: await setupState(), delivery: deliveryState()
       });
@@ -173,7 +173,7 @@ export function createPatchServer({
         "Connection": "keep-alive"
       });
       response.write(`event: ready\ndata: ${JSON.stringify({ ok: true, setup: await setupState(), delivery: deliveryState() })}\n\n`);
-      response.write(`event: patch-snapshot\ndata: ${JSON.stringify([...sessions.values()])}\n\n`);
+      response.write(`event: daemonwood-snapshot\ndata: ${JSON.stringify([...sessions.values()])}\n\n`);
       clients.add(response);
       request.on("close", () => clients.delete(response));
       return;
@@ -204,7 +204,7 @@ export function createPatchServer({
             agentName: safe.agentName,
             reason: verdict.reason
           };
-          send(clients, "patch-refused", lastRefusal);
+          send(clients, "daemonwood-refused", lastRefusal);
           json(response, 403, { ok: false, error: verdict.reason });
           return;
         }
@@ -212,7 +212,7 @@ export function createPatchServer({
         admit(safe, { supersedes: verdict.supersedes });
         hookEvents += 1;
         lastHookReceivedAt = new Date().toISOString();
-        send(clients, "patch-delivery", deliveryState());
+        send(clients, "daemonwood-delivery", deliveryState());
         json(response, 202, { ok: true, event: safe });
       } catch (error) {
         const status = error.code === "BODY_TOO_LARGE" ? 413 : 400;
@@ -262,7 +262,7 @@ export function createPatchServer({
     for (const [id, at] of farewells) if (Date.now() - at > FAREWELL_MS) farewells.delete(id);
     reapDeadSessions(sessions, seen.processes, emit, undefined, seen.ledger, seen.registry);
     for (const session of refreshIdentities(sessions, seen.processes, seen.registry)) {
-      send(clients, "patch-session", session);
+      send(clients, "daemonwood-session", session);
     }
     for (const correction of reconcileWithRegistry(sessions, seen.processes, seen.registry)) {
       admit(correction, { processes: seen.processes, registry: seen.registry });
@@ -282,7 +282,7 @@ export function createPatchServer({
      event instead. */
   const heartbeat = setInterval(async () => {
     const payload = JSON.stringify({ at: new Date().toISOString(), sessions: sessions.size, setup: await setupState(), delivery: deliveryState() });
-    for (const client of clients) client.write(`event: patch-beat\ndata: ${payload}\n\n`);
+    for (const client of clients) client.write(`event: daemonwood-beat\ndata: ${payload}\n\n`);
   }, heartbeatIntervalMs);
   heartbeat.unref();
 
@@ -612,7 +612,7 @@ function expiryReason(session, processes, ledger = null, registry = null) {
 }
 
 function broadcast(clients, event) {
-  send(clients, "patch-event", event);
+  send(clients, "daemonwood-event", event);
 }
 
 function send(clients, name, payload) {

@@ -122,6 +122,20 @@ export const BEHAVIOURS = Object.freeze([
     }
   }),
   Object.freeze({
+    id: "idle.firewatch",
+    summary: "At the campfire a resting familiar briefly turns toward the flames and takes a small, slow breath.",
+    states: ["idle"],
+    priority: 30,
+    flourish: { everyMs: 9000, lastsMs: 900 },
+    pose(ctx) {
+      if (!ctx.atOwnStation || !flourishActive(ctx, this.flourish)) return null;
+      const pose = facingToward(ctx.agent.position.x, nodes.campfire.x);
+      const every = this.flourish.everyMs * ctx.tempo;
+      const into = (ctx.elapsed + (ctx.phase * 7919) % every) % every;
+      return { pose: pose ?? undefined, lift: Math.sin((into / this.flourish.lastsMs) * Math.PI) * 0.8 };
+    }
+  }),
+  Object.freeze({
     id: "arriving.look_around",
     summary: "A familiar that has just arrived looks one way, then the other, taking the place in.",
     states: ["arriving"],
