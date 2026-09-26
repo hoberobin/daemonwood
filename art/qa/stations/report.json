@@ -1,0 +1,55 @@
+{
+  "capturedAt": "2026-09-26T23:29:53.163Z",
+  "familiars": {
+    "moss": {
+      "description": "Station work · Moss (editing): hammer (station sheet) · Moss (investigating): book (station sheet) · Moss (running): lever (station sheet) · Moss (testing): flask (station sheet)",
+      "reducedMotionStill": true,
+      "sceneScreenshot": "moss-scene.png"
+    },
+    "fern": {
+      "description": "Station work · Fern (editing): hammer (station sheet) · Fern (investigating): book (station sheet) · Fern (running): lever (station sheet) · Fern (testing): flask (station sheet)",
+      "reducedMotionStill": true,
+      "sceneScreenshot": "fern-scene.png"
+    },
+    "lumen": {
+      "description": "Station work · Lumen (editing): hammer (station sheet) · Lumen (investigating): book (station sheet) · Lumen (running): lever (station sheet) · Lumen (testing): flask (station sheet)",
+      "reducedMotionStill": true,
+      "sceneScreenshot": "lumen-scene.png"
+    },
+    "cedar": {
+      "description": "Station work · Cedar (editing): hammer (station sheet) · Cedar (investigating): book (station sheet) · Cedar (running): lever (station sheet) · Cedar (testing): flask (station sheet)",
+      "reducedMotionStill": true,
+      "sceneScreenshot": "cedar-scene.png"
+    },
+    "alder": {
+      "description": "Station work · Alder (editing): hammer (station sheet) · Alder (investigating): book (station sheet) · Alder (running): lever (station sheet) · Alder (testing): flask (station sheet)",
+      "reducedMotionStill": true,
+      "sceneScreenshot": "alder-scene.png"
+    },
+    "mica": {
+      "description": "Station work · Mica (editing): hammer (station sheet) · Mica (investigating): book (station sheet) · Mica (running): lever (station sheet) · Mica (testing): flask (station sheet)",
+      "reducedMotionStill": true,
+      "sceneScreenshot": "mica-scene.png"
+    },
+    "ripple": {
+      "description": "Station work · Ripple (editing): hammer (station sheet) · Ripple (investigating): book (station sheet) · Ripple (running): lever (station sheet) · Ripple (testing): flask (station sheet)",
+      "reducedMotionStill": true,
+      "sceneScreenshot": "ripple-scene.png"
+    },
+    "thimble": {
+      "description": "Station work · Thimble (editing): hammer (station sheet) · Thimble (investigating): book (station sheet) · Thimble (running): lever (station sheet) · Thimble (testing): flask (station sheet)",
+      "reducedMotionStill": true,
+      "sceneScreenshot": "thimble-scene.png"
+    },
+    "spruce": {
+      "description": "Station work · Spruce (editing): hammer (station sheet) · Spruce (investigating): book (station sheet) · Spruce (running): lever (station sheet) · Spruce (testing): flask (station sheet)",
+      "reducedMotionStill": true,
+      "sceneScreenshot": "spruce-scene.png"
+    },
+    "nettle": {
+      "description": "Station work · Nettle (editing): hammer (station sheet) · Nettle (investigating): book (station sheet) · Nettle (running): lever (station sheet) · Nettle (testing): flask (station sheet)",
+      "reducedMotionStill": true,
+      "sceneScreenshot": "nettle-scene.png"
+    }
+  }
+}

@@ -2,5 +2,14 @@
    Which familiars have a station-work sheet (art/source/station-contract.json).
    A familiar missing here draws its ordinary frames at every station. */
 export const STATION_SHEETS = Object.freeze({
-  "moss": "./assets/sprites/moss-stations-v1.png"
+  "moss": "./assets/sprites/moss-stations-v1.png",
+  "fern": "./assets/sprites/fern-stations-v1.png",
+  "lumen": "./assets/sprites/lumen-stations-v1.png",
+  "cedar": "./assets/sprites/cedar-stations-v1.png",
+  "alder": "./assets/sprites/alder-stations-v1.png",
+  "mica": "./assets/sprites/mica-stations-v1.png",
+  "ripple": "./assets/sprites/ripple-stations-v1.png",
+  "thimble": "./assets/sprites/thimble-stations-v1.png",
+  "spruce": "./assets/sprites/spruce-stations-v1.png",
+  "nettle": "./assets/sprites/nettle-stations-v1.png"
 });
