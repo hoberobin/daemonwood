@@ -8,23 +8,21 @@ macOS (Linux/WSL in beta), Node.js 22 or newer (24 LTS recommended), and
 Claude Code on your `PATH`. Native Windows is not supported yet; run Daemonwood
 inside WSL next to Claude Code.
 
-## 2. Launch Daemonwood
+## 2. Wake Daemonwood
 
-From a clone of this repository:
+From any directory:
 
 ```bash
-npm start
+npx daemonwood wake
 ```
 
-That one command checks Node and Claude Code, copies a durable runtime into
-`~/.daemonwood/versions/`, writes Daemonwood's hooks into your Claude Code user
-settings (`~/.claude/settings.json`, or `$CLAUDE_CONFIG_DIR/settings.json`),
-starts a background service and opens the map. It prints the address and
-returns to the shell, so you can close the terminal. Nothing refers back to
-the clone afterwards; moving or deleting it does not break the integration.
-
-Once the package is published, `npx --yes <package-name>` does the same thing
-from any directory.
+npm asks once to download the package; say yes. That one command checks Node
+and Claude Code, copies a durable runtime into `~/.daemonwood/versions/`,
+writes Daemonwood's hooks into your Claude Code user settings
+(`~/.claude/settings.json`, or `$CLAUDE_CONFIG_DIR/settings.json`), starts a
+background service and opens the map. It prints the address and returns to the
+shell, so you can close the terminal. Nothing refers back to npm's cache (or to
+a clone, if you ran `npm start` from one) afterwards.
 
 It covers **every project** in that Claude Code profile. Sessions that are
 already open appear from Claude Code's own session notes; sessions started from
@@ -40,12 +38,16 @@ at the Shipping Dock, and after five quiet minutes it rests at the Campfire.
 ## 4. Everyday commands
 
 ```bash
-node bin/daemonwood.mjs            # launch / resume / reopen the map (npm start)
-node bin/daemonwood.mjs status     # service, Claude Code and hook check (npm run status)
-node bin/daemonwood.mjs repair     # rewrite Daemonwood's hooks and restart (npm run repair)
-node bin/daemonwood.mjs stop       # pause; Claude events will not restart it (npm run stop)
-node bin/daemonwood.mjs uninstall  # remove hooks and runtime, keep familiar names
+npx daemonwood wake        # set up / resume / reopen the map
+npx daemonwood status      # service, Claude Code and hook check
+npx daemonwood repair      # rewrite Daemonwood's hooks and restart
+npx daemonwood sleep       # pause; Claude events will not wake it
+npx daemonwood uninstall   # remove hooks and runtime, keep familiar names
 ```
+
+After the first wake the same commands work as `~/.daemonwood/bin/daemonwood
+<command>`, without npm. From a clone they are `npm start`, `npm run status`,
+`npm run repair`, `npm run stop` and `npm run disconnect`.
 
 Options: `--no-open` prints the address instead of opening a browser;
 `--no-statusline` leaves Claude Code's status line alone; `--wrap-statusline`

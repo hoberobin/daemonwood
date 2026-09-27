@@ -3,7 +3,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { join } from "node:path";
 import { createDaemonwoodServer } from "./src/event-server.js";
 import { createFamiliarLedger } from "./src/familiar-ledger.js";
-import { claudeHome, installation, daemonwoodHome, setting } from "./src/local-paths.js";
+import { claudeHome, installation, daemonwoodHome, setting, displayCommand } from "./src/local-paths.js";
 import { CLAUDE_EVENTS, inspectDaemonwoodHooks, inspectDaemonwoodStatusLine } from "./scripts/claude-setup.mjs";
 
 const root = fileURLToPath(new URL(".", import.meta.url));
@@ -11,8 +11,9 @@ const quote = value => `'${String(value).replaceAll("'", "'\\''")}'`;
 export async function setupSnapshot() {
   const installed = installation();
   const file = join(claudeHome(), "settings.json");
-  // Absolute commands work for npx and global installs alike; the page shows them.
-  const command = `${quote(process.execPath)} ${quote(join(installed?.root || root, 'bin/daemonwood.mjs'))}`;
+  // The installed command works however Daemonwood was first launched (npx,
+  // global, checkout); the dev server has none and names its own files.
+  const command = installed ? displayCommand() : `${quote(process.execPath)} ${quote(join(root, 'bin/daemonwood.mjs'))}`;
   const repairCommand = `${command} repair`;
   const statusCommand = `${command} status`;
   try {

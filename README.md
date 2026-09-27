@@ -12,42 +12,57 @@ The core is provider-neutral: any agent that can POST the payload in
 [`docs/protocol.md`](docs/protocol.md) appears on the map. Claude Code is the
 one adapter that ships.
 
-## Run it
+## Wake it up
 
-macOS (Linux/WSL beta), Node.js 22 or newer, and Claude Code on `PATH`. No
-dependencies to install.
+macOS (Linux/WSL beta), Node.js 22 or newer, and Claude Code on `PATH`. Then,
+from any directory:
 
 ```bash
-npm start     # set up, start in the background, open the map
+npx daemonwood wake
 ```
 
-That is the whole setup, and it is safe to re-run. It stages a durable runtime
-in `~/.daemonwood/`, writes Daemonwood's hooks into Claude Code's user settings
-(`~/.claude/settings.json`, or `$CLAUDE_CONFIG_DIR`), which covers **every
-project in that profile at once**, starts a background service and opens the
-page. You can close the terminal; nothing refers back to this folder. Sessions
-Claude Code is already running appear straight away from its own per-session
-notes, and sessions started from now on report each move as it happens. Your
-other hooks, permissions and status line are kept.
+That is the whole setup. npm asks once whether to download the package, and a
+second later the map opens in your browser. It is safe to run again whenever
+you like, and `npx daemonwood@latest wake` upgrades.
+
+What it did: it staged a durable runtime in `~/.daemonwood/`, wrote
+Daemonwood's hooks into Claude Code's user settings (`~/.claude/settings.json`,
+or `$CLAUDE_CONFIG_DIR`), which covers **every project in that profile at
+once**, and started a background service. You can close the terminal; nothing
+refers back to npm's download cache. Sessions Claude Code is already running
+appear straight away from its own per-session notes, and sessions started from
+now on report each move as it happens. Your other hooks, permissions and status
+line are kept.
 
 ```bash
-npm run status      # service, Claude Code, hooks, delivery
-npm run repair      # rewrite Daemonwood's hooks and restart
-npm run stop        # pause until the next launch
-npm run disconnect  # uninstall: remove only Daemonwood's hooks and runtime
+npx daemonwood status     # service, Claude Code, hooks, delivery
+npx daemonwood repair     # rewrite Daemonwood's hooks and restart
+npx daemonwood sleep      # pause until you wake it again
+npx daemonwood uninstall  # remove only Daemonwood's hooks and runtime
+```
+
+After the first wake, the same commands also live at
+`~/.daemonwood/bin/daemonwood` (it is what the map's connection dialog shows),
+and `npm install -g daemonwood` puts a plain `daemonwood` on your `PATH`.
+`--wrap-statusline` puts each session's familiar in front of a custom status
+line you already have; `--no-statusline` leaves the status line alone;
+`--no-open` skips the browser.
+
+### From a clone
+
+```bash
+npm start           # the same as `npx daemonwood wake`, from this checkout
+npm run status      # also: repair, stop, disconnect
 npm test            # the automated suite
 npm run dev         # serve this checkout in the foreground, for development
 ```
 
-`--wrap-statusline` puts each session's familiar in front of a custom status
-line you already have; `--no-statusline` leaves the status line alone;
-`--no-open` skips the browser. Once published, `npx --yes <package-name>` will
-do the same from any directory.
+Releasing a new version is in [`docs/releasing.md`](docs/releasing.md).
 
 New here? [`docs/getting-started.md`](docs/getting-started.md) is the shortest
 path from download to a moving familiar.
 
-**Formerly The Patch.** If you ran it under the old name, `npm start` once
+**Formerly The Patch.** If you ran it under the old name, waking it once
 upgrades it. The first launch carries your familiars' faces from `~/.the-patch/`
 to `~/.daemonwood/`, stops the old service, replaces the old hooks in
 `~/.claude/settings.json` and clears out the old runtime. The two old hook

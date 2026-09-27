@@ -1,12 +1,12 @@
 import { mkdir, readFile, writeFile, copyFile, rm, rename, access, open, stat, readdir } from "node:fs/promises";
 import { constants } from "node:fs";
 import { homedir } from "node:os";
-import { join, dirname, resolve } from "node:path";
+import { join, dirname, resolve, basename } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { createHash, randomUUID } from "node:crypto";
 import { spawn, execFile } from "node:child_process";
 import { promisify } from "node:util";
-import { daemonwoodHome, claudeHome, installation, runtime, isPaused, readLocalJson, setting } from "../src/local-paths.js";
+import { daemonwoodHome, claudeHome, installation, runtime, isPaused, readLocalJson, setting, commandPath, displayCommand } from "../src/local-paths.js";
 import { atomicJson, withLock, editSettings, delay } from "./local-files.mjs";
 import { payloadFiles } from "./package-files.mjs";
 import { addDaemonwoodHooks, removeDaemonwoodHooks, addDaemonwoodStatusLine, removeDaemonwoodStatusLine, isDaemonwoodStatusLine, inspectDaemonwoodHooks } from "./claude-setup.mjs";
@@ -14,6 +14,30 @@ import { addDaemonwoodHooks, removeDaemonwoodHooks, addDaemonwoodStatusLine, rem
 export const sourceRoot = fileURLToPath(new URL("..", import.meta.url));
 export const hookOptions = () => ({ adapterPath: join(daemonwoodHome(), "hooks/daemonwood-hook.mjs"), statusLinePath: join(daemonwoodHome(), "hooks/daemonwood-statusline.mjs") });
 const runFile = promisify(execFile);
+
+/* What to tell someone to type next, in the form they launched with: the
+   installed command sets DAEMONWOOD_COMMAND, npx sets npm_command=exec, a
+   global install runs through its `daemonwood` link, and a checkout has npm
+   scripts. Checkout script names differ from the verbs, hence the table. */
+const SCRIPTS = { wake: "npm start", status: "npm run status", doctor: "npm run doctor", repair: "npm run repair", sleep: "npm run stop", uninstall: "npm run disconnect" };
+export function commandFor(verb, env = process.env, argv = process.argv) {
+  if (env.DAEMONWOOD_COMMAND) return `${env.DAEMONWOOD_COMMAND} ${verb}`;
+  if (env.npm_command === "exec") return `npx daemonwood ${verb}`;
+  if (basename(argv[1] || "") === "daemonwood") return `daemonwood ${verb}`;
+  if (env.npm_lifecycle_script?.includes("bin/daemonwood.mjs")) return SCRIPTS[verb];
+  return `node bin/daemonwood.mjs ${verb}`;
+}
+
+// A plain shell script, so it runs with the Node that installed it even when
+// that Node is not first on PATH. Rewritten with every install and rollback.
+async function writeCommand(installed) {
+  const quote = value => `'${String(value).replaceAll("'", "'\\''")}'`;
+  const path = commandPath();
+  await mkdir(dirname(path), { recursive: true, mode: 0o700 });
+  const env = `DAEMONWOOD_HOME=${quote(daemonwoodHome())} CLAUDE_CONFIG_DIR=${quote(installed.claudeDirectory)} DAEMONWOOD_COMMAND=${quote(displayCommand(path))}`;
+  await writeFile(`${path}.tmp`, `#!/bin/sh\n# Daemonwood's own command. Every launch rewrites it for the installed build.\n${env} exec ${quote(installed.nodePath)} ${quote(join(installed.root, "bin/daemonwood.mjs"))} "$@"\n`, { mode: 0o700 });
+  await rename(`${path}.tmp`, path);
+}
 
 export async function detectClaude() {
   try {
@@ -40,7 +64,7 @@ export async function ensureRunning({ resume = false } = {}) {
     if (resume) await atomicJson(join(daemonwoodHome(), "paused.json"), false);
     if (isPaused()) return null;
     const installed = installation();
-    if (!installed) throw new Error("Daemonwood isn't installed yet. Run the launch command again.");
+    if (!installed) throw new Error(`Daemonwood isn't installed yet. Run ${commandFor("wake")}.`);
     let health = await serviceHealth();
     if (health && health.build === installed.build) return health;
     if (health) await stopServiceUnlocked();
@@ -62,7 +86,7 @@ export async function ensureRunning({ resume = false } = {}) {
       if (child.exitCode !== null) break;
       await delay(60);
     }
-    throw new Error(`Daemonwood couldn't start. Run doctor for details. Local log: ${log}`);
+    throw new Error(`Daemonwood couldn't start. Run ${commandFor("doctor")} for details. Local log: ${log}`);
   });
 }
 
@@ -129,13 +153,14 @@ export async function installRuntime({ root = sourceRoot, statusLine = true, wra
     // is atomic; an event during setup sees either complete runtime.
     await atomicJson(join(daemonwoodHome(), "install.json"), installed);
     try {
+      await writeCommand(installed);
       await editSettings(settingsFile, value => {
         let next = addDaemonwoodHooks(value, hookOptions());
         if (statusLine && (!value.statusLine || isDaemonwoodStatusLine(value.statusLine, hookOptions()) || wrapStatusLine)) next = addDaemonwoodStatusLine(next, hookOptions());
         return next;
       });
     } catch (error) {
-      if (previous) await atomicJson(join(daemonwoodHome(), "install.json"), previous);
+      if (previous) { await atomicJson(join(daemonwoodHome(), "install.json"), previous); await writeCommand(previous).catch(() => {}); }
       else await rm(join(daemonwoodHome(), "install.json"), { force: true });
       throw error;
     }
@@ -231,6 +256,7 @@ export async function launch(options = {}) {
     if (legacy) await atomicJson(join(legacyHome(), "paused.json"), false).catch(() => {});
     if (before && before.build !== installed.build) {
       await atomicJson(join(daemonwoodHome(), "install.json"), before);
+      await writeCommand(before).catch(() => {});
       await ensureRunning({ resume: true }).catch(() => {});
       throw new Error(`${error.message} The previous runtime was restored.`);
     }
@@ -244,22 +270,22 @@ export async function diagnose() {
   const problems = [];
   let claudeVersion = null;
   try { claudeVersion = await detectClaude(); } catch (e) { problems.push(e.message); }
-  if (!installed) problems.push("Not installed. Run the launch command.");
+  if (!installed) problems.push(`Not installed. Run ${commandFor("wake")}.`);
   else {
     for (const file of [installed.nodePath, join(installed.root, "server.mjs"), hookOptions().adapterPath]) {
-      try { await access(file); } catch { problems.push("An installed runtime path is missing. Run repair."); }
+      try { await access(file); } catch { problems.push(`An installed runtime path is missing. Run ${commandFor("repair")}.`); }
     }
     const file = join(installed.claudeDirectory, "settings.json");
     try {
       const settings = JSON.parse(await readFile(file, "utf8"));
       const inspection = inspectDaemonwoodHooks(settings, hookOptions());
-      if (inspection.missing.length) problems.push("Claude Code setup is incomplete. Run repair.");
+      if (inspection.missing.length) problems.push(`Claude Code setup is incomplete. Run ${commandFor("repair")}.`);
       if (settings.disableAllHooks) problems.push("Claude Code hooks are disabled in user settings.");
       const exact = Object.values(settings.hooks || {}).flatMap(groups => Array.isArray(groups) ? groups.flatMap(g => g.hooks || []) : []).filter(h => h.args?.includes(hookOptions().adapterPath));
-      if (exact.some(h => h.command !== installed.nodePath)) problems.push("A hook uses an outdated Node path. Run repair.");
+      if (exact.some(h => h.command !== installed.nodePath)) problems.push(`A hook uses an outdated Node path. Run ${commandFor("repair")}.`);
     } catch { problems.push(`Claude settings cannot be read: ${file}`); }
   }
-  if (!health) problems.push(isPaused() ? "Paused. Run the launch command to resume." : "The local service is stopped. Run the launch command.");
+  if (!health) problems.push(isPaused() ? `Asleep. Run ${commandFor("wake")} to wake it.` : `The local service is stopped. Run ${commandFor("wake")}.`);
   return { installed: Boolean(installed), version: installed?.version, claudeVersion, health, paused: isPaused(), problems: [...new Set(problems)] };
 }
 
@@ -268,7 +294,7 @@ export async function uninstallRuntime() {
     const installed = installation();
     await stopService();
     if (installed) await editSettings(join(installed.claudeDirectory, "settings.json"), value => removeDaemonwoodStatusLine(removeDaemonwoodHooks(value, hookOptions()), hookOptions()));
-    for (const name of ["hooks", "versions", "install.json", "runtime.json", "service.log"]) await rm(join(daemonwoodHome(), name), { recursive: true, force: true });
+    for (const name of ["hooks", "bin", "versions", "install.json", "runtime.json", "service.log"]) await rm(join(daemonwoodHome(), name), { recursive: true, force: true });
     // The forwarders a migration left behind, never a live old install.
     if (!setting("HOME") && !await hasLegacyInstall()) {
       for (const [old] of LEGACY_LAUNCHERS) await rm(join(legacyHome(), "hooks", old), { force: true });

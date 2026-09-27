@@ -11,6 +11,15 @@ export function readLocalJson(file, fallback = null) {
   try { return JSON.parse(readFileSync(file, "utf8")); } catch { return fallback; }
 }
 export const installation = () => readLocalJson(join(daemonwoodHome(), "install.json"));
+/* Daemonwood's own command, written by every launch so it always runs the
+   installed build. Shown as ~/… when it lives in the home folder and needs no
+   quoting, because people copy it from the page into a terminal. */
+export const commandPath = () => join(daemonwoodHome(), "bin", "daemonwood");
+export function displayCommand(path = commandPath()) {
+  const home = homedir();
+  const short = path.startsWith(`${home}/`) ? `~/${path.slice(home.length + 1)}` : path;
+  return /^[~\w./-]+$/.test(short) ? short : `'${path.replaceAll("'", "'\\''")}'`;
+}
 export const runtime = () => readLocalJson(join(daemonwoodHome(), "runtime.json"));
 export const isPaused = () => readLocalJson(join(daemonwoodHome(), "paused.json"), false) === true;
 export function localOrigin() {

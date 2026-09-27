@@ -1,14 +1,33 @@
 {
   "name": "daemonwood",
   "version": "0.15.0-beta.1",
-  "private": true,
-  "description": "Watch local Claude Code sessions as pixel familiars in a Pacific Northwest workshop.",
+  "description": "Wake up a pixel workshop where every Claude Code session is a familiar. One command: npx daemonwood wake",
+  "keywords": [
+    "claude-code",
+    "claude",
+    "hooks",
+    "agents",
+    "pixel-art",
+    "dashboard"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hoberobin/daemonwood.git"
+  },
+  "homepage": "https://github.com/hoberobin/daemonwood#readme",
+  "bugs": {
+    "url": "https://github.com/hoberobin/daemonwood/issues"
+  },
   "type": "module",
   "engines": {
     "node": ">=22"
   },
   "bin": {
-    "daemonwood": "./bin/daemonwood.mjs"
+    "daemonwood": "bin/daemonwood.mjs"
+  },
+  "publishConfig": {
+    "access": "public",
+    "tag": "latest"
   },
   "scripts": {
     "start": "node bin/daemonwood.mjs",
@@ -23,7 +42,10 @@
     "doctor": "node bin/daemonwood.mjs doctor",
     "repair": "node bin/daemonwood.mjs repair",
     "stop": "node bin/daemonwood.mjs stop",
-    "uninstall:daemonwood": "node bin/daemonwood.mjs uninstall"
+    "uninstall:daemonwood": "node bin/daemonwood.mjs uninstall",
+    "wake": "node bin/daemonwood.mjs wake",
+    "sleep": "node bin/daemonwood.mjs sleep",
+    "prepublishOnly": "node -e \"if(!process.env.DAEMONWOOD_RELEASE){console.error(\\\"Not released yet. When ready: DAEMONWOOD_RELEASE=1 npm publish (see docs/releasing.md).\\\");process.exit(1)}\" && npm test"
   },
   "files": [
     "bin/",

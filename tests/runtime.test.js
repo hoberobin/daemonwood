@@ -8,6 +8,8 @@ import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
 import { editSettings, withLock } from "../scripts/local-files.mjs";
 import { payload, payloadFiles } from "../scripts/package-files.mjs";
+import { commandFor } from "../scripts/runtime.mjs";
+import { displayCommand } from "../src/local-paths.js";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
 const run = promisify(execFile);
@@ -20,6 +22,26 @@ test("npm's file list and the durable installer ship the same payload", async ()
   const files = await payloadFiles(root);
   assert.ok(files.includes("bin/daemonwood.mjs") && files.includes("scripts/daemon.mjs"));
   assert.ok(!files.some((file) => /^(art|docs|tests|\.claude|\.vscode)\//.test(file)), "source art, docs and tests stay out of the package");
+});
+
+/* The published package is the product's front door: `npx daemonwood wake`.
+   npm 11 silently drops a bin path written "./bin/…" at publish time, and a
+   prerelease published without the latest tag is invisible to a bare npx. */
+test("the package publishes the daemonwood command where npx looks for it", async () => {
+  const pkg = JSON.parse(await readFile(join(root, "package.json"), "utf8"));
+  assert.equal(pkg.name, "daemonwood");
+  assert.ok(!pkg.private, "a private package cannot be published");
+  assert.deepEqual(pkg.bin, { daemonwood: "bin/daemonwood.mjs" });
+  assert.equal(pkg.publishConfig?.tag, "latest");
+  assert.ok(!pkg.dependencies && !pkg.devDependencies, "nothing to install but the package itself");
+});
+
+test("next-step commands are named the way the person launched", () => {
+  assert.equal(commandFor("status", { npm_command: "exec" }, []), "npx daemonwood status");
+  assert.equal(commandFor("sleep", {}, ["node", "/usr/local/bin/daemonwood"]), "daemonwood sleep");
+  assert.equal(commandFor("sleep", { npm_lifecycle_script: "node bin/daemonwood.mjs" }, ["node", "bin/daemonwood.mjs"]), "npm run stop");
+  assert.equal(commandFor("repair", { DAEMONWOOD_COMMAND: "~/.daemonwood/bin/daemonwood", npm_command: "exec" }, []), "~/.daemonwood/bin/daemonwood repair");
+  assert.equal(displayCommand("/opt/it's here/daemonwood"), "'/opt/it'\\''s here/daemonwood'");
 });
 
 test("settings edits refuse invalid JSON without touching the file", async () => {
@@ -74,7 +96,10 @@ test("launch, status, stop, relaunch and uninstall leave other settings intact",
   const cli = (...args) => run(process.execPath, [join(root, "bin/daemonwood.mjs"), ...args], { env, cwd: dir, timeout: 20_000 });
   try {
     const launched = await cli("--no-open");
-    assert.match(launched.stdout, /Daemonwood is ready at http:\/\/127\.0\.0\.1:\d+/);
+    assert.match(launched.stdout, /Daemonwood is awake at http:\/\/127\.0\.0\.1:\d+/);
+    const own = join(home, "bin/daemonwood");
+    const viaOwn = JSON.parse((await run(own, ["status", "--json"], { env: { ...env, DAEMONWOOD_HOME: "", CLAUDE_CONFIG_DIR: "" }, cwd: dir, timeout: 20_000 })).stdout);
+    assert.deepEqual(viaOwn.problems, [], "the installed command finds its own home and profile from anywhere");
     const settings = JSON.parse(await readFile(join(claude, "settings.json"), "utf8"));
     assert.equal(settings.hooks.SessionStart[0].hooks[0].args[0], join(home, "hooks/daemonwood-hook.mjs"), "hooks point at the durable launcher");
     assert.equal(settings.hooks.Stop.length, 2, "another tool's hook is kept beside ours");
@@ -88,7 +113,7 @@ test("launch, status, stop, relaunch and uninstall leave other settings intact",
     await cli("stop");
     await assert.rejects(fetch(`${report.health.origin}/api/health`, { signal: AbortSignal.timeout(500) }));
     await mkdir(join(home, "versions", "0.0.1-stale"), { recursive: true });
-    assert.match((await cli("--no-open")).stdout, /is ready/, "launching again resumes a paused Daemonwood");
+    assert.match((await cli("wake", "up", "--no-open")).stdout, /is awake/, "waking again resumes a paused Daemonwood");
     const installed = JSON.parse(await readFile(join(home, "install.json"), "utf8"));
     assert.deepEqual(await readdir(join(home, "versions")), [installed.build], "old runtimes are pruned after a healthy launch");
 
@@ -141,7 +166,7 @@ test("the first launch after the rename adopts and retires a ~/.the-patch instal
   for (const name of ["DAEMONWOOD_HOME", "PATCH_HOME"]) delete env[name];
   const cli = (...args) => run(process.execPath, [join(root, "bin/daemonwood.mjs"), ...args], { env, cwd: dir, timeout: 20_000 });
   try {
-    assert.match((await cli("--no-open")).stdout, /Daemonwood is ready/);
+    assert.match((await cli("--no-open")).stdout, /Daemonwood is awake/);
     assert.equal(shutdowns, 1, "the old service was asked to stop");
     assert.deepEqual(JSON.parse(await readFile(join(home, "familiars.json"), "utf8")), faces, "remembered faces came across");
 

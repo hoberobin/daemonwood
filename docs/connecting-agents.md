@@ -3,7 +3,7 @@
 ## One command
 
 ```bash
-npm start            # from a clone; `npx --yes <package-name>` once published
+npx daemonwood wake  # or `npm start` from a clone
 ```
 
 The launcher (`bin/daemonwood.mjs` → `scripts/cli.mjs` → `scripts/runtime.mjs`)
