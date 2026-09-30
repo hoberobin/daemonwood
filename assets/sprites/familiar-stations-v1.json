@@ -32,15 +32,15 @@
   "items": {
     "editing": "wooden mallet: raised, then tapped down",
     "investigating": "cedar-bound book: reading, then a page mid-turn",
-    "running": "short brass lever: held upright, then pulled back",
+    "running": "short gray joystick with a muted red knob: held upright, then pulled back",
     "testing": "small glass flask: held up to the eye, then swirled"
   },
   "familiars": {
     "moss": {
       "image": "./assets/sprites/moss-stations-v1.png",
       "source": "art/source/familiars/moss-stations.png",
-      "sourceHash": "3288a770aab770e1611d1439a29c5bf107220419a19ac6294587e4084ab0d6fd",
-      "exportHash": "f759c5c18bf2953344e495b66983634dc22bedb371ff17f6aeb2fb74d80198d2",
+      "sourceHash": "c3c971934f02a007a6a0527de516cca93d2932f9dc447bb5f24a3a83744b3cbf",
+      "exportHash": "0a18317df53b3c3fc0391b36a3016d8f49c59df5d3def595f364cab910393a68",
       "sourceBounds": [
         [
           24,
@@ -95,8 +95,8 @@
     "fern": {
       "image": "./assets/sprites/fern-stations-v1.png",
       "source": "art/source/familiars/fern-stations.png",
-      "sourceHash": "2c0997d1ef90a58a909745c02291bbb58ab8e3adf90b2b0b5bcccfc327daf98f",
-      "exportHash": "87a025f718c46e6342c26f3507eda77a28cb47a5935cbf29ff21c51a2eecb3cb",
+      "sourceHash": "de331642d18d876ae727c641120a9b04fab38c18cc9fb21850311bbe6397af27",
+      "exportHash": "6c0db3011191980d5576608edcd3a9ef2db577a6d511f5464bdce386ce9443a8",
       "sourceBounds": [
         [
           45,
@@ -151,8 +151,8 @@
     "lumen": {
       "image": "./assets/sprites/lumen-stations-v1.png",
       "source": "art/source/familiars/lumen-stations.png",
-      "sourceHash": "0784d2fc70a3f10fd2ee04201b9c465a3dfdc6e1e46e1ba04823b33bf299c022",
-      "exportHash": "35c3ab3a8aad13e7368503c58f7715e1b1fdb3911292cc0bd8c541e8870c25b0",
+      "sourceHash": "7828880704bb960d27b3b92d1ca3e71c56a8e597cf33be8a69170f3288056653",
+      "exportHash": "31b9378b717e5ebcee67b82ccc3122a5d9cae1e0edff1334957631a0fc89c8e0",
       "sourceBounds": [
         [
           38,
@@ -207,8 +207,8 @@
     "cedar": {
       "image": "./assets/sprites/cedar-stations-v1.png",
       "source": "art/source/familiars/cedar-stations.png",
-      "sourceHash": "0e7336b412b0141906f7ff7387a91a7d446f795b8d1759cf66638ba0af10d72a",
-      "exportHash": "9e9ae4927c9282e78f7dcf7a580262c780ffbea4e35674ec54c46eb673b2e755",
+      "sourceHash": "535f613886974554e53f4a2c461b7330aef068196be140883c49b2fd4609821b",
+      "exportHash": "2c455bf07b79f3c7e574c9b1d3e61887d1c920762c09a5155789e33276e7e4f6",
       "sourceBounds": [
         [
           42,
@@ -263,8 +263,8 @@
     "alder": {
       "image": "./assets/sprites/alder-stations-v1.png",
       "source": "art/source/familiars/alder-stations.png",
-      "sourceHash": "fd605be4cc882e55e8ba5f3a72325e6bf4bb722ba39df1dde599470ca8366add",
-      "exportHash": "afb2da9dff4058c15743170a04792835d9575874dd0f78f843e9ed8fa8d3aabd",
+      "sourceHash": "d14563d2e68187188299b38c91be4e4c788e8ddadbb998652aa28ff1fc1bab38",
+      "exportHash": "0a2b20a879da2af8e23a92ea604aa78a686a73a664d084c7e65ee3a58142ed80",
       "sourceBounds": [
         [
           23,
@@ -319,8 +319,8 @@
     "mica": {
       "image": "./assets/sprites/mica-stations-v1.png",
       "source": "art/source/familiars/mica-stations.png",
-      "sourceHash": "8e2e6697866c136a184efaa52d58b76c95e254933ec172fac05598b9b9bda69d",
-      "exportHash": "008295c67917859bdfc175ec1d381f1002935c25cf4154bf5d590b6c2ac1fcb2",
+      "sourceHash": "304e89624fedf40c38fd1495cf5af5e30a05b4dbdf6b03caad7c3f7fa94959a1",
+      "exportHash": "e21023af92f64521c5b2cf0410bccf88d98c04cbae02f242b998d357649c2359",
       "sourceBounds": [
         [
           29,
@@ -375,8 +375,8 @@
     "ripple": {
       "image": "./assets/sprites/ripple-stations-v1.png",
       "source": "art/source/familiars/ripple-stations.png",
-      "sourceHash": "01a29320f459b2df200bbd9ccc75c0c49a0eb6ad947ce6935576e5c2f8c516d6",
-      "exportHash": "b7f39a012702b05e0cb5c7d09561f82f40bfc490e29fca306ddfd3500ac7c6b8",
+      "sourceHash": "cf878a406521dac3475893d413e05afba6eb76c6e3c9ffabad902be134b10828",
+      "exportHash": "75443e09d5bc26c312c0106e3ec542a6e4dae155e6a05406fd267f627ea0d29d",
       "sourceBounds": [
         [
           18,
@@ -431,8 +431,8 @@
     "thimble": {
       "image": "./assets/sprites/thimble-stations-v1.png",
       "source": "art/source/familiars/thimble-stations.png",
-      "sourceHash": "ce3c68e9bb908bf4e8955326865634498e33412990612ededd1bd6595c5af939",
-      "exportHash": "2dc1910c76507ac502eccbf6c0ff0f647018dfe5718ccd055813a19c0c12e9ad",
+      "sourceHash": "f7e9c378791717f30b61bea47f758d67b13504b54d6b4b048edd9fa556c5331f",
+      "exportHash": "db8980966e27e2818c22bc2111fe42b9bf44152855a669a7429b5bc416719c70",
       "sourceBounds": [
         [
           33,
@@ -487,8 +487,8 @@
     "spruce": {
       "image": "./assets/sprites/spruce-stations-v1.png",
       "source": "art/source/familiars/spruce-stations.png",
-      "sourceHash": "329adc10be4f81e4ee008e42d4ecfe0199f3f2509c0d3666b98f6b3d51c5cbda",
-      "exportHash": "90ab7f38b752982358b0f19ee06e2d37391e51134a03b910f7c091da0ed1a6df",
+      "sourceHash": "783d73f92d464fb257b5d50a97f6e149921b91719e421f6624b7cff4df444ee8",
+      "exportHash": "b2bc750843c87cd2b5daf1fd12ba5323af785326f3cca49536ed3513868af9d6",
       "sourceBounds": [
         [
           53,
@@ -543,8 +543,8 @@
     "nettle": {
       "image": "./assets/sprites/nettle-stations-v1.png",
       "source": "art/source/familiars/nettle-stations.png",
-      "sourceHash": "081e3ad9fb9c439a33431cca86aae578872397ad43cda784ac2547a6b758de6c",
-      "exportHash": "af0baf3bdcae53ca56e9d0e64ad6bbd09423485e9e38298e6a9af1f6eec1eebc",
+      "sourceHash": "f3736ea10d094040e076ce8b7c9dc1d20fbf3195b2279a25f546abb4b8f5745f",
+      "exportHash": "d02417411abb369eacb2a51c363db0bae8f39e7215450cc0ce33be9c60039ce0",
       "sourceBounds": [
         [
           43,

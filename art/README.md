@@ -18,7 +18,7 @@ Generated source sheets were made with the built-in image-generation tool and th
 
 ## Station-work sheets (optional, one familiar at a time)
 
-Each familiar can gain a second, smaller sheet in which it works with its station's tool: a mallet at the Workbench (editing), a book at Research, a brass lever at Command (running) and a flask at the Test Dungeon. The frame layout is `art/source/station-contract.json`: 4 × 2 cells, two frames per tool, a held pose and a moving one. The 24-frame base sheet is never touched.
+Each familiar can gain a second, smaller sheet in which it works with its station's tool: a mallet at the Workbench (editing), a book at Research, a gray joystick with a muted red knob at Command (running) and a flask at the Test Dungeon. The frame layout is `art/source/station-contract.json`: 4 × 2 cells, two frames per tool, a held pose and a moving one. The 24-frame base sheet is never touched.
 
 1. Generate the sheet from `art/prompts/stations/<id>.txt`, giving the image tool that familiar's approved base sheet as Image 1. Keep only a result whose character is unmistakably the same one.
 2. Save it as `art/source/familiars/<id>-stations.png` (1024 × 512, transparent) and add a `familiar-stations` entry for it to `art/registry.json` with the same provenance fields as the base sheet.

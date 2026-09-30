@@ -5,9 +5,9 @@ Deliver a genuine alpha TRANSPARENT PNG, 1024x512, EXACT FOUR equal columns by T
 The prop is held in front of the chest the same way Image 1 holds its parchment question card, wooden cog and cedar parcel, and at about the same size as those props. Props are hand-held only: no tables, anvils, shelves, consoles or machines.
 Row 1, cell 1: holding a small wooden mallet raised, focused expression. Cell 2: the same mallet brought down in a light tap, small concentrating squint.
 Row 1, cell 3: holding an open cedar-bound book, reading, calm. Cell 4: the same book with one page mid-turn.
-Row 2, cell 5: both hands on a short brass lever with a round brass knob, held upright. Cell 6: the same lever pulled back toward the body, determined.
+Row 2, cell 5: both hands on a short gray joystick with a muted red knob, held upright. Cell 6: the same joystick pulled back toward the body, determined.
 Row 2, cell 7: holding a small round glass flask of cloudy, muted grey-green liquid up at eye level, curious. Cell 8: the same flask tilted in a gentle swirl.
 
-Muted world palette only: cedar, brass, soot, moss, cream. No bright yellow, bright green, red, or glowing blue on any prop — bright colours are reserved for the interface. No floating symbols, sparks, bubbles, motion lines or text. Exactly 8 separate characters. Production sprite sheet, not poster.
+Muted world palette only: cedar, brass, soot, moss, cream. No bright yellow, bright green, saturated red, or glowing blue on any prop; the Command joystick alone has a muted rust-red knob. No floating symbols, sparks, bubbles, motion lines or text. Exactly 8 separate characters. Production sprite sheet, not poster.
 
 Character: Fern, opossum archivist with pale pointed face, pink ears and curled pink tail, olive field pack and small papers. Preserve long opossum muzzle.
