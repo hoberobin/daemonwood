@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { AmbientLayer, FIRE } from "../src/effects.js";
-import { BOAT, BOAT_BOB_MS, drawBoat, landmarkAt } from "../src/world-art.js";
+import { BOAT, BOAT_BOB_MS, drawBoat, drawCreek, landmarkAt } from "../src/world-art.js";
 import { WorldRenderer } from "../src/renderer.js";
 import { ArtTimeline } from "../src/art-animation.js";
 import { AgentController, nodes, stationPosition } from "../src/world-model.js";
@@ -83,6 +83,23 @@ test("the boat is only redrawn while it is bobbing", () => {
   assert.equal(drawn(-Infinity), 0, "never knocked");
   assert.equal(drawn(400), 1);
   assert.equal(drawn(BOAT_BOB_MS), 0, "settled");
+});
+
+test("water accents move slowly and hold still for reduced motion", () => {
+  const view = { x: 0, y: 0, scale: 2 };
+  const frame = (time, reducedMotion) => {
+    const marks = [];
+    const context = {
+      save() {}, restore() {}, beginPath() {}, stroke() {},
+      ellipse(...args) { marks.push(["ring", ...args]); },
+      fillRect(...args) { marks.push(["glint", ...args]); }
+    };
+    drawCreek(context, view, time, reducedMotion);
+    return marks;
+  };
+  assert.deepEqual(frame(0, true), frame(30_000, true));
+  assert.notDeepEqual(frame(0, false), frame(30_000, false));
+  assert.equal(frame(0, false).filter(([kind]) => kind === "glint").length, 5);
 });
 
 /* The renderer's whole frame, on a fake canvas, with every mood on the map at

@@ -117,8 +117,8 @@ When concept art conflicts with a canonical file, the canonical file wins.
 - Hook handlers are rewritten rather than preserved on reinstall, so a moved `node` binary is repaired instead of counted as configured while failing, and handlers for events no longer subscribed to are stripped wherever they linger.
 
 - One source of record for the palette. Canvas code may not contain a colour literal, and a test fails if the art JSON, the stylesheet and the renderer ever disagree.
-- Firelight is the only ambient effect, and draws strictly beneath the placards and familiars. Mist, a light grade and a vignette were tried and removed: atmosphere in a screenshot, noise in a tool kept open all day.
-- Decoration animates an order of magnitude slower than any agent state, and reduced motion freezes the fire without putting it out.
+- Firelight, small lantern pools and local water glints draw strictly beneath the placards and familiars. Mist, a light grade and a vignette were tried and removed: atmosphere in a screenshot, noise in a tool kept open all day.
+- Decoration animates slower than agent state, and reduced motion holds the fire and lanterns lit while freezing their pulses and the water highlights.
 - Ambient layout is deterministic: the world looks the same on every reload.
 - The map's end of the terminal link matches the terminal's: the alert says where to go, the next step names the window, hovering names the terminal, the inspector leads with it, and the top bar says whether Claude Code is connected at all. A familiar's face is remembered across bridge restarts, because the face is the one word both ends share.
 - Every label in the interface is built the way the world builds its signs: a stained cedar plank in a darker batten, brass rivets, a soot edge. The tag above a familiar, the station placards, the detail panel, the dialog and the controls all share one recipe.

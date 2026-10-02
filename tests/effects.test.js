@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { AmbientLayer, FIRE, withAlpha } from "../src/effects.js";
+import { AmbientLayer, FIRE, LANTERNS, withAlpha } from "../src/effects.js";
 import { ambient } from "../src/design/tokens.js";
 
 /* A canvas stand-in that records what was asked of it AND models the save/
@@ -69,6 +69,16 @@ test("asking for less motion freezes the fire without putting it out", () => {
   const context = stubContext();
   still.draw(context, view, 30_000);
   assert.ok(context.calls.some((call) => call.name === "createRadialGradient"), "the firelight must still be drawn");
+});
+
+test("painted lanterns keep their light while reduced motion freezes their pulse", () => {
+  assert.equal(LANTERNS.length, 6);
+  const still = new AmbientLayer({ reducedMotion: true });
+  const first = stubContext(), later = stubContext();
+  still.draw(first, view, 0);
+  still.draw(later, view, 30_000);
+  assert.deepEqual(first.calls, later.calls);
+  assert.equal(first.calls.filter((call) => call.name === "createRadialGradient").length, 2 + LANTERNS.length);
 });
 
 test("firelight drawing is balanced and never leaks canvas state", () => {

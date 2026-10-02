@@ -1,4 +1,4 @@
-import { environment, signals } from "./design/tokens.js";
+import { ambient, environment, signals } from "./design/tokens.js";
 import { FIRE, withAlpha } from "./effects.js";
 
 // Editable source-space masks. These reuse pixels from the preserved master;
@@ -86,6 +86,24 @@ export function drawCreek(context, view, elapsed, reducedMotion) {
     const phase = (seconds / 8 + offset / 5) % 1;
     context.globalAlpha = reducedMotion ? 0.5 : Math.sin(phase * Math.PI) * 0.5;
     context.beginPath(); context.ellipse(view.x + px * view.scale, view.y + py * view.scale, (2 + phase * 3) * view.scale, (0.4 + phase) * view.scale, 0, 0, Math.PI * 2); context.stroke();
+  }
+  // The waterfall is already painted. Narrow highlights travel only inside
+  // its white-blue ribbon; moving the painted water itself would leave a copy
+  // behind on the flattened plate. Their fixed offsets avoid a synchronized loop.
+  context.fillStyle = environment.bloom;
+  for (const [px, offset] of [[10.8, 0.18], [13.3, 0.51], [15.2, 0.79]]) {
+    const phase = (seconds / ambient.waterfallCycleSeconds + offset) % 1;
+    context.globalAlpha = Math.sin(phase * Math.PI) * ambient.waterfallGlintAlpha;
+    context.fillRect(view.x + px * view.scale, view.y + (40 + phase * 30) * view.scale,
+      0.45 * view.scale, 3.4 * view.scale);
+  }
+  // Two slow, short flashes in the open dock water complement the existing
+  // rings without adding a bright line across the whole shoreline.
+  for (const [px, py, offset] of [[357, 270, 0.24], [485, 271, 0.67]]) {
+    const phase = (seconds / 9 + offset) % 1;
+    context.globalAlpha = Math.sin(phase * Math.PI) * 0.24;
+    context.fillRect(view.x + (px + phase * 3) * view.scale, view.y + py * view.scale,
+      3.2 * view.scale, 0.35 * view.scale);
   }
   context.restore();
 }

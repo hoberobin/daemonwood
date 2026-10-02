@@ -201,8 +201,8 @@ export const sign = Object.freeze({
   edge: environment.soot
 });
 
-/* Firelight. The one ambient effect the world carries: the plate paints the
-   flame, this draws the light it casts. Deliberately small — the art bible
+/* Local light and water accents. The plate paints the light sources and the
+   waterfall; these values only give them a little movement. Deliberately small — the art bible
    allows decoration to animate only at lower contrast and slower cadence than
    an agent's own state, and the campfire sits at the centre of the map, which
    is the part that has to stay quiet.
@@ -220,6 +220,11 @@ export const ambient = Object.freeze({
   emberCount: 7,
   emberAlpha: 0.85,
   emberRiseSeconds: 3.6,
+  lanternGlowAlpha: 0.16,
+  lanternRadius: 8,
+  lanternPulseSeconds: 5.4,
+  waterfallGlintAlpha: 0.38,
+  waterfallCycleSeconds: 5.8,
   /* Stoking: what a click on the fire does. The glow swells and settles over
      `stokeMs`, and a burst of sparks climbs higher than the idle embers ever
      do. Same ember colour, never gold, for the reason above. */

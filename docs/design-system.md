@@ -46,7 +46,7 @@ test-enforced — which is the difference between a mirror and a second source.
 | `signals` | One colour per state, eleven of them. **Only these may mean something.** | Canvas tags, HUD |
 | `ui` | Interface surfaces, ink, HUD paper, scrims. Not world colours. | CSS, canvas HUD |
 | `alert` | The two signal washes an alert surface is allowed to use. | CSS |
-| `ambient` | Weather and light: alphas, cadences, counts. | `effects.js` |
+| `ambient` | Local light and water: alphas, cadences, counts. | `effects.js`, `world-art.js` |
 | `hud` | Canvas HUD geometry, in logical world units. | `renderer.js` |
 | `type` | Two families: `mono` for labels, `sans` for body. | CSS, canvas |
 | `motion` | Speeds and cadences shared by camera, walk, and pulses. | Renderer, world model |
@@ -114,7 +114,7 @@ The canvas draws in a fixed order. Each layer has a rule it may not break.
 
 ```
 1. plate          the illustrated map
-2. ambient        firelight: glow, core flicker, embers       <- may not touch 3-5
+2. ambient        firelight, lantern pools, local water       <- may not touch 3-5
 3. placards       station names
 4. familiars      sprites, rings, helper dots
 5. badges         one action glyph per familiar
@@ -134,11 +134,12 @@ and a familiar standing there names it better.
 Three rules, taken from the art bible and enforced by taste:
 
 1. **Decoration animates slower and quieter than state.** The fire breathes over
-   2.4 seconds; an attention pulse takes a quarter of a second.
+   2.4 seconds, lanterns over 5.4 seconds and waterfall glints over 5.8 seconds;
+   an attention pulse takes a quarter of a second.
 2. **The centre stays quiet.** The campfire is the centre of the map, so its
    fire breathes rather than flickers.
-3. **`prefers-reduced-motion` freezes the fire, it does not put it out.** The
-   light stays; the flicker stops. The light is the point, the motion is not.
+3. **`prefers-reduced-motion` freezes the local effects.** Fire and lantern light
+   stay visible; their pulses and the water highlights stop moving.
 
 Nothing ambient is random. Embers are laid out deterministically so the world
 looks the same on every reload — which matters when the whole job is recognising
@@ -350,13 +351,15 @@ Tests that hold the system together:
 
 ## 9. Adding an ambient effect
 
-Any new effect goes in `effects.js` as a method on `AmbientLayer`, with its
-constants in `ambient` tokens. Before adding one, note that the last three were
+New light effects go in `effects.js` on `AmbientLayer`; water accents extend
+`drawCreek()` in `world-art.js`. Their constants belong in `ambient` tokens.
+Before adding one, note that the last three global effects were
 removed for being noise — the bar is that the world is worse without it. It must:
 
-- draw only inside the `draw()` call, so it lands under the familiars;
+- draw only in the ambient portion of the renderer, beneath familiars;
 - balance every `save()` with a `restore()` (the test's stub models the stack);
-- read its phase from `this.phase(elapsedMs)`, so reduced motion freezes it;
+- freeze its phase for reduced motion (`this.phase(elapsedMs)` in `effects.js`,
+  zero elapsed seconds in `drawCreek()`);
 - lay itself out deterministically, never with `Math.random()`;
 - cost nothing measurable — the frame budget is 16.7ms and ambient currently
   uses a small fraction of it.

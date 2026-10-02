@@ -30,9 +30,21 @@ function round(value) {
    plate changes. */
 export const FIRE = Object.freeze({ x: 258, y: 132, radius: 34 });
 
-/* The one ambient effect in the world. The campfire is painted into the plate
+// Centres of painted lanterns, measured in the same 512 × 288 space as FIRE.
+// A small selection across the map keeps the light local and leaves the status
+// colours to the badges. The phases are fixed so reloads never reshuffle them.
+export const LANTERNS = Object.freeze([
+  { x: 56, y: 41, phase: 0.12 },
+  { x: 139, y: 41, phase: 0.68 },
+  { x: 224, y: 37, phase: 0.35 },
+  { x: 286, y: 61, phase: 0.82 },
+  { x: 73, y: 198, phase: 0.49 },
+  { x: 358, y: 196, phase: 0.93 }
+]);
+
+/* Local light over the painted world. The campfire is painted into the plate
    mid-flame and frozen; this draws the light that flame casts and the embers it
-   throws, so the illustration stays the authority on what the fire looks like.
+   throws. Lanterns get a smaller, slower pulse around their painted centres.
    It draws BELOW the familiars and their tags, so no amount of atmosphere can
    cost the interface a pixel of legibility. */
 export class AmbientLayer {
@@ -73,7 +85,28 @@ export class AmbientLayer {
 
   draw(context, view, elapsedMs) {
     this.drawFirelight(context, view, this.phase(elapsedMs), this.flare(elapsedMs));
+    this.drawLanterns(context, view, this.phase(elapsedMs));
     if (!this.reducedMotion) this.drawSparks(context, view, elapsedMs);
+  }
+
+  drawLanterns(context, view, seconds) {
+    context.save();
+    context.globalCompositeOperation = "screen";
+    for (const lantern of LANTERNS) {
+      const breath = 0.8 + Math.sin((seconds / ambient.lanternPulseSeconds + lantern.phase) * Math.PI * 2) * 0.2;
+      const px = view.x + lantern.x * view.scale;
+      const py = view.y + lantern.y * view.scale;
+      const radius = ambient.lanternRadius * view.scale;
+      const glow = context.createRadialGradient(px, py, 0, px, py, radius);
+      glow.addColorStop(0, withAlpha(ambient.emberColor, ambient.lanternGlowAlpha * breath));
+      glow.addColorStop(0.35, withAlpha(ambient.fireGlow, ambient.lanternGlowAlpha * breath * 0.42));
+      glow.addColorStop(1, withAlpha(ambient.fireGlow, 0));
+      context.fillStyle = glow;
+      context.beginPath();
+      context.arc(px, py, radius, 0, Math.PI * 2);
+      context.fill();
+    }
+    context.restore();
   }
 
   drawFirelight(context, view, seconds, flare = 0) {
